@@ -1,0 +1,247 @@
+{
+  "_NOTE": "Reconstruction of Rick v. Brandsema, 2009 SCC 10 facts as a schema instance for fitness-testing the BC FLA Separation Agreement schema. Names and dates are illustrative; the structural assertions are drawn from the SCC reasons (¶¶ 3-25). This instance is intentionally shaped to validate; the substantive Brandsema problem is captured by the values, not by ajv.",
+  "parties": [
+    {
+      "role_label": "Spouse 1",
+      "legal_name": {
+        "first": "Berend",
+        "middle": null,
+        "last": "Brandsema"
+      },
+      "former_names": [],
+      "preferred_name": "Berend",
+      "date_of_birth": "1948-01-01",
+      "occupation": "Dairy farmer",
+      "employer": "Brandsema family farm corporation",
+      "residential_address": {
+        "street_line_1": "Family farm property",
+        "city": "Chilliwack",
+        "province_or_state": "British Columbia",
+        "postal_code": "V0X 0X0",
+        "country": "Canada"
+      },
+      "email": "berend@example.com",
+      "phone": "[ILLUSTRATIVE]",
+      "solicitor": {
+        "name": "Husband's counsel",
+        "firm": "[ILLUSTRATIVE]",
+        "address": {
+          "street_line_1": "[ILLUSTRATIVE]",
+          "city": "Chilliwack",
+          "province_or_state": "British Columbia",
+          "postal_code": "V0X 0X0",
+          "country": "Canada"
+        },
+        "lsbc_number": "[ILLUSTRATIVE]",
+        "email": "husband-counsel@example.com",
+        "phone": "[ILLUSTRATIVE]"
+      }
+    },
+    {
+      "role_label": "Spouse 2",
+      "legal_name": {
+        "first": "Nancy",
+        "middle": null,
+        "last": "Rick"
+      },
+      "former_names": [],
+      "preferred_name": "Nancy",
+      "date_of_birth": "1949-01-01",
+      "occupation": "Farm operations co-spouse",
+      "employer": "Brandsema family farm corporation",
+      "residential_address": {
+        "street_line_1": "Family farm property",
+        "city": "Chilliwack",
+        "province_or_state": "British Columbia",
+        "postal_code": "V0X 0X0",
+        "country": "Canada"
+      },
+      "email": "nancy@example.com",
+      "phone": "[ILLUSTRATIVE]",
+      "solicitor": {
+        "name": "Wife's counsel — found inadequate against vulnerabilities by trial judge",
+        "firm": "[ILLUSTRATIVE]",
+        "address": {
+          "street_line_1": "[ILLUSTRATIVE]",
+          "city": "Chilliwack",
+          "province_or_state": "British Columbia",
+          "postal_code": "V0X 0X0",
+          "country": "Canada"
+        },
+        "lsbc_number": "[ILLUSTRATIVE]",
+        "email": "wife-counsel@example.com",
+        "phone": "[ILLUSTRATIVE]"
+      }
+    }
+  ],
+  "relationship_status": {
+    "category": "married",
+    "marriage_date": "1973-01-01",
+    "marriage_place": "British Columbia",
+    "cohabitation_start_date": null,
+    "separation_date": "2000-06-01",
+    "separation_finality": "date_certain"
+  },
+  "valuation_date": {
+    "date": "2001-04-01",
+    "is_default": false,
+    "override_reason": "Date of the reconciliation agreement under negotiation."
+  },
+  "financial_disclosure_attestations": {
+    "spouse_1": {
+      "disclosure_complete_attestation": {
+        "confirmed": false,
+        "signed_at_timestamp": "2001-04-01T00:00:00-08:00",
+        "attestation_text": "Husband signed a finality / disclosure clause but the trial judge found his disclosure was materially incomplete: the value of corporate and agricultural assets was deliberately understated."
+      },
+      "disclosure_documents_provided": [
+        {
+          "category": "business_financials",
+          "date_provided": "2001-04-01",
+          "document_reference": "Husband-prepared valuation, found unreliable",
+          "recipient_acknowledgment_signed": true
+        }
+      ],
+      "valuation_methodology": [
+        {
+          "asset_id": "farm_corp",
+          "method_used": "self-prepared",
+          "basis": "Husband's own estimate, no independent appraisal",
+          "qualified_appraiser_if_applicable": null
+        }
+      ],
+      "non_disclosure_acknowledgment_by_other_spouse": {
+        "confirmed": true,
+        "attestation_text": "Wife signed an acknowledgment but, as later established, did not in fact know of the undisclosed value at the time of signing."
+      }
+    },
+    "spouse_2": {
+      "disclosure_complete_attestation": {
+        "confirmed": true,
+        "signed_at_timestamp": "2001-04-01T00:00:00-08:00",
+        "attestation_text": "Wife disclosed her own (more limited) financial information."
+      },
+      "disclosure_documents_provided": [
+        {
+          "category": "T1",
+          "date_provided": "2001-04-01",
+          "document_reference": "[ILLUSTRATIVE]",
+          "recipient_acknowledgment_signed": true
+        }
+      ],
+      "valuation_methodology": [],
+      "non_disclosure_acknowledgment_by_other_spouse": {
+        "confirmed": true,
+        "attestation_text": "Husband purported to acknowledge the wife's disclosure was complete."
+      }
+    },
+    "consequences_of_non_disclosure": "FLA s. 93(3)(a): a court may set aside an agreement on grounds including failure to disclose significant property or debts. Brandsema (SCC 2009) treats material non-disclosure as a primary ground for set-aside even where finality clauses are present."
+  },
+  "procedural_fairness": {
+    "independent_legal_advice": {
+      "spouse_1": {
+        "received": true,
+        "lawyer_name": "Husband's counsel",
+        "firm": "[ILLUSTRATIVE]",
+        "date": "2001-03-15",
+        "duration_minutes": 60,
+        "attestation_text": "Husband received ILA in advance of execution."
+      },
+      "spouse_2": {
+        "received": true,
+        "lawyer_name": "Wife's counsel",
+        "firm": "[ILLUSTRATIVE]",
+        "date": "2001-03-15",
+        "duration_minutes": 60,
+        "attestation_text": "Wife received ILA, but the trial judge found the advice was inadequate against the backdrop of (a) husband's non-disclosure and (b) wife's mental-health vulnerability — the formal box is checked, the substantive adequacy is what later litigation tested."
+      }
+    },
+    "voluntariness": {
+      "spouse_1": {
+        "confirmed": true,
+        "no_duress": true,
+        "no_coercion": true,
+        "no_undue_influence": true,
+        "attestation_text": "Husband attested voluntariness.",
+        "signed_at_timestamp": "2001-04-01T00:00:00-08:00"
+      },
+      "spouse_2": {
+        "confirmed": true,
+        "no_duress": true,
+        "no_coercion": true,
+        "no_undue_influence": false,
+        "attestation_text": "Wife signed a voluntariness clause, but the SCC effectively held that a clause cannot cure where the other spouse's misrepresentations and the wife's impaired judgment combined to vitiate true free agreement.",
+        "signed_at_timestamp": "2001-04-01T00:00:00-08:00"
+      }
+    },
+    "equality_of_bargaining_position": {
+      "assessment": "Profound disparity. Husband had operational control of the corporate and agricultural assets; wife had a documented psychiatric condition that the trial judge found impaired her judgment during negotiation.",
+      "vulnerabilities_acknowledged": [
+        "mental_health_impairment",
+        "asymmetric_asset_control"
+      ],
+      "accommodations_made": []
+    },
+    "time_to_consider": {
+      "spouse_1": {
+        "days_between_first_draft_and_signing": 30,
+        "was_reasonable": true
+      },
+      "spouse_2": {
+        "days_between_first_draft_and_signing": 30,
+        "was_reasonable": false
+      }
+    },
+    "understanding": {
+      "spouse_1": {
+        "language_of_negotiation": "English",
+        "interpreter_used": false,
+        "confirmed_understands_terms": true,
+        "confirmed_understands_consequences": true
+      },
+      "spouse_2": {
+        "language_of_negotiation": "English",
+        "interpreter_used": false,
+        "confirmed_understands_terms": false,
+        "confirmed_understands_consequences": false
+      }
+    }
+  },
+  "substantive_fairness": {
+    "miglin_stage_1": {
+      "agreement_reflects_parties_intentions": false,
+      "complies_with_fla_objectives": false,
+      "fla_objectives_referenced": [
+        "FLA s.84 family property division (default: equal)",
+        "FLA s.81"
+      ],
+      "departure_from_ssag_explained": "Spousal-support quantum based on the unilateral asset valuation; later found unreliable.",
+      "departure_from_equal_division_explained": "Husband's self-prepared valuation drove the unequal split; the trial judge found the valuation was deliberately understated."
+    },
+    "miglin_stage_2_anticipated_changes": [],
+    "hartshorne_circumstances": {
+      "unequal_position_acknowledged": false,
+      "why_unequal_division_substantively_fair": "The agreement asserted finality and substantive fairness; on review, neither was supported by the record.",
+      "comparison_to_fla_default_division": "Significant departure from the FLA default; the SCC ordered equal division on remand."
+    },
+    "acknowledgment_of_setaside_grounds": "Agreement contained a finality clause; the SCC held a finality clause cannot inoculate a procedural-fairness failure."
+  },
+  "instructions_record": {
+    "chain_genesis_hash": "GENESIS",
+    "entries": [
+      {
+        "sequence": 1,
+        "node_id": "intro",
+        "node_title": "Brandsema reconstruction marker",
+        "decision": "agree",
+        "decision_label": "Reconstructed entry — not a real session",
+        "note": "This entry exists only to satisfy the schema's instructions_record structure for the fitness test.",
+        "ts": "2001-04-01T00:00:00-08:00",
+        "prev_hash": "GENESIS",
+        "hash": "brandsema_reconstruction_marker_001",
+        "stress_confirmed": false
+      }
+    ],
+    "final_hash": "brandsema_reconstruction_marker_001"
+  }
+}

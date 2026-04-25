@@ -1,0 +1,15 @@
+{
+  "name": "instructit-mcp-server",
+  "version": "0.1.0",
+  "description": "MCP server exposing the InstructIT POC pipeline (validate, render, bridge) as agent tools.",
+  "type": "module",
+  "license": "MPL-2.0",
+  "bin": { "instructit-mcp": "./server.mjs" },
+  "main": "server.mjs",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "docx": "^8.0.0"
+  }
+}
