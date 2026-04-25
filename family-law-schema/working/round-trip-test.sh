@@ -98,6 +98,20 @@ step "10. Criminal sample-filled.json validates against criminal schema" \
 step "11. Criminal docx renders" \
   bash -c "rm -f criminal-instructions-memo.docx && node working/render-criminal-docx.mjs > /tmp/rt-11.log 2>&1 && [[ -s criminal-instructions-memo.docx ]]"
 
+step "12. Criminal InstructIT bridge produces 12-entry record" \
+  bash -c "
+    rm -f schema/criminal/instructit-export.json
+    node working/instructit-criminal-to-schema.mjs working/sample-criminal-export.json > /tmp/rt-12.log 2>&1
+    [[ \$(jq '._stats.total_entries' schema/criminal/instructit-export.json) -eq 12 ]]
+  "
+
+step "13. TypeScript types regenerate from both schemas" \
+  bash -c "
+    node working/json-to-ts.mjs > /tmp/rt-13a.log 2>&1
+    node working/json-to-ts.mjs schema/criminal/instructions.schema.json schema/criminal/types.ts CriminalGuiltyPleaInstructions > /tmp/rt-13b.log 2>&1
+    [[ -s schema/types.ts && -s schema/criminal/types.ts ]]
+  "
+
 echo ""
 echo "==================================="
 echo " Pass: $PASS  /  Fail: $FAIL"

@@ -591,7 +591,7 @@ export interface SeparationAgreement {
   "separation_finality": "date_certain" | "date_disputed" | "date_agreed_for_purposes_of_this_agreement";
 };
   /** Ordered recital clauses forming the preamble of the agreement. */
-  "recitals": Array<{
+  "recitals"?: Array<{
   /** Unique snake_case identifier for this recital. */
   "key": string;
   /** Recital prose. Use {{placeholder}} tokens for party names, dates, and other variable data. */
@@ -600,7 +600,7 @@ export interface SeparationAgreement {
   "purpose": string;
 }>;
   /** Defined terms used throughout the agreement body. */
-  "definitions_section": Array<{
+  "definitions_section"?: Array<{
   /** The defined term as it appears in the agreement (title case, in quotation marks when used in the document). */
   "term": string;
   /** Full definition text. */
@@ -609,9 +609,9 @@ export interface SeparationAgreement {
   "fla_cross_reference": string | null;
 }>;
   /** All children of the relationship to whom this agreement applies. */
-  "children": Array<Child>;
+  "children"?: Array<Child>;
   /** Parenting time arrangements per FLA ss. 40–42 [VERIFY]. */
-  "parenting_time": {
+  "parenting_time"?: {
   /** High-level characterization of the parenting time arrangement. */
   "schedule_type": "shared_5050" | "primary_with_one_parent" | "split" | "other_specified";
   /** Parent with whom the child primarily resides, if schedule_type is 'primary_with_one_parent'. */
@@ -640,14 +640,14 @@ export interface SeparationAgreement {
 };
 };
   /** Allocation of parental responsibilities (decision-making) per FLA s. 41 [VERIFY]. */
-  "parental_responsibilities": {
+  "parental_responsibilities"?: {
   /** Each decision-making domain with its allocation. */
   "domains": Array<DecisionDomain>;
   /** Process when jointly deciding parents cannot agree, e.g., mediation, parenting coordinator, arbitration. */
   "dispute_resolution_for_deadlock"?: string;
 };
   /** Communication protocols between parents and with children. */
-  "communication": {
+  "communication"?: {
   /** Required communication platform, e.g., 'OurFamilyWizard', 'email only', or named app. */
   "parent_to_parent_channel": string;
   /** Maximum hours within which a parent must respond to a non-emergency communication. */
@@ -667,7 +667,7 @@ export interface SeparationAgreement {
   "no_disparagement": boolean;
 };
   /** Relocation provisions per FLA Part 4, Division 6 (ss. 65–71) [VERIFY]. */
-  "relocation_and_mobility": {
+  "relocation_and_mobility"?: {
   /** Minimum days of written notice required before a proposed relocation. FLA s. 66 prescribes a minimum of 60 days [VERIFY]. */
   "notice_period_days": number;
   /** What constitutes a 'relocation' triggering notice obligations, e.g., move exceeding a specified distance or change of school district. */
@@ -678,7 +678,7 @@ export interface SeparationAgreement {
   "dispute_resolution_before_move": string;
 };
   /** International and domestic travel provisions and passport custody. */
-  "travel_and_passports": {
+  "travel_and_passports"?: {
   /** Steps required to obtain the other parent's consent for international travel, including form of consent (written/notarized) and advance notice period. */
   "international_travel_consent_process": string;
   /** Days of notice required before international travel with the child. */
@@ -698,7 +698,7 @@ export interface SeparationAgreement {
 };
 };
   /** Scheduled reviews and variation mechanism for parenting provisions. */
-  "review_and_variation": {
+  "review_and_variation"?: {
   /** Pre-agreed points at which the parties will review parenting arrangements. */
   "scheduled_reviews"?: Array<{
   /** Event or date triggering review, e.g., 'child turns 13', 'child enters high school', or a calendar date. */
@@ -721,11 +721,11 @@ export interface SeparationAgreement {
   "override_reason"?: string;
 };
   /** All family property within the meaning of FLA s. 84 [VERIFY]. Includes property owned by at least one spouse at the date of separation, regardless of when acquired, unless excluded under s. 85. */
-  "family_property": Array<Asset>;
+  "family_property"?: Array<Asset>;
   /** Property excluded from family property under FLA s. 85 [VERIFY]. Growth in value during the relationship is family property per FLA s. 84(2)(g) [VERIFY]. */
   "excluded_property"?: Array<unknown>;
   /** All family debt within the meaning of FLA s. 86 [VERIFY]. Includes debt incurred during the relationship for a family purpose and debt incurred to acquire, maintain, or improve family property. */
-  "family_debt": Array<Debt>;
+  "family_debt"?: Array<Debt>;
   /** Detailed records for each parcel of real property, supplementing the corresponding family_property entry. */
   "real_property"?: Array<RealProperty>;
   /** Pension plans, RRSPs, RRIFs, LIRAs, LIFs, and DPSPs subject to division. */
@@ -739,7 +739,7 @@ export interface SeparationAgreement {
   /** Bank accounts, brokerage accounts, TFSAs, non-registered investments, and crypto wallets. */
   "financial_accounts"?: Array<Account>;
   /** Summary calculation of the equalization payment. */
-  "equalization_payment_summary": {
+  "equalization_payment_summary"?: {
   /** Aggregate fair market value of all family property in CAD. */
   "total_family_property_fmv": number;
   /** Aggregate outstanding family debt in CAD. */
@@ -790,7 +790,7 @@ export interface SeparationAgreement {
 };
 };
   /** Income tax treatment of support payments under the Income Tax Act, R.S.C. 1985, c. 1 (5th Supp.). */
-  "tax_treatment": {
+  "tax_treatment"?: {
   /** Post-May 1997 child support: not deductible by payor, not includable by recipient, per ITA s. 56.1(4) and s. 60.1(4). */
   "child_support_tax_treatment": string;
   /** Periodic spousal support: deductible by payor under ITA s. 60(b), includable by recipient under ITA s. 56(1)(b). [VERIFY: s. 60(b) and s. 56(1)(b) current references] */
@@ -807,7 +807,7 @@ export interface SeparationAgreement {
   "retroactive_support_tax_treatment": string;
 };
   /** Mechanics for executing the property division and completing all required transfers. */
-  "implementation_and_transfer": {
+  "implementation_and_transfer"?: {
   /** Number of days after execution of the agreement within which all transfers and steps must be completed. */
   "implementation_deadline_days": number;
   /** List of title transfers required. */
@@ -855,12 +855,12 @@ export interface SeparationAgreement {
 };
 };
   /** Income determination for each spouse for guideline support purposes. */
-  "income_determination": {
+  "income_determination"?: {
   "spouse_1": propertiesincomeDeterminationdefsSpouseIncome;
   "spouse_2": propertiesincomeDeterminationdefsSpouseIncome;
 };
   /** Child support terms under the Federal Child Support Guidelines, SOR/97-175, and BC Family Law Act, S.B.C. 2011, c. 25, Part 7. */
-  "child_support": {
+  "child_support"?: {
   /** The spouse obligated to pay child support. */
   "payor": "spouse_1" | "spouse_2";
   /** Applicable guideline instrument. */
@@ -899,7 +899,7 @@ export interface SeparationAgreement {
   /** Retroactive child support claim, resolved per DBS v. SRG, 2006 SCC 37, and Michel v. Graydon, 2020 SCC 24. [VERIFY: Michel v. Graydon citation 2020 SCC 24] */
   "retroactive_child_support"?: unknown | null;
   /** Spousal support terms under FLA Part 7, Division 8, and the Spousal Support Advisory Guidelines (SSAG). */
-  "spousal_support": {
+  "spousal_support"?: {
   /** Basis of entitlement per Moge v. Moge, [1992] 3 SCR 813, and Bracklow v. Bracklow, [1999] 1 SCR 420. */
   "entitlement_basis": Array<"compensatory" | "non_compensatory" | "contractual">;
   /** Advisory framework used for quantum and duration. */
@@ -945,7 +945,7 @@ export interface SeparationAgreement {
   "waiver"?: unknown | null;
 };
   /** Security for support obligations. */
-  "support_security": {
+  "support_security"?: {
   /** Life insurance policy maintained to secure support obligations. */
   "life_insurance"?: unknown | null;
   /** Charge registered against real property as security for support arrears or lump sum. */
@@ -954,7 +954,7 @@ export interface SeparationAgreement {
   "fmep_assignment"?: boolean;
 };
   /** Review and variation provisions for child and spousal support. */
-  "support_review_and_variation": {
+  "support_review_and_variation"?: {
   /** Specific future dates on which support will be reviewed. */
   "scheduled_review_dates"?: Array<string>;
   /** Events that automatically trigger a support review. */
@@ -965,7 +965,7 @@ export interface SeparationAgreement {
   "dispute_resolution_process": Array<"negotiation" | "mediation" | "med_arb" | "arbitration" | "court">;
 };
   /** Mutual releases of all claims arising from the relationship, subject to FLA s. 4 and s. 93 set-aside jurisdiction. */
-  "releases_and_waivers": {
+  "releases_and_waivers"?: {
   /** Text of the mutual general release of claims arising from the relationship, subject to FLA s. 4 (agreement requirements) and s. 93 (set-aside powers). */
   "mutual_general_release": string;
   /** Category-specific releases. */
@@ -991,7 +991,7 @@ export interface SeparationAgreement {
   "wesa_s60_acknowledgment": string;
 };
   /** Mutual and specific indemnification provisions. */
-  "indemnities": {
+  "indemnities"?: {
   /** Each party indemnifies the other for debts allocated to that party under the property/debt division sections. */
   "debt_indemnity": string;
   /** Indemnity for tax liability arising from assets allocated or transferred under this agreement. */
@@ -1009,7 +1009,7 @@ export interface SeparationAgreement {
 };
 };
   /** Tiered dispute resolution: mediation, arbitration, then court. */
-  "dispute_resolution": {
+  "dispute_resolution"?: {
   /** Mediation as the mandatory first step. */
   "mandatory_mediation": {
   /** Process for selecting a mediator (mutual agreement, then roster selection). */
@@ -1039,7 +1039,7 @@ export interface SeparationAgreement {
   "cost_rules": string;
 };
   /** Governing law and jurisdictional provisions. */
-  "governing_law_and_jurisdiction": {
+  "governing_law_and_jurisdiction"?: {
   /** This agreement is governed by the Family Law Act, SBC 2011, c. 25, and the laws of British Columbia. */
   "governing_law": string;
   /** The parties submit to the exclusive jurisdiction of the courts of British Columbia. */
@@ -1048,19 +1048,19 @@ export interface SeparationAgreement {
   "limitation_suspension_acknowledgment": string;
 };
   /** Entire agreement / integration clause. */
-  "entire_agreement_clause": {
+  "entire_agreement_clause"?: {
   /** This agreement constitutes the entire agreement and supersedes all prior oral or written agreements, understandings, and negotiations. */
   "supersession": string;
   /** Neither party has relied on any representations, warranties, or promises not expressly set out in this agreement. */
   "no_outside_representations": string;
 };
   /** Standard severability clause. */
-  "severability": {
+  "severability"?: {
   /** If any provision is found unenforceable or invalid by a court of competent jurisdiction, the remaining provisions continue in full force and effect. */
   "clause_text": string;
 };
   /** Amendment formalities and counterpart execution. */
-  "amendments_and_counterparts": {
+  "amendments_and_counterparts"?: {
   /** Amendments only effective if in writing, signed by both parties, with each party having received ILA on the amendment. */
   "amendments_in_writing": string;
   /** Electronic signatures are permitted under the BC Electronic Transactions Act, SBC 2001, c. 10 [VERIFY]. */
@@ -1069,7 +1069,7 @@ export interface SeparationAgreement {
   "counterparts": string;
 };
   /** Service and notice requirements. */
-  "notice_provisions": {
+  "notice_provisions"?: {
   /** Permitted delivery methods: registered mail, email with read receipt, courier. */
   "permitted_methods": Array<string>;
   /** Each party's address for service, cross-referencing the parties section. */
@@ -1092,7 +1092,7 @@ export interface SeparationAgreement {
   "address_change_obligation": string;
 };
   /** Conditions that must be satisfied before the agreement becomes binding, if applicable. */
-  "conditions_precedent": {
+  "conditions_precedent"?: {
   /** Court approval required where a party lacks legal capacity or is an undischarged bankrupt. */
   "court_approval_if_required"?: string;
   /** Completion of all property transfers described in this agreement. */
@@ -1103,7 +1103,7 @@ export interface SeparationAgreement {
   "financial_disclosure_certified_complete": string;
 };
   /** Default events, cure periods, and enforcement mechanisms. */
-  "default_and_remedies": {
+  "default_and_remedies"?: {
   /** Events constituting default: missed support payment, failure to transfer property or assets by deadline, breach of disclosure representations, failure to maintain required insurance. */
   "events_of_default": Array<string>;
   /** Number of days after written notice within which the defaulting party may cure (e.g., 15 days). */
@@ -1116,7 +1116,7 @@ export interface SeparationAgreement {
   "fmep_enrollment": string;
 };
   /** Signature, witness, and optional notarization blocks for each party. */
-  "execution_block": {
+  "execution_block"?: {
   /** Execution block for Party 1. */
   "party_1_execution": {
   /** Full legal name of Party 1. */
@@ -1145,12 +1145,12 @@ export interface SeparationAgreement {
 };
 };
   /** Separate ILA certificate appended for each party. */
-  "ila_certificates": {
+  "ila_certificates"?: {
   "party_1_ila": ILACertificate;
   "party_2_ila": ILACertificate;
 };
   /** Index of schedules forming part of this agreement. */
-  "schedules_index": {
+  "schedules_index"?: {
   /** Schedule A: Complete inventory of family and excluded assets and debts. */
   "schedule_a": string;
   /** Schedule B: Sworn financial statements per spouse (Form F8 equivalent). */
@@ -1382,7 +1382,7 @@ export interface SeparationAgreement {
   "consequences_of_non_disclosure": string;
 };
   /** Optional contemporaneous behavioural and capacity evidence to corroborate voluntariness and capacity at each decision node. */
-  "behavioural_and_capacity_screen": {
+  "behavioural_and_capacity_screen"?: {
   /** Whether an affect-monitoring tool was used during the agreement process. */
   "affect_monitor_used": boolean;
   /** Text of consent attestation from both parties for use of the affect monitor. */

@@ -1,18 +1,24 @@
 #!/usr/bin/env node
-// Convert the unified JSON Schema to TypeScript types using a minimal walker.
+// Convert a JSON Schema to TypeScript types using a minimal walker.
 // Avoids external deps so the POC runs anywhere with node.
-// Reads schema/agreement.schema.json, writes schema/types.ts.
+// Default: reads schema/agreement.schema.json, writes schema/types.ts.
+// Override: pass [schema-path] [output-ts-path] [TopLevelTypeName] as args.
 
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const ROOT = "/Users/mjb/Desktop/family-law-settlement-poc";
-const schema = JSON.parse(fs.readFileSync(path.join(ROOT, "schema/agreement.schema.json"), "utf8"));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.resolve(__dirname, "..");
+const schemaPath = process.argv[2] ? path.resolve(process.argv[2]) : path.join(ROOT, "schema/agreement.schema.json");
+const outPath = process.argv[3] ? path.resolve(process.argv[3]) : path.join(ROOT, "schema/types.ts");
+const topName = process.argv[4] || "SeparationAgreement";
+const schema = JSON.parse(fs.readFileSync(schemaPath, "utf8"));
 
 const out = [];
 const declared = new Set();
 
-out.push("// Auto-generated from agreement.schema.json");
+out.push(`// Auto-generated from ${path.basename(schemaPath)}`);
 out.push("// Do not edit by hand. Re-run working/json-to-ts.mjs to regenerate.\n");
 
 function tsName(key) {
@@ -61,7 +67,7 @@ for (const [name, def] of Object.entries(defs)) {
 }
 
 // Top-level type
-out.push(`export interface SeparationAgreement ${tsType(schema, "SeparationAgreement")}\n`);
+out.push(`export interface ${topName} ${tsType(schema, topName)}\n`);
 
-fs.writeFileSync(path.join(ROOT, "schema/types.ts"), out.join("\n"));
-console.log(`types.ts written: ${out.join("\n").length} bytes`);
+fs.writeFileSync(outPath, out.join("\n"));
+console.log(`${path.basename(outPath)} written: ${out.join("\n").length} bytes`);

@@ -1,0 +1,18 @@
+{
+  "current": "final",
+  "started_at": "2026-04-24T17:30:00-07:00",
+  "log": [
+    { "node": "intro",            "title": "About this confirmation",                                    "decision": "agree",        "decision_label": "Agree", "note": "", "ts": "2026-04-24T17:30:30-07:00", "prev_hash": "GENESIS",           "hash": "a1b2c3d4e5f60718" },
+    { "node": "charge",           "title": "Understanding of the charge(s)",                             "decision": "agree",        "decision_label": "Agree", "note": "", "ts": "2026-04-24T17:31:30-07:00", "prev_hash": "a1b2c3d4e5f60718", "hash": "b2c3d4e5f6071829" },
+    { "node": "admission",        "title": "Admission of the essential elements",                        "decision": "agree",        "decision_label": "Agree", "note": "", "ts": "2026-04-24T17:32:30-07:00", "prev_hash": "b2c3d4e5f6071829", "hash": "c3d4e5f60718293a" },
+    { "node": "voluntariness",    "title": "Voluntariness of the plea",                                  "decision": "agree",        "decision_label": "Agree", "note": "", "ts": "2026-04-24T17:33:30-07:00", "prev_hash": "c3d4e5f60718293a", "hash": "d4e5f60718293a4b" },
+    { "node": "consequences",     "title": "Nature and consequences of the plea",                        "decision": "agree",        "decision_label": "Agree", "note": "", "ts": "2026-04-24T17:34:30-07:00", "prev_hash": "d4e5f60718293a4b", "hash": "e5f60718293a4b5c" },
+    { "node": "not_bound",        "title": "Court is not bound by any Crown / defence agreement",        "decision": "agree",        "decision_label": "Agree", "note": "", "ts": "2026-04-24T17:35:30-07:00", "prev_hash": "e5f60718293a4b5c", "hash": "f60718293a4b5c6d" },
+    { "node": "trial_rights",     "title": "Waiver of trial rights",                                     "decision": "agree",        "decision_label": "Agree", "note": "", "ts": "2026-04-24T17:36:30-07:00", "prev_hash": "f60718293a4b5c6d", "hash": "0718293a4b5c6d7e" },
+    { "node": "sentencing_range", "title": "Sentencing range discussed (not guaranteed)",                "decision": "agree",        "decision_label": "Agree", "note": "", "ts": "2026-04-24T17:37:30-07:00", "prev_hash": "0718293a4b5c6d7e", "hash": "18293a4b5c6d7e8f" },
+    { "node": "collateral",       "title": "Collateral consequences acknowledged",                       "decision": "agree",        "decision_label": "Agree", "note": "", "ts": "2026-04-24T17:38:30-07:00", "prev_hash": "18293a4b5c6d7e8f", "hash": "8293a4b5c6d7e8f9" },
+    { "node": "appeal_rights",    "title": "Appeal rights explained",                                    "decision": "agree",        "decision_label": "Agree", "note": "", "ts": "2026-04-24T17:39:30-07:00", "prev_hash": "8293a4b5c6d7e8f9", "hash": "293a4b5c6d7e8f90" },
+    { "node": "alternatives",     "title": "Alternative resolutions considered",                         "decision": "agree",        "decision_label": "Agree", "note": "", "ts": "2026-04-24T17:40:30-07:00", "prev_hash": "293a4b5c6d7e8f90", "hash": "93a4b5c6d7e8f901" },
+    { "node": "final",            "title": "Final instruction — enter the guilty plea",                  "decision": "acknowledged", "decision_label": "Acknowledged", "note": "", "ts": "2026-04-24T17:42:00-07:00", "prev_hash": "93a4b5c6d7e8f901", "hash": "3a4b5c6d7e8f9012" }
+  ]
+}
