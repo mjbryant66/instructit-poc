@@ -1,0 +1,182 @@
+{
+  "$id": "bail-ladder.json",
+  "primary_authority": "R. v. Antic, 2017 SCC 27",
+  "supporting_authorities": [
+    {
+      "style": "R. v. Zora, 2020 SCC 14",
+      "principle": "Mens rea required for breach of bail conditions under s. 145(3); conditions must be minimal in number, necessary, reasonable, sufficiently linked to the accused's risks, and not unduly impair liberty."
+    },
+    {
+      "style": "R. v. Myers, 2019 SCC 18",
+      "principle": "Bail review timelines under s. 525 are mandatory; systemic delays in bail reviews violate s. 11(e) Charter rights."
+    },
+    {
+      "style": "R. v. St-Cloud, 2015 SCC 27",
+      "principle": "Framework for tertiary ground detention under s. 515(10)(c): four-factor analysis to maintain public confidence in the administration of justice."
+    },
+    {
+      "style": "R. v. Tunney, 2018 ONSC 961",
+      "principle": "Practical application of the Antic ladder in Ontario superior court bail reviews; reinforces sequential analysis."
+    }
+  ],
+  "constitutional_anchor": {
+    "charter_provision": "s. 11(e)",
+    "right": "Any person charged with an offence has the right not to be denied reasonable bail without just cause.",
+    "interpretive_note": "The ladder of bail reflects the constitutional presumption of release. The onus rests on the Crown (or on the accused in reverse-onus situations under s. 515(6)) to justify each step up the ladder."
+  },
+  "rungs_least_to_most_restrictive": [
+    {
+      "rung": 1,
+      "form_of_release": "Unconditional release on an undertaking",
+      "criminal_code_anchor": "s. 515(1)",
+      "antic_principle": "This is the default. A justice shall order release on an undertaking without conditions unless the Crown shows cause why a more restrictive form is justified. Antic ¶67(a).",
+      "counsel_position_to_argue": "Default applies. The Crown has not discharged its burden to show cause for any condition or more onerous form of release. The accused will attend court voluntarily.",
+      "common_conditions_added_at_this_rung": []
+    },
+    {
+      "rung": 2,
+      "form_of_release": "Undertaking with conditions",
+      "criminal_code_anchor": "s. 515(2)(a)",
+      "antic_principle": "Conditions may be imposed on an undertaking only where unconditional release is inadequate. Each condition must bear a specific nexus to the grounds for detention relied upon and must be minimally impairing. Antic ¶67(b); Zora ¶24.",
+      "counsel_position_to_argue": "If the Crown seeks conditions, demand a specific, evidence-based justification for each one. Generic or boilerplate conditions (e.g., blanket curfews, area restrictions with no factual link) are impermissible after Zora. Consent to the narrowest conditions that address a proven risk.",
+      "common_conditions_added_at_this_rung": [
+        "Reporting to police or bail supervision",
+        "Residence at a specified address",
+        "No-contact with complainant or witnesses",
+        "Area restrictions (with specific factual nexus)",
+        "Curfew (where risk of reoffending is linked to time of day)",
+        "Abstention from alcohol or drugs (where substance use is causally linked to the alleged offence)",
+        "Weapons prohibition / surrender of firearms",
+        "Surrender of passport / no-travel conditions"
+      ]
+    },
+    {
+      "rung": 3,
+      "form_of_release": "Recognizance without surety, without deposit",
+      "criminal_code_anchor": "s. 515(2)(b)",
+      "antic_principle": "A personal recognizance in a set amount (the accused's own pledge) is the next step only if an undertaking with conditions is inadequate. The amount must not be set so high as to constitute de facto detention. Antic ¶67(c).",
+      "counsel_position_to_argue": "If the Crown seeks a recognizance, argue the accused's personal promise with conditions already addresses the risk. If a recognizance is ordered, advocate for a modest amount proportionate to the accused's means. An amount the accused cannot realistically forfeit is functionally a detention order.",
+      "common_conditions_added_at_this_rung": [
+        "All conditions available at rung 2",
+        "Personal financial pledge in a specified amount"
+      ]
+    },
+    {
+      "rung": 4,
+      "form_of_release": "Recognizance without surety, with cash deposit",
+      "criminal_code_anchor": "s. 515(2)(d)",
+      "antic_principle": "A cash deposit from the accused may be ordered only where the accused does not ordinarily reside in the province or does not reside within 200 km of the place of custody. This is a narrow statutory gateway. Antic ¶67(d) [VERIFY]. Cash bail should never be used as a proxy for surety supervision.",
+      "counsel_position_to_argue": "Object unless the Crown establishes the non-residence/distance threshold. Cash deposits disproportionately affect indigent accused. If the accused resides locally, this rung is statutorily unavailable. Even where it applies, the deposit amount must be proportionate to the accused's financial capacity.",
+      "common_conditions_added_at_this_rung": [
+        "All conditions available at rungs 2–3",
+        "Cash deposit in a specified amount"
+      ]
+    },
+    {
+      "rung": 5,
+      "form_of_release": "Recognizance with surety (no deposit)",
+      "criminal_code_anchor": "s. 515(2)(c)",
+      "antic_principle": "A surety is the last significant tool before detention. It should only be required where all less restrictive forms are inadequate to address the grounds for detention. The surety provides community supervision and a financial pledge. Antic ¶67(e)–(g).",
+      "counsel_position_to_argue": "A surety should not be ordered merely because it is useful or adds comfort; it must be necessary. If proposed, ensure the surety is suitable (knowledge of the accused, ability to supervise, understanding of obligations). Argue that conditions on an undertaking or a personal recognizance already accomplish what a surety would add. If a surety is accepted, resist excessive surety amounts that function as wealth-based detention.",
+      "common_conditions_added_at_this_rung": [
+        "All conditions available at rungs 2–3",
+        "Named surety with pledge in a specified amount",
+        "Surety supervision obligations (e.g., accused to reside with surety, surety to report breaches)"
+      ]
+    },
+    {
+      "rung": 6,
+      "form_of_release": "Recognizance with surety and cash deposit",
+      "criminal_code_anchor": "s. 515(2)(e)",
+      "antic_principle": "The most restrictive form of release. A cash deposit on top of a surety should be reserved for cases where the risk is acute and no lesser combination suffices. Antic ¶67(h) [VERIFY]. The justice must articulate why a surety alone is inadequate.",
+      "counsel_position_to_argue": "This is functionally one step from detention. Challenge the Crown to explain what specific risk remains after a suitable surety with conditions. The combined financial burden on the accused and surety must not be so onerous as to amount to constructive detention. If the accused is indigent, this rung is almost certainly disproportionate.",
+      "common_conditions_added_at_this_rung": [
+        "All conditions available at rungs 2–3 and 5",
+        "Cash deposit in addition to surety pledge",
+        "Heightened supervision conditions"
+      ]
+    },
+    {
+      "rung": 7,
+      "form_of_release": "Detention (no release)",
+      "criminal_code_anchor": "s. 515(10)",
+      "antic_principle": "Detention is the last resort. It may only be ordered where no form of release, at any rung, with any combination of conditions, surety, or deposit, is sufficient to address the grounds for detention. Antic ¶67(i).",
+      "counsel_position_to_argue": "Force the Crown to satisfy at least one of the three statutory grounds on a balance of probabilities. Respond to each ground individually. Propose a detailed release plan addressing every identified risk. If the justice is inclined to detain, ask them to articulate on the record which rung was considered and why it was found inadequate, creating a reviewable record for bail review under s. 520 or s. 525.",
+      "common_conditions_added_at_this_rung": []
+    }
+  ],
+  "antic_rules_to_argue": [
+    {
+      "rule": "The justice must start at rung 1 and move up only when satisfied the current rung is inadequate. Each rung must be considered and rejected before the next is imposed.",
+      "source": "Antic ¶67"
+    },
+    {
+      "rule": "Cash deposits should not be ordered in lieu of a surety where a surety is available. The deposit rung (rung 4) has a narrow statutory gateway (non-resident / 200+ km).",
+      "source": "Antic ¶67(c)–(d) [VERIFY]"
+    },
+    {
+      "rule": "Bail conditions must be the minimum necessary; they must be clear, necessary, reasonable, least onerous, sufficiently linked to the risk, and not unduly impair the accused's liberty or render breach an easy and almost inevitable consequence of daily life.",
+      "source": "Antic ¶67(j) [VERIFY]; Zora ¶24 [VERIFY]"
+    },
+    {
+      "rule": "Sureties should be the last resort before detention, not a default mechanism of release.",
+      "source": "Antic ¶67(g) [VERIFY]"
+    },
+    {
+      "rule": "The ladder applies even in reverse-onus situations (s. 515(6)). The accused bears the onus, but the justice must still consider the least restrictive form adequate to address the grounds.",
+      "source": "Antic ¶67 [VERIFY]"
+    },
+    {
+      "rule": "A justice who departs from the ladder must provide reasons explaining why each less restrictive rung was inadequate.",
+      "source": "Antic ¶67"
+    }
+  ],
+  "three_grounds_for_detention": [
+    {
+      "ground": "primary",
+      "section": "s. 515(10)(a)",
+      "test": "Detention is necessary to ensure the accused's attendance in court.",
+      "key_factors": [
+        "Ties to the community (employment, family, residence)",
+        "Prior history of failures to appear",
+        "Severity of the charges and potential sentence as a flight incentive",
+        "Citizenship or immigration status",
+        "Existence of outstanding charges or warrants"
+      ]
+    },
+    {
+      "ground": "secondary",
+      "section": "s. 515(10)(b)",
+      "test": "Detention is necessary for the protection or safety of the public, including any victim or witness, having regard to a substantial likelihood the accused will, if released, commit a criminal offence or interfere with the administration of justice.",
+      "key_factors": [
+        "Criminal record, especially similar offences",
+        "History of violence or threats",
+        "Circumstances of the current offence",
+        "Whether release conditions can adequately mitigate the risk",
+        "Accused's compliance history with prior court orders"
+      ]
+    },
+    {
+      "ground": "tertiary",
+      "section": "s. 515(10)(c)",
+      "test": "Detention is necessary to maintain confidence in the administration of justice, having regard to all the circumstances including the four St-Cloud factors.",
+      "st_cloud_factors": [
+        "Apparent strength of the Crown's case",
+        "Gravity of the offence",
+        "Circumstances surrounding the commission of the offence, including use of a firearm",
+        "Potential for a lengthy term of imprisonment if convicted"
+      ],
+      "counsel_note": "The tertiary ground is narrow and should not be used to justify detention where the primary and secondary grounds are not met. It is not a residual catch-all. St-Cloud ¶85 [VERIFY]."
+    }
+  ],
+  "operational_steps_for_counsel": [
+    "Always open at rung 1. Force the Crown to articulate, on the record, why unconditional release is inadequate before conceding anything.",
+    "If the Crown seeks conditions, require a specific factual nexus for each condition under Zora. Object to boilerplate conditions that lack an evidentiary foundation.",
+    "Prepare a detailed release plan in advance: proposed address, surety information (if needed), employment details, community ties, and a plan addressing each anticipated Crown concern.",
+    "If a surety is proposed by the Crown, argue it is not necessary (merely useful) before agreeing. If a surety is ordered, ensure the surety amount reflects the surety's actual means, not a punitive figure.",
+    "Cash deposit applies only where the accused does not ordinarily reside in the province or resides 200+ km from the place of custody (s. 515(2)(d) [VERIFY]). Object if neither threshold is met.",
+    "If detention is sought, respond to each of the three grounds separately. Concede nothing globally.",
+    "If detained, immediately advise the client of the right to a bail review under s. 520 (superior court review) and the mandatory s. 525 review timelines reinforced by Myers.",
+    "Document every rung the justice considered and rejected. This record is essential for an effective bail review."
+  ]
+}

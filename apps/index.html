@@ -21,6 +21,8 @@
   header .sub { color: var(--muted); font-size: 16px; }
   .pocs { display: grid; grid-template-columns: 1fr; gap: 22px; }
   @media (min-width: 720px) { .pocs { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1080px) { .pocs { grid-template-columns: 1fr 1fr 1fr; } }
+  .poc.bl .cta:hover { background: #2d4a2d; color: #fff; }
   .poc { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px;
     padding: 28px; }
   .poc h2 { margin: 0 0 6px; font-size: 22px; }
@@ -66,7 +68,23 @@
     </div>
   </header>
 
-  <div class="pocs">
+  <div class="pocs" style="grid-template-columns: 1fr 1fr 1fr;">
+    <div class="poc bl" style="--accent-fl: #2d4a2d;">
+      <span class="target" style="background:#e6f0e6;color:#2d4a2d;border:1px solid #b6cdb6;">For criminal counsel</span>
+      <h2 style="color:#2d4a2d;">Bail Cheat Sheet</h2>
+      <p>Counsel-facing reference for a bail hearing — for rusty counsel, public-defender training,
+      or duty counsel under pressure. <strong>Not</strong> a client tool.</p>
+      <p><strong>Differentiator:</strong> jurisdiction-aware. Pick the courthouse and it filters
+      to the local bail program (Toronto Bail Program, JHS Peel/Brampton, BC Bail Supervision,
+      etc.). Walks counsel through onus, three grounds for detention, and the Antic ladder.</p>
+      <ul>
+        <li>s. 515(6) reverse-onus categories with section anchors</li>
+        <li>Antic ladder (rungs 1–7) with counsel positions per rung</li>
+        <li>Local bail programs (ON + BC) by courthouse</li>
+        <li>Three grounds for detention (St-Cloud-aware)</li>
+      </ul>
+      <a class="cta" style="color:#2d4a2d;border-color:#2d4a2d;" href="bail-cheatsheet/">Open the bail tool →</a>
+    </div>
     <div class="poc fl">
       <span class="target">For BC family lawyers</span>
       <h2>Family Law Settlement</h2>

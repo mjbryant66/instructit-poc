@@ -1,0 +1,144 @@
+{
+  "$id": "bail-onus.json",
+  "default_rule": {
+    "section": "Criminal Code s. 515(1)",
+    "rule": "Crown shows cause for detention.",
+    "consequence": "Accused presumptively released on an undertaking without conditions unless the prosecutor shows cause why detention or more restrictive release is justified."
+  },
+  "reverse_onus_categories": [
+    {
+      "key": "indictable_while_at_large",
+      "label": "Indictable offence committed while at large",
+      "section": "s. 515(6)(a)(i)",
+      "trigger_description": "The accused is charged with an indictable offence alleged to have been committed while at large on an earlier indictable offence charge (on judicial interim release, recognizance, undertaking, or subject to an order under s. 672.58 or s. 672.62).",
+      "examples_of_offences": ["Any indictable offence if the timing condition is met"],
+      "rule": "Accused shows cause why detention is not justified.",
+      "ancillary_authority": "R. v. Morales, [1992] 3 SCR 711 (foundational on s. 515(6) reverse-onus validity under s. 11(e) Charter)"
+    },
+    {
+      "key": "non_resident_indictable",
+      "label": "Non-ordinarily-resident accused charged with indictable offence",
+      "section": "s. 515(6)(a)(ii)",
+      "trigger_description": "The accused is charged with an indictable offence and is not ordinarily resident in Canada.",
+      "examples_of_offences": ["Any indictable offence where accused is not ordinarily resident in Canada"],
+      "rule": "Accused shows cause why detention is not justified.",
+      "ancillary_authority": null
+    },
+    {
+      "key": "failure_to_appear_breach",
+      "label": "Failure to appear / breach of release condition",
+      "section": "s. 515(6)(b)",
+      "trigger_description": "The accused is charged with an offence under s. 145(2)-(5) (failure to attend court, failure to comply with condition of undertaking or recognizance, being at large without excuse) alleged to have been committed while at large on an earlier charge.",
+      "examples_of_offences": ["Failure to attend court (s. 145(2))", "Failure to comply with condition of undertaking or recognizance (s. 145(3)-(5))", "Being at large on interim release without lawful excuse (s. 145(5)) [VERIFY exact subsections post-2019 renumbering under Bill C-75]"],
+      "rule": "Accused shows cause why detention is not justified.",
+      "ancillary_authority": null
+    },
+    {
+      "key": "intimate_partner_violence",
+      "label": "Intimate-partner violence reverse onus",
+      "section": "s. 515(6)(b.1)",
+      "trigger_description": "The accused is charged with an offence involving violence against an intimate partner (as defined in s. 2) and the accused has a previous conviction for violence against an intimate partner. Added by Bill C-75 (in force December 18, 2019).",
+      "examples_of_offences": ["Assault (s. 266) against intimate partner where prior IPV conviction exists", "Assault causing bodily harm (s. 267) against intimate partner with prior IPV conviction", "Aggravated assault (s. 268) against intimate partner with prior IPV conviction", "Uttering threats (s. 264.1) against intimate partner with prior IPV conviction", "Criminal harassment (s. 264) against intimate partner with prior IPV conviction"],
+      "rule": "Accused shows cause why detention is not justified.",
+      "ancillary_authority": "R. v. Zora, 2020 SCC 14 (discusses bail conditions and s. 11(e) in context of Bill C-75 reforms; not a direct challenge to (b.1) but relevant framework)"
+    },
+    {
+      "key": "cdsa_trafficking_importing_production",
+      "label": "Serious drug offences under the CDSA",
+      "section": "s. 515(6)(c)",
+      "trigger_description": "The accused is charged with an offence under s. 5(3), s. 6(3), or s. 7(2) of the Controlled Drugs and Substances Act (trafficking, importing/exporting, or production, respectively) that is punishable by imprisonment for life.",
+      "examples_of_offences": ["Trafficking in a Schedule I substance (e.g., cocaine, heroin, fentanyl) (CDSA s. 5(3)(a))", "Importing/exporting a Schedule I or II substance (CDSA s. 6(3)(a) or (b)) [VERIFY (b) reference]", "Production of a Schedule I substance (CDSA s. 7(2)(a))", "Production of a Schedule II substance (CDSA s. 7(2)(b))"],
+      "rule": "Accused shows cause why detention is not justified.",
+      "ancillary_authority": "R. v. Pearson, [1992] 3 SCR 665 (upheld constitutionality of drug-offence reverse onus under s. 11(e))"
+    },
+    {
+      "key": "firearms_offences",
+      "label": "Serious firearms offences",
+      "section": "s. 515(6)(d)",
+      "trigger_description": "The accused is charged with one of the listed firearms offences in the Criminal Code.",
+      "examples_of_offences": [
+        "Possession of prohibited or restricted firearm with ammunition (s. 95(1))",
+        "Possession of weapon obtained by crime (s. 96(1))",
+        "Weapons trafficking (s. 99)",
+        "Possession for purpose of weapons trafficking (s. 100)",
+        "Importing or exporting knowing it is unauthorized (s. 103)",
+        "Unauthorized importing or exporting (s. 104) [VERIFY if s. 104 is included or only s. 103]"
+      ],
+      "rule": "Accused shows cause why detention is not justified.",
+      "ancillary_authority": null
+    },
+    {
+      "key": "criminal_organization_offence",
+      "label": "Criminal organization offences",
+      "section": "s. 515(6)(a)(iii) [VERIFY exact paragraph]",
+      "trigger_description": "The accused is charged with an indictable offence alleged to have been committed for the benefit of, at the direction of, or in association with a criminal organization, or is a criminal organization offence under ss. 467.11, 467.111, 467.12, or 467.13.",
+      "examples_of_offences": ["Participation in activities of criminal organization (s. 467.11)", "Recruitment of members by a criminal organization (s. 467.111)", "Commission of offence for criminal organization (s. 467.12)", "Instructing commission of offence for criminal organization (s. 467.13)"],
+      "rule": "Accused shows cause why detention is not justified.",
+      "ancillary_authority": null
+    },
+    {
+      "key": "terrorism_offence",
+      "label": "Terrorism offences",
+      "section": "s. 515(6)(d) [VERIFY: may be a separate paragraph, e.g., (d.1) or included in an expanded (d)]",
+      "trigger_description": "The accused is charged with a terrorism offence as defined in s. 2 of the Criminal Code (Part II.1, ss. 83.01-83.33).",
+      "examples_of_offences": ["Participating in activity of terrorist group (s. 83.18)", "Facilitating terrorist activity (s. 83.19)", "Commission of offence for terrorist group (s. 83.2)", "Instructing to carry out activity for terrorist group (s. 83.21)", "Instructing to carry out terrorist activity (s. 83.22)", "Harbouring or concealing (s. 83.23)", "Financing of terrorism (s. 83.02-83.04)"],
+      "rule": "Accused shows cause why detention is not justified.",
+      "ancillary_authority": "Application under s. 83.28 of the Criminal Code, 2004 SCC 42 (discusses terrorism provisions and Charter; not a direct bail challenge but relevant context)"
+    },
+    {
+      "key": "use_of_firearm_in_offence",
+      "label": "Offence alleged to involve a firearm",
+      "section": "s. 515(6)(a)(viii) [VERIFY exact sub-paragraph]",
+      "trigger_description": "The accused is charged with a serious offence alleged to have been committed with a firearm (not limited to the listed firearms offences but captures violent offences where a firearm was used).",
+      "examples_of_offences": ["Robbery with a firearm (s. 344(a))", "Extortion with a firearm (s. 346)", "Attempted murder with a firearm", "Discharge firearm with intent (s. 244)"],
+      "rule": "Accused shows cause why detention is not justified.",
+      "ancillary_authority": null
+    }
+  ],
+  "separate_regime_s469": {
+    "key": "s469_superior_court_jurisdiction",
+    "label": "Murder and other s. 469 offences (superior court bail under s. 522)",
+    "section": "Criminal Code s. 522",
+    "trigger_description": "For offences listed in s. 469 (murder, treason, alarming Her Majesty, intimidating Parliament, piracy, and certain related offences), bail jurisdiction lies exclusively with a Superior Court judge. The accused bears the onus to show cause why detention is not justified.",
+    "examples_of_offences": ["First-degree murder (s. 235)", "Second-degree murder (s. 235)", "Treason (s. 47)", "Alarming Her Majesty (s. 49)", "Intimidating Parliament or a legislature (s. 51)", "Inciting to mutiny (s. 53)", "Seditious offences (ss. 59-61) [VERIFY if still in s. 469 list]", "Piracy (ss. 74-75)"],
+    "rule": "Accused shows cause why detention is not justified. Application must be made to a Superior Court judge, not a justice of the peace or provincial court judge.",
+    "ancillary_authority": "R. v. Farinacci (1993), 109 DLR (4th) 97 (Ont. CA) (discusses s. 522 bail review standard)"
+  },
+  "non_reverse_but_complex": [
+    {
+      "key": "terrorism_charter_challenges",
+      "label": "Charter s. 11(e) challenges to terrorism reverse onus",
+      "note": "The terrorism reverse onus has faced s. 11(e) challenges on the basis that the breadth of terrorism offences and the stigma attached create a disproportionate burden. No SCC decision has struck it down, but lower courts have engaged with the issue. [VERIFY: check for any post-2020 appellate decisions specifically addressing constitutionality of terrorism reverse onus at bail.]"
+    },
+    {
+      "key": "bill_c75_ipv_reverse_onus_scope",
+      "label": "Scope disputes regarding intimate-partner violence reverse onus (s. 515(6)(b.1))",
+      "note": "Courts have grappled with what qualifies as 'violence against an intimate partner' for the purpose of triggering the reverse onus, and whether the prior conviction must itself have been prosecuted as IPV or merely involved an intimate partner. Provincial appellate guidance is evolving. [VERIFY current state of case law in 2025-2026.]"
+    },
+    {
+      "key": "hybrid_offences_election",
+      "label": "Hybrid offences before Crown election",
+      "note": "Where the Crown has not yet elected the mode of prosecution for a hybrid offence, the offence is deemed indictable under s. 34(1)(a) of the Interpretation Act. This can trigger reverse onus under s. 515(6)(a)(i) if the accused is already at large on another indictable charge. Defence counsel should confirm whether Crown election has occurred."
+    },
+    {
+      "key": "bill_s217_intimate_partner_violence_expansion",
+      "label": "Potential further IPV bail reforms [VERIFY]",
+      "note": "There have been ongoing legislative proposals to expand the IPV reverse onus (e.g., removing the requirement of a prior conviction). Counsel should verify the current state of any amending legislation as of the hearing date. [VERIFY: check for any amendments enacted in 2024-2026.]"
+    }
+  ],
+  "operational_test": {
+    "step_1": "Identify the offence(s) charged and the applicable maximum penalty.",
+    "step_2": "Check if the offence falls within any s. 515(6) reverse-onus category or s. 469 (triggering s. 522 Superior Court jurisdiction).",
+    "step_3": "Determine onus: default (s. 515(1)) = Crown shows cause; reverse onus (s. 515(6) or s. 522) = accused shows cause.",
+    "step_4": "If reverse onus applies, prepare a s. 11(e) Charter argument where the reverse onus may be disproportionate to the circumstances. Key anchor cases: R. v. Pearson, [1992] 3 SCR 665; R. v. Morales, [1992] 3 SCR 711; R. v. St-Cloud, 2015 SCC 27; R. v. Zora, 2020 SCC 14.",
+    "step_5": "Even under reverse onus, the accused need only show cause on a balance of probabilities that detention is not justified on any of the three grounds (primary, secondary, tertiary) in s. 515(10)."
+  },
+  "metadata": {
+    "jurisdiction": "Canada (federal)",
+    "primary_statute": "Criminal Code, RSC 1985, c C-46",
+    "related_statutes": ["Controlled Drugs and Substances Act, SC 1996, c 19", "Interpretation Act, RSC 1985, c I-21"],
+    "last_verified": "2026-04-25",
+    "verification_notes": "Multiple [VERIFY] tags remain. Counsel must confirm exact sub-paragraph references against the current consolidated text of the Criminal Code on laws-lois.justice.gc.ca, particularly post-Bill C-75 (2019) renumbering and any 2024-2026 amendments.",
+    "disclaimer": "This reference data is designed to support bail-hearing preparation. It is not a substitute for reading the current statute."
+  }
+}
