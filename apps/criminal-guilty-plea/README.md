@@ -41,8 +41,13 @@ addressed each statutory and common-law obligation.
 
 ## Running
 
-Open `index.html` directly in a browser. No build step. localStorage key:
-`instructit_criminal_guilty_plea_v1`.
+Open `index.html` directly in any browser — `file://` works. No build, no
+server needed. The supporting authorities (jurisprudence + bar-guidance)
+are embedded inline as `<script type="application/json">` blocks; the
+external `data/` files remain as the source of truth (re-inline by editing
+the HTML or with a small build step).
+
+localStorage key: `instructit_criminal_guilty_plea_v1`.
 
 ## Future modules (per the InstructIT v2 roadmap in PAI memory)
 
