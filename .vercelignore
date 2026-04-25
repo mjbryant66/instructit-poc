@@ -1,0 +1,11 @@
+node_modules/
+family-law-schema/working/node_modules/
+family-law-schema/gcai-responses/
+family-law-schema/working/prompt-*.md
+family-law-schema/working/sample-*.json
+family-law-schema/working/*.sh
+family-law-schema/working/*.mjs
+family-law-schema/separation-agreement-draft.docx
+family-law-schema/criminal-instructions-memo.docx
+family-law-schema/schema/sample-filled.json
+.git/
