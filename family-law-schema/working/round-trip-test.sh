@@ -67,6 +67,37 @@ step "8. Sample tree node count == log entries (round-trip integrity)" \
     [[ \$src_log -eq \$out_entries ]]
   "
 
+step "9. Criminal schema compiles" \
+  bash -c "
+    node -e \"
+      const A = require('./working/node_modules/ajv/dist/2020').default || require('./working/node_modules/ajv/dist/2020');
+      const f = require('./working/node_modules/ajv-formats').default || require('./working/node_modules/ajv-formats');
+      const fs = require('fs');
+      const ajv = new A({ strict: false });
+      f(ajv);
+      const s = JSON.parse(fs.readFileSync('schema/criminal/instructions.schema.json'));
+      ajv.compile(s);
+    \"
+  "
+
+step "10. Criminal sample-filled.json validates against criminal schema" \
+  bash -c "
+    node -e \"
+      const A = require('./working/node_modules/ajv/dist/2020').default || require('./working/node_modules/ajv/dist/2020');
+      const f = require('./working/node_modules/ajv-formats').default || require('./working/node_modules/ajv-formats');
+      const fs = require('fs');
+      const ajv = new A({ strict: false, allErrors: true });
+      f(ajv);
+      const s = JSON.parse(fs.readFileSync('schema/criminal/instructions.schema.json'));
+      const sample = JSON.parse(fs.readFileSync('schema/criminal/sample-filled.json'));
+      const v = ajv.compile(s);
+      if (!v(sample)) { console.error(v.errors.length, 'errors'); process.exit(1); }
+    \"
+  "
+
+step "11. Criminal docx renders" \
+  bash -c "rm -f criminal-instructions-memo.docx && node working/render-criminal-docx.mjs > /tmp/rt-11.log 2>&1 && [[ -s criminal-instructions-memo.docx ]]"
+
 echo ""
 echo "==================================="
 echo " Pass: $PASS  /  Fail: $FAIL"

@@ -1,7 +1,7 @@
 {
   "$schema_ref": "agreement.schema.json",
   "_NOTE": "Partial fragment exported from InstructIT browser POC. Merge into a full agreement instance. Spouse mapping (this session = spouse_1 vs spouse_2) must be set by the operator.",
-  "_exported_at": "2026-04-25T05:31:31.590Z",
+  "_exported_at": "2026-04-25T05:37:36.257Z",
   "_source": "sample-instructit-export.json",
   "instructions_record": {
     "chain_genesis_hash": "GENESIS",
