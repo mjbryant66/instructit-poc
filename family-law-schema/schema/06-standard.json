@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "standard-clauses.schema.json",
+  "title": "BC FLA Separation Agreement – Standard Clauses, Execution & ILA Certificates",
+  "type": "object",
+  "$defs": {
+    "WitnessBlock": {
+      "type": "object",
+      "description": "Witness attestation block for a party's signature.",
+      "properties": {
+        "witness_full_name": { "type": "string", "description": "Full legal name of the witness." },
+        "witness_occupation": { "type": "string", "description": "Occupation of the witness." },
+        "witness_address": { "type": "string", "description": "Full address of the witness." },
+        "witness_signature_date": { "type": "string", "format": "date", "description": "Date the witness signed." },
+        "witness_signature": { "type": "boolean", "description": "True when the witness has signed." }
+      },
+      "required": ["witness_full_name", "witness_occupation", "witness_address", "witness_signature_date", "witness_signature"]
+    },
+    "ILACertificate": {
+      "type": "object",
+      "description": "Independent Legal Advice certificate appended per party.",
+      "properties": {
+        "party_name": { "type": "string", "description": "Name of the party who received ILA." },
+        "lawyer_name": { "type": "string", "description": "Full name of the advising lawyer." },
+        "law_firm": { "type": "string", "description": "Name of the lawyer's firm." },
+        "firm_address": { "type": "string", "description": "Business address of the firm." },
+        "lsbc_member_number": { "type": "string", "description": "Law Society of British Columbia member number." },
+        "date_of_advice": { "type": "string", "format": "date", "description": "Date ILA was provided." },
+        "location_of_advice": { "type": "string", "description": "City/address where advice was given." },
+        "duration_minutes": { "type": "integer", "minimum": 1, "description": "Duration of the ILA session in minutes." },
+        "confirmations": {
+          "type": "object",
+          "description": "Mandatory confirmations the ILA lawyer must attest to.",
+          "properties": {
+            "reviewed_entire_agreement": { "type": "boolean", "description": "Lawyer reviewed the entire agreement with the client." },
+            "client_appeared_to_understand": { "type": "boolean", "description": "Client appeared to understand the terms and consequences." },
+            "free_of_duress_coercion_undue_influence": { "type": "boolean", "description": "Client appeared free of duress, coercion, or undue influence." },
+            "reasonable_opportunity_for_questions": { "type": "boolean", "description": "Client had a reasonable opportunity to ask questions and have them answered." },
+            "client_confirmed_full_disclosure": { "type": "boolean", "description": "Client confirmed that full financial disclosure had been made." },
+            "lawyer_is_independent": { "type": "boolean", "description": "Lawyer is independent and does not also act for the other spouse." }
+          },
+          "required": ["reviewed_entire_agreement", "client_appeared_to_understand", "free_of_duress_coercion_undue_influence", "reasonable_opportunity_for_questions", "client_confirmed_full_disclosure", "lawyer_is_independent"]
+        },
+        "lawyer_signature": { "type": "boolean", "description": "True when the ILA lawyer has signed the certificate." }
+      },
+      "required": ["party_name", "lawyer_name", "law_firm", "firm_address", "lsbc_member_number", "date_of_advice", "location_of_advice", "duration_minutes", "confirmations", "lawyer_signature"]
+    },
+    "NotaryBlock": {
+      "type": "object",
+      "description": "Optional notarization block, recommended where agreement effects real property transfers.",
+      "properties": {
+        "notary_name": { "type": "string", "description": "Full name of the notary public." },
+        "notary_commission_number": { "type": "string", "description": "BC notary commission or appointment number." },
+        "commission_expiry": { "type": "string", "format": "date", "description": "Expiry date of the notary's commission." },
+        "notarization_date": { "type": "string", "format": "date", "description": "Date the document was notarized." },
+        "notarization_location": { "type": "string", "description": "Location where notarization occurred." },
+        "notary_signature": { "type": "boolean", "description": "True when the notary has signed and sealed." }
+      },
+      "required": ["notary_name", "notary_commission_number", "notarization_date", "notarization_location", "notary_signature"]
+    }
+  },
+  "properties": {
+    "releases_and_waivers": {
+      "type": "object",
+      "description": "Mutual releases of all claims arising from the relationship, subject to FLA s. 4 and s. 93 set-aside jurisdiction.",
+      "properties": {
+        "mutual_general_release": { "type": "string", "description": "Text of the mutual general release of claims arising from the relationship, subject to FLA s. 4 (agreement requirements) and s. 93 (set-aside powers)." },
+        "specific_releases": {
+          "type": "object",
+          "description": "Category-specific releases.",
+          "properties": {
+            "property": { "type": "string", "description": "Release of all property division claims under FLA Part 5." },
+            "support": { "type": "string", "description": "Release of spousal support claims except as provided in this agreement." },
+            "parenting": { "type": "string", "description": "Release of parenting claims except as provided; subject to best-interests reservation." },
+            "estate_wills_variation": { "type": "string", "description": "Release of estate claims, including acknowledgment of WESA s. 60 wills variation rights being waived for spousal claims." },
+            "tort": { "type": "string", "description": "Release of tort claims arising from the relationship." },
+            "intentional_infliction": { "type": "string", "description": "Release of claims for intentional infliction of emotional distress arising from the relationship." }
+          },
+          "required": ["property", "support", "parenting", "estate_wills_variation", "tort", "intentional_infliction"]
+        },
+        "finality_acknowledgment": { "type": "string", "description": "Acknowledgment that all releases are intended to be final and binding." },
+        "children_reservation": { "type": "string", "description": "Explicit reservation: Nothing in this agreement releases claims relating to children, which remain always subject to the court's best-interests jurisdiction." },
+        "wesa_s60_acknowledgment": { "type": "string", "description": "Each party acknowledges awareness of WESA s. 60 wills variation rights and waives spousal claims thereunder." }
+      },
+      "required": ["mutual_general_release", "specific_releases", "finality_acknowledgment", "children_reservation", "wesa_s60_acknowledgment"]
+    },
+    "indemnities": {
+      "type": "object",
+      "description": "Mutual and specific indemnification provisions.",
+      "properties": {
+        "debt_indemnity": { "type": "string", "description": "Each party indemnifies the other for debts allocated to that party under the property/debt division sections." },
+        "tax_exposure_indemnity": { "type": "string", "description": "Indemnity for tax liability arising from assets allocated or transferred under this agreement." },
+        "disclosure_breach_indemnity": { "type": "string", "description": "Indemnity for loss arising from breach of the full-disclosure representations." },
+        "notice_and_defence_rights": {
+          "type": "object",
+          "description": "Procedural rights on indemnified claims.",
+          "properties": {
+            "notice_requirement": { "type": "string", "description": "Indemnified party must give prompt written notice of any third-party claim." },
+            "right_to_defend": { "type": "string", "description": "Indemnifying party has the right to assume defence of the claim at its cost." },
+            "cooperation": { "type": "string", "description": "Indemnified party must cooperate in the defence." }
+          },
+          "required": ["notice_requirement", "right_to_defend", "cooperation"]
+        }
+      },
+      "required": ["debt_indemnity", "tax_exposure_indemnity", "disclosure_breach_indemnity", "notice_and_defence_rights"]
+    },
+    "dispute_resolution": {
+      "type": "object",
+      "description": "Tiered dispute resolution: mediation, arbitration, then court.",
+      "properties": {
+        "mandatory_mediation": {
+          "type": "object",
+          "description": "Mediation as the mandatory first step.",
+          "properties": {
+            "mediator_selection_process": { "type": "string", "description": "Process for selecting a mediator (mutual agreement, then roster selection)." },
+            "cost_sharing": { "type": "string", "description": "Mediation costs shared equally unless mediator or court orders otherwise." },
+            "timeline": { "type": "string", "description": "Mediation to commence within 30 days of written dispute notice." }
+          },
+          "required": ["mediator_selection_process", "cost_sharing", "timeline"]
+        },
+        "arbitration": {
+          "type": "object",
+          "description": "Arbitration as second tier if mediation fails.",
+          "properties": {
+            "governing_rules": { "type": "string", "description": "Arbitration conducted under BC Arbitration Act and, where applicable, the Notice to Mediate (Family) Regulation [VERIFY]." },
+            "arbitrator_selection": { "type": "string", "description": "Single arbitrator selected by agreement or appointed per BC Arbitration Act." },
+            "binding": { "type": "boolean", "description": "True if arbitration is binding." }
+          },
+          "required": ["governing_rules", "arbitrator_selection", "binding"]
+        },
+        "court_last_resort": {
+          "type": "object",
+          "description": "Court proceedings as last resort.",
+          "properties": {
+            "court": { "type": "string", "description": "Supreme Court of British Columbia." },
+            "registry": { "type": "string", "description": "Named judicial registry (e.g., Vancouver, Victoria, etc.)." }
+          },
+          "required": ["court", "registry"]
+        },
+        "cost_rules": { "type": "string", "description": "Party who initiates frivolous proceedings bears the other party's mediator/arbitrator fees and reasonable legal costs." }
+      },
+      "required": ["mandatory_mediation", "arbitration", "court_last_resort", "cost_rules"]
+    },
+    "governing_law_and_jurisdiction": {
+      "type": "object",
+      "description": "Governing law and jurisdictional provisions.",
+      "properties": {
+        "governing_law": { "type": "string", "description": "This agreement is governed by the Family Law Act, SBC 2011, c. 25, and the laws of British Columbia." },
+        "exclusive_jurisdiction": { "type": "string", "description": "The parties submit to the exclusive jurisdiction of the courts of British Columbia." },
+        "limitation_suspension_acknowledgment": { "type": "string", "description": "Acknowledgment that under FLA s. 198(5) [VERIFY], limitation periods are suspended while the parties are engaged in qualifying family dispute resolution." }
+      },
+      "required": ["governing_law", "exclusive_jurisdiction", "limitation_suspension_acknowledgment"]
+    },
+    "entire_agreement_clause": {
+      "type": "object",
+      "description": "Entire agreement / integration clause.",
+      "properties": {
+        "supersession": { "type": "string", "description": "This agreement constitutes the entire agreement and supersedes all prior oral or written agreements, understandings, and negotiations." },
+        "no_outside_representations": { "type": "string", "description": "Neither party has relied on any representations, warranties, or promises not expressly set out in this agreement." }
+      },
+      "required": ["supersession", "no_outside_representations"]
+    },
+    "severability": {
+      "type": "object",
+      "description": "Standard severability clause.",
+      "properties": {
+        "clause_text": { "type": "string", "description": "If any provision is found unenforceable or invalid by a court of competent jurisdiction, the remaining provisions continue in full force and effect." }
+      },
+      "required": ["clause_text"]
+    },
+    "amendments_and_counterparts": {
+      "type": "object",
+      "description": "Amendment formalities and counterpart execution.",
+      "properties": {
+        "amendments_in_writing": { "type": "string", "description": "Amendments only effective if in writing, signed by both parties, with each party having received ILA on the amendment." },
+        "electronic_signatures": { "type": "string", "description": "Electronic signatures are permitted under the BC Electronic Transactions Act, SBC 2001, c. 10 [VERIFY]." },
+        "counterparts": { "type": "string", "description": "This agreement may be executed in counterparts, each of which is deemed an original, and all of which together constitute one agreement." }
+      },
+      "required": ["amendments_in_writing", "electronic_signatures", "counterparts"]
+    },
+    "notice_provisions": {
+      "type": "object",
+      "description": "Service and notice requirements.",
+      "properties": {
+        "permitted_methods": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Permitted delivery methods: registered mail, email with read receipt, courier."
+        },
+        "addresses_for_service": {
+          "type": "object",
+          "description": "Each party's address for service, cross-referencing the parties section.",
+          "properties": {
+            "party_1_address": { "type": "string", "description": "Party 1's last known address for service." },
+            "party_2_address": { "type": "string", "description": "Party 2's last known address for service." }
+          },
+          "required": ["party_1_address", "party_2_address"]
+        },
+        "deemed_receipt_rules": {
+          "type": "object",
+          "description": "Rules for when notice is deemed received.",
+          "properties": {
+            "registered_mail": { "type": "string", "description": "5 business days after posting." },
+            "email": { "type": "string", "description": "Upon receipt of read confirmation or, absent confirmation, 2 business days after sending." },
+            "courier": { "type": "string", "description": "Next business day after delivery to the courier." }
+          },
+          "required": ["registered_mail", "email", "courier"]
+        },
+        "address_change_obligation": { "type": "string", "description": "Each party must notify the other in writing of any change of address within 10 days." }
+      },
+      "required": ["permitted_methods", "addresses_for_service", "deemed_receipt_rules", "address_change_obligation"]
+    },
+    "conditions_precedent": {
+      "type": "object",
+      "description": "Conditions that must be satisfied before the agreement becomes binding, if applicable.",
+      "properties": {
+        "court_approval_if_required": { "type": "string", "description": "Court approval required where a party lacks legal capacity or is an undischarged bankrupt." },
+        "property_transfer_completion": { "type": "string", "description": "Completion of all property transfers described in this agreement." },
+        "ila_confirmation": { "type": "string", "description": "Each party's ILA certificate must be executed and appended before the agreement takes effect." },
+        "financial_disclosure_certified_complete": { "type": "string", "description": "Both parties certify that financial disclosure exchange, including Form F8 equivalents, is complete." }
+      },
+      "required": ["ila_confirmation", "financial_disclosure_certified_complete"]
+    },
+    "default_and_remedies": {
+      "type": "object",
+      "description": "Default events, cure periods, and enforcement mechanisms.",
+      "properties": {
+        "events_of_default": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Events constituting default: missed support payment, failure to transfer property or assets by deadline, breach of disclosure representations, failure to maintain required insurance."
+        },
+        "cure_period_days": { "type": "integer", "minimum": 0, "description": "Number of days after written notice within which the defaulting party may cure (e.g., 15 days)." },
+        "acceleration_of_obligations": { "type": "string", "description": "Upon uncured default, the non-defaulting party may declare all remaining obligations immediately due." },
+        "fla_filing_for_enforcement": { "type": "string", "description": "The agreement may be filed with the court under FLA s. 44 [VERIFY] for property enforcement or s. 148 [VERIFY] for support enforcement." },
+        "fmep_enrollment": { "type": "string", "description": "Support obligations may be enrolled with the BC Family Maintenance Enforcement Program for enforcement." }
+      },
+      "required": ["events_of_default", "cure_period_days", "acceleration_of_obligations", "fla_filing_for_enforcement", "fmep_enrollment"]
+    },
+    "execution_block": {
+      "type": "object",
+      "description": "Signature, witness, and optional notarization blocks for each party.",
+      "properties": {
+        "party_1_execution": {
+          "type": "object",
+          "description": "Execution block for Party 1.",
+          "properties": {
+            "party_name": { "type": "string", "description": "Full legal name of Party 1." },
+            "signature_date": { "type": "string", "format": "date", "description": "Date Party 1 signed." },
+            "signature_location": { "type": "string", "description": "City and province where Party 1 signed." },
+            "party_signature": { "type": "boolean", "description": "True when Party 1 has signed." },
+            "witness": { "$ref": "#/$defs/WitnessBlock" },
+            "notarization": { "$ref": "#/$defs/NotaryBlock" }
+          },
+          "required": ["party_name", "signature_date", "signature_location", "party_signature", "witness"]
+        },
+        "party_2_execution": {
+          "type": "object",
+          "description": "Execution block for Party 2.",
+          "properties": {
+            "party_name": { "type": "string", "description": "Full legal name of Party 2." },
+            "signature_date": { "type": "string", "format": "date", "description": "Date Party 2 signed." },
+            "signature_location": { "type": "string", "description": "City and province where Party 2 signed." },
+            "party_signature": { "type": "boolean", "description": "True when Party 2 has signed." },
+            "witness": { "$ref": "#/$defs/WitnessBlock" },
+            "notarization": { "$ref": "#/$defs/NotaryBlock" }
+          },
+          "required": ["party_name", "signature_date", "signature_location", "party_signature", "witness"]
+        }
+      },
+      "required": ["party_1_execution", "party_2_execution"]
+    },
+    "ila_certificates": {
+      "type": "object",
+      "description": "Separate ILA certificate appended for each party.",
+      "properties": {
+        "party_1_ila": { "$ref": "#/$defs/ILACertificate" },
+        "party_2_ila": { "$ref": "#/$defs/ILACertificate" }
+      },
+      "required": ["party_1_ila", "party_2_ila"]
+    },
+    "schedules_index": {
+      "type": "object",
+      "description": "Index of schedules forming part of this agreement.",
+      "properties": {
+        "schedule_a": { "type": "string", "const": "Asset and Debt Inventory", "description": "Schedule A: Complete inventory of family and excluded assets and debts." },
+        "schedule_b": { "type": "string", "const": "Financial Disclosure (Form F8 Equivalents)", "description": "Schedule B: Sworn financial statements per spouse (Form F8 equivalent)." },
+        "schedule_c": { "type": "string", "const": "Parenting Schedule Calendar", "description": "Schedule C: Detailed parenting time calendar." },
+        "schedule_d": { "type": "string", "const": "Insurance and Beneficiary Designations", "description": "Schedule D: Life and other insurance policies with beneficiary designations." },
+        "schedule_e": { "type": "string", "const": "Real Property Transfer Documents", "description": "Schedule E: Transfer forms and conveyancing documents for real property." },
+        "schedule_f": { "type": "string", "const": "Pension Division Forms", "description": "Schedule F: Pension division agreements and required statutory forms." },
+        "schedule_g": { "type": "string", "const": "SSAG Calculation Output", "description": "Schedule G: Spousal Support Advisory Guidelines calculation output used to inform support terms." }
+      },
+      "required": ["schedule_a", "schedule_b", "schedule_c", "schedule_d", "schedule_e", "schedule_f", "schedule_g"]
+    }
+  },
+  "required": [
+    "releases_and_waivers",
+    "indemnities",
+    "dispute_resolution",
+    "governing_law_and_jurisdiction",
+    "entire_agreement_clause",
+    "severability",
+    "amendments_and_counterparts",
+    "notice_provisions",
+    "conditions_precedent",
+    "default_and_remedies",
+    "execution_block",
+    "ila_certificates",
+    "schedules_index"
+  ]
+}

@@ -1,0 +1,272 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "parties.schema.json",
+  "title": "BC FLA Separation Agreement — Parties, Recitals & Definitions",
+  "description": "Sub-schema covering the parties, recitals, and definitions sections of a separation agreement governed by the British Columbia Family Law Act, SBC 2011, c. 25.",
+  "type": "object",
+  "definitions": {
+    "Date": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date (YYYY-MM-DD)."
+    },
+    "Currency": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Monetary amount in the specified currency."
+        },
+        "currency_code": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$",
+          "default": "CAD",
+          "description": "ISO 4217 currency code."
+        }
+      },
+      "required": ["amount", "currency_code"]
+    },
+    "Address": {
+      "type": "object",
+      "properties": {
+        "street_line_1": { "type": "string", "description": "Street address line 1." },
+        "street_line_2": { "type": ["string", "null"], "description": "Street address line 2 (unit, suite, etc.)." },
+        "city": { "type": "string", "description": "City or municipality." },
+        "province_or_state": { "type": "string", "description": "Province, state, or territory." },
+        "postal_code": { "type": "string", "description": "Postal or ZIP code." },
+        "country": { "type": "string", "default": "Canada", "description": "Country name." }
+      },
+      "required": ["street_line_1", "city", "province_or_state", "postal_code", "country"]
+    },
+    "Solicitor": {
+      "type": "object",
+      "description": "Independent legal advice (ILA) counsel for a party.",
+      "properties": {
+        "name": { "type": "string", "description": "Full legal name of the solicitor." },
+        "firm": { "type": "string", "description": "Law firm name." },
+        "address": { "$ref": "#/definitions/Address" },
+        "email": { "type": "string", "format": "email", "description": "Professional email." },
+        "phone": { "type": "string", "description": "Contact phone number." },
+        "law_society_number": { "type": ["string", "null"], "description": "Law Society of BC member number, if available." }
+      },
+      "required": ["name", "firm", "email"]
+    },
+    "Person": {
+      "type": "object",
+      "description": "A party (spouse) to the separation agreement.",
+      "properties": {
+        "role_label": {
+          "type": "string",
+          "enum": ["Spouse 1", "Spouse 2"],
+          "description": "Gender-neutral role label for referencing this party throughout the agreement."
+        },
+        "legal_name": {
+          "type": "object",
+          "properties": {
+            "first": { "type": "string", "description": "Legal first name(s)." },
+            "middle": { "type": ["string", "null"], "description": "Legal middle name(s)." },
+            "last": { "type": "string", "description": "Legal surname." }
+          },
+          "required": ["first", "last"]
+        },
+        "former_names": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "All former and maiden names."
+        },
+        "preferred_name": {
+          "type": ["string", "null"],
+          "description": "Preferred or commonly known name, if different from legal name."
+        },
+        "date_of_birth": { "$ref": "#/definitions/Date", "description": "Date of birth." },
+        "sin": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9]{3}-?[0-9]{3}-?[0-9]{3}$",
+          "description": "Social Insurance Number. Optional; encrypted at rest."
+        },
+        "occupation": { "type": ["string", "null"], "description": "Current occupation or profession." },
+        "employer": { "type": ["string", "null"], "description": "Current employer name." },
+        "residential_address": { "$ref": "#/definitions/Address", "description": "Current residential address." },
+        "mailing_address": {
+          "oneOf": [
+            { "$ref": "#/definitions/Address" },
+            { "type": "null" }
+          ],
+          "description": "Mailing address if different from residential address."
+        },
+        "email": { "type": "string", "format": "email", "description": "Personal email address for notices." },
+        "phone": { "type": "string", "description": "Primary telephone number." },
+        "solicitor": { "$ref": "#/definitions/Solicitor" }
+      },
+      "required": [
+        "role_label",
+        "legal_name",
+        "date_of_birth",
+        "residential_address",
+        "email",
+        "phone",
+        "solicitor"
+      ]
+    }
+  },
+  "properties": {
+    "parties": {
+      "type": "array",
+      "description": "Exactly two spouses who are parties to this agreement.",
+      "items": { "$ref": "#/definitions/Person" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "relationship_status": {
+      "type": "object",
+      "description": "Classification of the spousal relationship under the FLA, s. 3.",
+      "properties": {
+        "category": {
+          "type": "string",
+          "enum": [
+            "married",
+            "unmarried_2yr_or_more",
+            "unmarried_under_2yr_with_child",
+            "unmarried_no_property_rights"
+          ],
+          "description": "FLA s. 3 spouse classification. 'married' = legally married; 'unmarried_2yr_or_more' = lived in marriage-like relationship ≥ 2 years (full property rights per s. 3(1)(b)); 'unmarried_under_2yr_with_child' = < 2 years but with a child (support rights, limited property rights [VERIFY s. 3]); 'unmarried_no_property_rights' = does not meet s. 3 threshold for property division."
+        },
+        "marriage_date": {
+          "oneOf": [{ "$ref": "#/definitions/Date" }, { "type": "null" }],
+          "description": "Date of marriage, if applicable."
+        },
+        "marriage_place": {
+          "type": ["string", "null"],
+          "description": "City/province/country where the marriage was solemnized."
+        },
+        "cohabitation_start_date": {
+          "oneOf": [{ "$ref": "#/definitions/Date" }, { "type": "null" }],
+          "description": "Date the parties began living in a marriage-like relationship (FLA s. 3(1)(b))."
+        },
+        "separation_date": {
+          "$ref": "#/definitions/Date",
+          "description": "Date of separation. Triggers limitation periods under FLA s. 198 (2 years for property/debt division) and s. 198(2) (1 year for spousal support for unmarried spouses) [VERIFY s. 198(2)]."
+        },
+        "separation_finality": {
+          "type": "string",
+          "enum": [
+            "date_certain",
+            "date_disputed",
+            "date_agreed_for_purposes_of_this_agreement"
+          ],
+          "description": "Whether the separation date is agreed, disputed, or adopted solely for purposes of this agreement."
+        }
+      },
+      "required": ["category", "separation_date", "separation_finality"]
+    },
+    "recitals": {
+      "type": "array",
+      "description": "Ordered recital clauses forming the preamble of the agreement.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "description": "Unique snake_case identifier for this recital."
+          },
+          "text": {
+            "type": "string",
+            "description": "Recital prose. Use {{placeholder}} tokens for party names, dates, and other variable data."
+          },
+          "purpose": {
+            "type": "string",
+            "description": "One-line drafter note explaining the legal or practical purpose of this recital."
+          }
+        },
+        "required": ["key", "text", "purpose"]
+      },
+      "minItems": 8,
+      "default": [
+        {
+          "key": "identification",
+          "text": "{{spouse_1_legal_name}} (\"Spouse 1\") and {{spouse_2_legal_name}} (\"Spouse 2\") are the parties to this Agreement.",
+          "purpose": "Identifies the contracting parties by legal name and role label."
+        },
+        {
+          "key": "marriage_or_cohabitation",
+          "text": "The parties were married on {{marriage_date}} at {{marriage_place}} (or began cohabiting in a marriage-like relationship on {{cohabitation_start_date}}).",
+          "purpose": "Establishes the relationship and its FLA s. 3 classification."
+        },
+        {
+          "key": "separation",
+          "text": "The parties separated on {{separation_date}} within the meaning of the Family Law Act and have lived separate and apart since that date.",
+          "purpose": "Fixes the separation date for limitation-period purposes (FLA s. 198)."
+        },
+        {
+          "key": "children",
+          "text": "There are {{number_of_children}} children of the relationship, namely {{children_names_and_dobs}}.",
+          "purpose": "Identifies children whose guardianship, parenting, and support are addressed."
+        },
+        {
+          "key": "intent_to_settle",
+          "text": "The parties wish to settle all matters arising from their relationship, including the division of family property and family debt, spousal support, child support, guardianship, and parenting arrangements, on the terms set out in this Agreement.",
+          "purpose": "States comprehensive settlement intent to support enforceability under FLA s. 93."
+        },
+        {
+          "key": "prior_interim_arrangements",
+          "text": "Since separation the parties have maintained interim arrangements regarding {{interim_topics}}, which this Agreement supersedes.",
+          "purpose": "Addresses any existing informal or court-ordered interim arrangements."
+        },
+        {
+          "key": "independent_legal_advice",
+          "text": "Each party has obtained independent legal advice, or has had the opportunity to do so and has chosen not to, before executing this Agreement.",
+          "purpose": "Supports enforceability by evidencing ILA (FLA s. 93(3)(b) [VERIFY])."
+        },
+        {
+          "key": "full_disclosure",
+          "text": "Each party has provided to the other full and frank disclosure of all income, assets, debts, and other relevant financial information as of the Disclosure Date.",
+          "purpose": "Satisfies the disclosure requirement that underpins enforceability (FLA s. 93(3)(c) [VERIFY])."
+        },
+        {
+          "key": "binding_agreement",
+          "text": "The parties intend this Agreement to be a written agreement that is binding on them and enforceable under Part 2 of the Family Law Act, subject to the court's authority under FLA s. 93 to set aside or replace provisions of the Agreement.",
+          "purpose": "Confirms binding intent and acknowledges the court's residual discretion under FLA s. 93."
+        }
+      ]
+    },
+    "definitions_section": {
+      "type": "array",
+      "description": "Defined terms used throughout the agreement body.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "term": {
+            "type": "string",
+            "description": "The defined term as it appears in the agreement (title case, in quotation marks when used in the document)."
+          },
+          "definition": {
+            "type": "string",
+            "description": "Full definition text."
+          },
+          "fla_cross_reference": {
+            "type": ["string", "null"],
+            "description": "FLA section cross-reference, if the term maps to a statutory definition. Null otherwise."
+          }
+        },
+        "required": ["term", "definition", "fla_cross_reference"]
+      },
+      "minItems": 11,
+      "default": [
+        { "term": "Family Property", "definition": "Has the meaning given in FLA s. 84, being property owned by at least one spouse on the date of separation that is not Excluded Property.", "fla_cross_reference": "FLA s. 84" },
+        { "term": "Excluded Property", "definition": "Has the meaning given in FLA s. 85, including property acquired before the relationship, gifts, inheritances, and certain other categories.", "fla_cross_reference": "FLA s. 85" },
+        { "term": "Family Debt", "definition": "Has the meaning given in FLA s. 86, being debts incurred during the relationship or after separation to maintain Family Property.", "fla_cross_reference": "FLA s. 86" },
+        { "term": "Separation Date", "definition": "Means {{separation_date}}, the date the parties began living separate and apart, as agreed or determined in this Agreement.", "fla_cross_reference": "FLA s. 3(4) [VERIFY]" },
+        { "term": "Triggering Event", "definition": "Has the meaning given in FLA s. 81, being the event (separation for spouses who are not married, or a triggering event under s. 81(1)(b) for married spouses) upon which property division obligations crystallize.", "fla_cross_reference": "FLA s. 81" },
+        { "term": "Children", "definition": "Means the children of the relationship as identified in the recitals, including any child for whom both parties stand in the role of parent within the meaning of FLA ss. 146–147 [VERIFY].", "fla_cross_reference": "FLA s. 146–147 [VERIFY]" },
+        { "term": "Child Support Guidelines", "definition": "Means the Federal Child Support Guidelines, SOR/97-175, as amended, applicable in British Columbia pursuant to FLA s. 150 [VERIFY].", "fla_cross_reference": "FLA s. 150 [VERIFY]" },
+        { "term": "SSAG", "definition": "Means the Spousal Support Advisory Guidelines, published by the Department of Justice Canada (2008, updated), used as a reference framework for the quantum and duration of spousal support.", "fla_cross_reference": null },
+        { "term": "Family Home", "definition": "Means the property located at {{family_home_address}} that was the parties' ordinary residence at the time of separation, as contemplated by FLA s. 84(1) [VERIFY specific subsection].", "fla_cross_reference": "FLA s. 84" },
+        { "term": "Disclosure Date", "definition": "Means {{disclosure_date}}, the date by reference to which the parties valued all Family Property, Excluded Property, and Family Debt for purposes of this Agreement.", "fla_cross_reference": null },
+        { "term": "Effective Date", "definition": "Means the date on which the last party or witness signs this Agreement, from which date all obligations herein take effect unless a different date is specified for a particular provision.", "fla_cross_reference": null }
+      ]
+    }
+  },
+  "required": ["parties", "relationship_status", "recitals", "definitions_section"]
+}

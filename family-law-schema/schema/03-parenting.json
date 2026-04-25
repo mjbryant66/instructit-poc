@@ -1,0 +1,289 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "parenting.schema.json",
+  "title": "BC FLA Separation Agreement — Children & Parenting Sub-Schema",
+  "notes": "All parenting provisions remain subject to the court's best-interests jurisdiction under FLA s. 37 and may be varied if circumstances change materially.",
+  "definitions": {
+    "Child": {
+      "type": "object",
+      "properties": {
+        "legal_name": { "type": "string", "description": "Full legal name of the child as shown on birth certificate or adoption order." },
+        "date_of_birth": { "type": "string", "format": "date", "description": "Child's date of birth (YYYY-MM-DD)." },
+        "sex_or_gender": { "type": "string", "description": "Sex or gender identity of the child. Free text; optional." },
+        "province_of_birth": { "type": "string", "description": "Canadian province or territory of birth, or country if born outside Canada." },
+        "parentage_type": {
+          "type": "string",
+          "enum": ["biological", "adopted", "standing_in_place_of_parent"],
+          "description": "Relationship basis. 'standing_in_place_of_parent' engages FLA s. 147 [VERIFY] regarding a person who is not a biological or adoptive parent but has demonstrated settled intention to treat the child as their own (see also FLA s. 146 [VERIFY])."
+        },
+        "school_name": { "type": "string", "description": "Current school attended by the child." },
+        "grade": { "type": "string", "description": "Current grade or program level." },
+        "primary_residence_address": { "type": "string", "description": "Address of the child's primary residence for enrollment and records purposes." },
+        "special_needs_or_medical": { "type": "string", "description": "Any diagnosed special needs, chronic medical conditions, or ongoing treatment requirements. Optional; free text." }
+      },
+      "required": ["legal_name", "date_of_birth", "province_of_birth", "parentage_type"]
+    },
+    "ParentingTimeBlock": {
+      "type": "object",
+      "properties": {
+        "day": { "type": "string", "enum": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], "description": "Day of the week for this block." },
+        "start_time": { "type": "string", "format": "time", "description": "Start time (HH:MM, 24-hour)." },
+        "end_time": { "type": "string", "format": "time", "description": "End time (HH:MM, 24-hour)." },
+        "with_parent": { "type": "string", "enum": ["spouse_1", "spouse_2"], "description": "Which parent has the child during this block." }
+      },
+      "required": ["day", "start_time", "end_time", "with_parent"]
+    },
+    "HolidayAllocation": {
+      "type": "object",
+      "properties": {
+        "holiday_name": { "type": "string", "description": "Name of the holiday or special day (e.g., Christmas Day, Thanksgiving, Mother's Day)." },
+        "allocated_to": { "type": "string", "enum": ["spouse_1", "spouse_2", "alternating", "split_day"], "description": "Which parent has the child, or rotation pattern." },
+        "rotation_rule": { "type": "string", "description": "Rotation details, e.g., 'Spouse 1 in even years, Spouse 2 in odd years.'" },
+        "start_datetime": { "type": "string", "format": "date-time", "description": "When holiday parenting time begins." },
+        "end_datetime": { "type": "string", "format": "date-time", "description": "When holiday parenting time ends." }
+      },
+      "required": ["holiday_name", "allocated_to"]
+    },
+    "DecisionDomain": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string",
+          "enum": ["health", "education", "religion_spiritual", "extracurricular", "day_to_day_care", "emergency", "cultural_heritage"],
+          "description": "Category of parental decision-making per FLA s. 41 [VERIFY]."
+        },
+        "allocation": {
+          "type": "string",
+          "enum": ["joint", "spouse_1", "spouse_2", "consult_then_one_decides"],
+          "description": "Who holds decision-making authority. 'consult_then_one_decides' requires meaningful consultation before the designated parent makes the final call."
+        },
+        "deciding_parent_if_applicable": {
+          "type": "string",
+          "enum": ["spouse_1", "spouse_2"],
+          "description": "The parent with final authority when allocation is 'consult_then_one_decides' or sole. Omit for joint."
+        },
+        "notes": { "type": "string", "description": "Additional terms or qualifications for this domain." }
+      },
+      "required": ["domain", "allocation"]
+    },
+    "BreakAllocation": {
+      "type": "object",
+      "properties": {
+        "break_name": { "type": "string", "enum": ["summer_break", "winter_break", "spring_break"], "description": "School break period." },
+        "allocation_method": { "type": "string", "description": "How the break is divided, e.g., 'First three weeks with Spouse 1, remaining with Spouse 2, alternating annually.'" },
+        "notification_deadline_days": { "type": "integer", "minimum": 0, "description": "Days before the break starts by which each parent must confirm plans." }
+      },
+      "required": ["break_name", "allocation_method"]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "children": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Child" },
+      "minItems": 1,
+      "description": "All children of the relationship to whom this agreement applies."
+    },
+    "parenting_time": {
+      "type": "object",
+      "description": "Parenting time arrangements per FLA ss. 40–42 [VERIFY].",
+      "properties": {
+        "schedule_type": {
+          "type": "string",
+          "enum": ["shared_5050", "primary_with_one_parent", "split", "other_specified"],
+          "description": "High-level characterization of the parenting time arrangement."
+        },
+        "primary_parent_if_applicable": {
+          "type": "string",
+          "enum": ["spouse_1", "spouse_2"],
+          "description": "Parent with whom the child primarily resides, if schedule_type is 'primary_with_one_parent'."
+        },
+        "weekly_schedule": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ParentingTimeBlock" },
+          "description": "Recurring weekly parenting time blocks."
+        },
+        "holiday_schedule": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/HolidayAllocation" },
+          "description": "Named holidays and special days with allocation and rotation rules."
+        },
+        "break_allocations": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/BreakAllocation" },
+          "description": "Summer, winter, and spring break allocations."
+        },
+        "transitions": {
+          "type": "object",
+          "properties": {
+            "responsible_for_transport": { "type": "string", "enum": ["spouse_1", "spouse_2", "alternating", "receiving_parent"], "description": "Who provides transportation at transitions." },
+            "transition_location": { "type": "string", "description": "Location for exchanges, e.g., school, neutral public place, or a parent's residence." },
+            "time_of_day_rules": { "type": "string", "description": "Any constraints on transition timing, e.g., 'No transitions after 8:00 PM on school nights.'" }
+          },
+          "description": "Rules governing physical exchanges of the child between parents."
+        },
+        "right_of_first_refusal": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean", "description": "Whether the other parent must be offered care before a third-party caregiver is used." },
+            "threshold_hours": { "type": "number", "minimum": 0, "description": "Minimum number of consecutive hours of absence that triggers the obligation." }
+          },
+          "required": ["enabled"],
+          "description": "Right of first refusal for childcare during the other parent's scheduled time."
+        }
+      },
+      "required": ["schedule_type", "weekly_schedule"]
+    },
+    "parental_responsibilities": {
+      "type": "object",
+      "description": "Allocation of parental responsibilities (decision-making) per FLA s. 41 [VERIFY].",
+      "properties": {
+        "domains": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/DecisionDomain" },
+          "minItems": 1,
+          "description": "Each decision-making domain with its allocation."
+        },
+        "dispute_resolution_for_deadlock": {
+          "type": "string",
+          "description": "Process when jointly deciding parents cannot agree, e.g., mediation, parenting coordinator, arbitration."
+        }
+      },
+      "required": ["domains"]
+    },
+    "communication": {
+      "type": "object",
+      "description": "Communication protocols between parents and with children.",
+      "properties": {
+        "parent_to_parent_channel": {
+          "type": "string",
+          "description": "Required communication platform, e.g., 'OurFamilyWizard', 'email only', or named app."
+        },
+        "response_time_hours": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Maximum hours within which a parent must respond to a non-emergency communication."
+        },
+        "emergency_response_time_hours": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Maximum hours for response to an emergency communication."
+        },
+        "parent_child_contact_during_other_time": {
+          "type": "object",
+          "properties": {
+            "frequency": { "type": "string", "description": "How often the non-residential parent may contact the child, e.g., 'once daily'." },
+            "mode": { "type": "string", "description": "Permitted mode of contact, e.g., 'phone call, video call'." },
+            "time_window": { "type": "string", "description": "Acceptable window for contact, e.g., '6:00 PM – 7:30 PM'." }
+          },
+          "description": "Terms for a parent contacting the child during the other parent's parenting time."
+        },
+        "no_disparagement": {
+          "type": "boolean",
+          "description": "Whether the agreement includes a mutual prohibition on disparaging the other parent in the child's presence or hearing."
+        }
+      },
+      "required": ["parent_to_parent_channel", "no_disparagement"]
+    },
+    "relocation_and_mobility": {
+      "type": "object",
+      "description": "Relocation provisions per FLA Part 4, Division 6 (ss. 65–71) [VERIFY].",
+      "properties": {
+        "notice_period_days": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Minimum days of written notice required before a proposed relocation. FLA s. 66 prescribes a minimum of 60 days [VERIFY]."
+        },
+        "relocation_definition": {
+          "type": "string",
+          "description": "What constitutes a 'relocation' triggering notice obligations, e.g., move exceeding a specified distance or change of school district."
+        },
+        "distance_threshold_km": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Distance in kilometres beyond which a move is treated as a relocation."
+        },
+        "dispute_resolution_before_move": {
+          "type": "string",
+          "description": "Required dispute-resolution steps (mediation, arbitration, court application) before either parent may relocate with a child."
+        }
+      },
+      "required": ["notice_period_days", "relocation_definition", "dispute_resolution_before_move"]
+    },
+    "travel_and_passports": {
+      "type": "object",
+      "description": "International and domestic travel provisions and passport custody.",
+      "properties": {
+        "international_travel_consent_process": {
+          "type": "string",
+          "description": "Steps required to obtain the other parent's consent for international travel, including form of consent (written/notarized) and advance notice period."
+        },
+        "advance_notice_days": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Days of notice required before international travel with the child."
+        },
+        "passport_held_by": {
+          "type": "string",
+          "enum": ["spouse_1", "spouse_2", "alternating_with_schedule", "jointly_held_neutral_location"],
+          "description": "Which parent retains physical custody of the child's passport."
+        },
+        "passport_retrieval_process": {
+          "type": "string",
+          "description": "How the non-holding parent obtains the passport for approved travel."
+        },
+        "itinerary_disclosure": {
+          "type": "object",
+          "properties": {
+            "required": { "type": "boolean", "description": "Whether the travelling parent must provide a detailed itinerary." },
+            "details": {
+              "type": "array",
+              "items": { "type": "string", "enum": ["flight_numbers", "accommodations", "contact_numbers", "return_date", "emergency_contact_at_destination"] },
+              "description": "Categories of travel information that must be disclosed."
+            },
+            "disclosure_deadline_days": { "type": "integer", "minimum": 0, "description": "Days before departure by which the itinerary must be provided." }
+          },
+          "description": "Notification requirements for travel itinerary, accommodations, and return."
+        }
+      },
+      "required": ["international_travel_consent_process", "passport_held_by"]
+    },
+    "review_and_variation": {
+      "type": "object",
+      "description": "Scheduled reviews and variation mechanism for parenting provisions.",
+      "properties": {
+        "scheduled_reviews": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "trigger": { "type": "string", "description": "Event or date triggering review, e.g., 'child turns 13', 'child enters high school', or a calendar date." },
+              "scope": { "type": "string", "description": "What is reviewed, e.g., 'parenting time schedule', 'all parenting provisions'." }
+            },
+            "required": ["trigger"]
+          },
+          "description": "Pre-agreed points at which the parties will review parenting arrangements."
+        },
+        "material_change_clause": {
+          "type": "string",
+          "description": "Text affirming either party may seek variation upon a material change in circumstances affecting the child's best interests, consistent with FLA s. 47 [VERIFY]."
+        },
+        "dispute_resolution_path": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Ordered steps before court application, e.g., ['negotiation', 'mediation', 'arbitration', 'court_application']."
+        }
+      },
+      "required": ["material_change_clause", "dispute_resolution_path"]
+    }
+  },
+  "required": [
+    "children",
+    "parenting_time",
+    "parental_responsibilities",
+    "communication",
+    "relocation_and_mobility",
+    "travel_and_passports",
+    "review_and_variation"
+  ]
+}

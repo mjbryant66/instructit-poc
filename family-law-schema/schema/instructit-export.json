@@ -1,0 +1,205 @@
+{
+  "$schema_ref": "agreement.schema.json",
+  "_NOTE": "Partial fragment exported from InstructIT browser POC. Merge into a full agreement instance. Spouse mapping (this session = spouse_1 vs spouse_2) must be set by the operator.",
+  "_exported_at": "2026-04-25T05:15:13.588Z",
+  "_source": "sample-instructit-export.json",
+  "instructions_record": {
+    "chain_genesis_hash": "GENESIS",
+    "entries": [
+      {
+        "sequence": 1,
+        "node_id": "intro",
+        "node_title": "About this confirmation",
+        "decision": "agree",
+        "decision_label": "Agree",
+        "note": "",
+        "ts": "2026-04-24T19:55:30-07:00",
+        "prev_hash": "GENESIS",
+        "hash": "a1b2c3d4e5f60718",
+        "affect_snapshot_ref": "affect_1",
+        "stress_confirmed": false
+      },
+      {
+        "sequence": 2,
+        "node_id": "ila",
+        "node_title": "Independent Legal Advice (ILA)",
+        "decision": "agree",
+        "decision_label": "Agree",
+        "note": "",
+        "ts": "2026-04-24T19:57:10-07:00",
+        "prev_hash": "a1b2c3d4e5f60718",
+        "hash": "b2c3d4e5f6071829",
+        "affect_snapshot_ref": "affect_2",
+        "stress_confirmed": false
+      },
+      {
+        "sequence": 3,
+        "node_id": "disclosure",
+        "node_title": "Full and complete financial disclosure",
+        "decision": "agree",
+        "decision_label": "Agree",
+        "note": "",
+        "ts": "2026-04-24T19:58:42-07:00",
+        "prev_hash": "b2c3d4e5f6071829",
+        "hash": "c3d4e5f60718293a",
+        "affect_snapshot_ref": "affect_3",
+        "stress_confirmed": false
+      },
+      {
+        "sequence": 4,
+        "node_id": "voluntariness",
+        "node_title": "Voluntariness — you are signing freely",
+        "decision": "agree",
+        "decision_label": "Agree (under stress-gate)",
+        "note": "",
+        "ts": "2026-04-24T20:00:15-07:00",
+        "prev_hash": "c3d4e5f60718293a",
+        "hash": "d4e5f60718293a4b",
+        "affect_snapshot_ref": "affect_4",
+        "stress_confirmed": true
+      },
+      {
+        "sequence": 5,
+        "node_id": "final",
+        "node_title": "Final instruction — sign the agreement",
+        "decision": "acknowledged",
+        "decision_label": "Acknowledged",
+        "note": "",
+        "ts": "2026-04-24T20:05:00-07:00",
+        "prev_hash": "d4e5f60718293a4b",
+        "hash": "e5f60718293a4b5c",
+        "affect_snapshot_ref": "affect_5",
+        "stress_confirmed": false
+      }
+    ],
+    "final_hash": "e5f60718293a4b5c"
+  },
+  "behavioural_and_capacity_screen": {
+    "affect_monitor_used": true,
+    "affect_monitor_consent_attestation": "User opted in to in-browser affect monitoring; camera stream stayed local; only summary expression scores were recorded.",
+    "affect_snapshots": [
+      {
+        "snapshot_id": "affect_1",
+        "node_id": "intro",
+        "timestamp": "2026-04-24T19:55:30-07:00",
+        "expression_scores": {
+          "happy": 0.12,
+          "neutral": 0.78,
+          "sad": 0.04,
+          "fearful": 0.02,
+          "angry": 0.01,
+          "surprised": 0.02,
+          "disgusted": 0.01
+        },
+        "stress_score": 0.08,
+        "stress_threshold": 0.45,
+        "exceeded": false,
+        "additional_confirmation_required": false,
+        "additional_confirmation_given": false
+      },
+      {
+        "snapshot_id": "affect_2",
+        "node_id": "ila",
+        "timestamp": "2026-04-24T19:57:10-07:00",
+        "expression_scores": {
+          "happy": 0.18,
+          "neutral": 0.72,
+          "sad": 0.05,
+          "fearful": 0.02,
+          "angry": 0.01,
+          "surprised": 0.01,
+          "disgusted": 0.01
+        },
+        "stress_score": 0.09,
+        "stress_threshold": 0.45,
+        "exceeded": false,
+        "additional_confirmation_required": false,
+        "additional_confirmation_given": false
+      },
+      {
+        "snapshot_id": "affect_3",
+        "node_id": "disclosure",
+        "timestamp": "2026-04-24T19:58:42-07:00",
+        "expression_scores": {
+          "happy": 0.05,
+          "neutral": 0.65,
+          "sad": 0.18,
+          "fearful": 0.07,
+          "angry": 0.02,
+          "surprised": 0.02,
+          "disgusted": 0.01
+        },
+        "stress_score": 0.28,
+        "stress_threshold": 0.45,
+        "exceeded": false,
+        "additional_confirmation_required": false,
+        "additional_confirmation_given": false
+      },
+      {
+        "snapshot_id": "affect_4",
+        "node_id": "voluntariness",
+        "timestamp": "2026-04-24T20:00:15-07:00",
+        "expression_scores": {
+          "happy": 0.02,
+          "neutral": 0.32,
+          "sad": 0.28,
+          "fearful": 0.22,
+          "angry": 0.1,
+          "surprised": 0.04,
+          "disgusted": 0.02
+        },
+        "stress_score": 0.62,
+        "stress_threshold": 0.45,
+        "exceeded": true,
+        "additional_confirmation_required": true,
+        "additional_confirmation_given": true
+      },
+      {
+        "snapshot_id": "affect_5",
+        "node_id": "final",
+        "timestamp": "2026-04-24T20:05:00-07:00",
+        "expression_scores": {
+          "happy": 0.2,
+          "neutral": 0.68,
+          "sad": 0.05,
+          "fearful": 0.03,
+          "angry": 0.01,
+          "surprised": 0.02,
+          "disgusted": 0.01
+        },
+        "stress_score": 0.1,
+        "stress_threshold": 0.45,
+        "exceeded": false,
+        "additional_confirmation_required": false,
+        "additional_confirmation_given": false
+      }
+    ],
+    "capacity_attestation_per_spouse": {}
+  },
+  "procedural_fairness_partial": {
+    "independent_legal_advice": {
+      "[spouse_under_session]": {
+        "received": true,
+        "attestation_text": "I confirm I received independent legal advice (recorded via InstructIT confirmation tree)."
+      }
+    },
+    "voluntariness": {
+      "[spouse_under_session]": {
+        "confirmed": true,
+        "no_duress": true,
+        "no_coercion": true,
+        "no_undue_influence": true,
+        "attestation_text": "I am signing this agreement voluntarily, free of duress, coercion, or undue influence (recorded via InstructIT confirmation tree).",
+        "signed_at_timestamp": "2026-04-24T20:00:15-07:00"
+      }
+    }
+  },
+  "_stats": {
+    "total_entries": 5,
+    "agree_count": 4,
+    "disagree_count": 0,
+    "factual_count": 0,
+    "stress_gate_confirmations": 1,
+    "affect_snapshots_recorded": 5
+  }
+}

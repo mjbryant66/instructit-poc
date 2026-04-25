@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>InstructIT — Criminal Guilty Plea (POC)</title>
+<style>
+  :root {
+    --bg: #faf8f5; --ink: #1a1a1a; --muted: #5a5a5a; --rule: #d8d4cc;
+    --accent: #5a2d2d; --agree: #2e7d32; --warn: #b25400; --alert: #b00020; --paper: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink);
+    font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    font-size: 17px; line-height: 1.55; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 32px 24px 96px; }
+  header { border-bottom: 1px solid var(--rule); padding-bottom: 20px; margin-bottom: 28px; }
+  header h1 { font-size: 22px; margin: 0 0 4px; }
+  header .sub { color: var(--muted); font-size: 14px; }
+  header .matter { margin-top: 12px; font-size: 14px; color: var(--muted); }
+  header .matter strong { color: var(--ink); }
+  .progress { display: flex; gap: 4px; margin: 16px 0 0; }
+  .progress span { flex: 1; height: 4px; background: var(--rule); border-radius: 2px; }
+  .progress span.done { background: var(--accent); }
+  .progress span.current { background: var(--accent); opacity: 0.5; }
+  .card { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
+    padding: 28px; }
+  .card .phase { color: var(--accent); font-size: 12px; letter-spacing: 1.2px;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+    font-family: ui-sans-serif, system-ui, sans-serif; }
+  .card h2 { font-size: 20px; margin: 0 0 12px; }
+  .card .auth { display: inline-block; font-size: 12px; color: var(--accent);
+    background: #f3e6e6; border: 1px solid #e0c4c4; padding: 3px 10px; border-radius: 999px;
+    margin-bottom: 14px; font-family: ui-sans-serif, system-ui, sans-serif; }
+  .card .body { font-size: 16px; }
+  .card .body ul { padding-left: 22px; margin: 8px 0; }
+  .card .body li { margin: 6px 0; }
+  .strategic { font-size: 14px; color: var(--muted); border-left: 3px solid var(--rule);
+    padding: 4px 0 4px 14px; margin: 14px 0; font-style: italic; }
+  .actions { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+  button { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px;
+    padding: 10px 18px; border-radius: 6px; cursor: pointer; border: 1px solid var(--rule);
+    background: var(--paper); color: var(--ink); }
+  button:hover { background: #f4f1ec; }
+  button.agree { background: var(--agree); color: #fff; border-color: var(--agree); }
+  button.disagree { color: var(--warn); border-color: #f3c896; }
+  .note { margin-top: 16px; }
+  .note label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px;
+    font-family: ui-sans-serif, system-ui, sans-serif; }
+  .note textarea { width: 100%; min-height: 70px; font-family: inherit; font-size: 15px;
+    padding: 10px 12px; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg);
+    resize: vertical; }
+  .record { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
+    padding: 32px; }
+  .record h2 { font-size: 22px; margin: 0 0 6px; }
+  .record .recmeta { color: var(--muted); font-size: 13px; margin-bottom: 20px;
+    font-family: ui-sans-serif, system-ui, sans-serif; }
+  .record .entry { border-top: 1px solid var(--rule); padding: 14px 0; }
+  .record .entry .stamp { font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .record .entry .heading { font-weight: 600; margin-bottom: 4px; }
+  .record .entry .decision { display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 12px; font-family: ui-sans-serif, system-ui, sans-serif; margin-right: 6px; }
+  .record .entry .decision.agree { background: #e8f4ea; color: #245a28; }
+  .record .entry .decision.disagree { background: #fbe9d7; color: #7a3800; }
+  .record .entry .note-display { color: var(--muted); font-size: 14px; margin-top: 6px;
+    border-left: 2px solid var(--rule); padding-left: 10px; }
+  .record .footer { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--rule);
+    font-size: 12px; color: var(--muted); }
+  .record .hash { font-family: ui-monospace, "SF Mono", Menlo, monospace; word-break: break-all; }
+  @media print { body { background: #fff; } .actions, .topbar, .progress { display: none !important; }
+    .card, .record { border: none; padding: 0; } .wrap { padding: 0; max-width: 100%; } }
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .topbar .reset { font-size: 12px; color: var(--muted); background: none; border: none;
+    cursor: pointer; padding: 0; text-decoration: underline; }
+  .topbar .reset:hover { color: var(--warn); }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+/* InstructIT — Criminal Guilty Plea (POC)
+   Anchor: Criminal Code s. 606 plea inquiry + defence counsel duties.
+   Captures client-confirmed instructions to plead guilty in a defensible
+   time-stamped, hash-chained record. */
+
+const TREE = {
+  matter_label: "[Client] — Criminal Matter [Information Number]",
+  matter_subtitle: "Criminal Code s. 606 — Pre-plea client instruction confirmation",
+  entry: "intro",
+  nodes: {
+    intro: {
+      type: "agree",
+      phase: "Confirm posture",
+      title: "About this confirmation",
+      body: `<p>This tool walks you through a structured confirmation of your
+        instructions to plead guilty, before counsel enters the plea on your behalf.
+        It produces a time-stamped, tamper-evident record that you and counsel both
+        retain.</p>
+        <p>At each step you will be asked to <em>Agree</em>, <em>Disagree (with note)</em>,
+        or <em>Defer</em>. If you disagree, the session pauses so counsel can address
+        your concern before continuing.</p>`,
+      next: "charge",
+    },
+    charge: {
+      type: "agree", phase: "s. 606(1.1)(b)(i)", auth: "Criminal Code s. 606(1.1)(b)(i)",
+      title: "Understanding of the charge(s)",
+      body: `<p>You confirm that you understand:</p>
+        <ul>
+          <li>The exact charge(s) you face (counsel has reviewed the Information with you);</li>
+          <li>The essential elements (the things the Crown would have to prove beyond a reasonable doubt at trial);</li>
+          <li>That you are pleading guilty only to the specific charge(s) listed and no others.</li>
+        </ul>`,
+      next: "admission",
+    },
+    admission: {
+      type: "agree", phase: "s. 606(1.1)(b)(ii)", auth: "Criminal Code s. 606(1.1)(b)(ii)",
+      title: "Admission of the essential elements",
+      body: `<p>You confirm that you actually committed the offence — that the facts
+        as the Crown will read them, or as the parties have agreed, are substantially
+        true, and that you admit the essential elements of the offence.</p>
+        <div class="strategic">If any part of the agreed facts is inaccurate, disagree
+        and tell counsel before plea.</div>`,
+      next: "voluntariness",
+    },
+    voluntariness: {
+      type: "agree", phase: "s. 606(1.1)(a)", auth: "Criminal Code s. 606(1.1)(a)",
+      title: "Voluntariness of the plea",
+      body: `<p>You confirm that you are pleading guilty <strong>voluntarily</strong>:</p>
+        <ul>
+          <li>No one has threatened you, coerced you, or pressured you into pleading guilty;</li>
+          <li>You are not pleading guilty because of any promise or inducement other than what
+          counsel has explained on the record;</li>
+          <li>You are not under the influence of alcohol, drugs, or any substance that affects your judgment.</li>
+        </ul>`,
+      next: "consequences",
+    },
+    consequences: {
+      type: "agree", phase: "s. 606(1.1)(b)(iii)", auth: "Criminal Code s. 606(1.1)(b)(iii)",
+      title: "Nature and consequences of the plea",
+      body: `<p>You understand that by pleading guilty:</p>
+        <ul>
+          <li>You will be convicted of the offence;</li>
+          <li>The court will impose a sentence;</li>
+          <li>The conviction will appear on your criminal record (subject to record-suspension eligibility).</li>
+        </ul>`,
+      next: "not_bound",
+    },
+    not_bound: {
+      type: "agree", phase: "s. 606(1.1)(b)(iv)", auth: "Criminal Code s. 606(1.1)(b)(iv)",
+      title: "Court is not bound by any Crown / defence agreement on sentence",
+      body: `<p>You understand that even if Crown counsel and your defence counsel
+        have agreed on a sentence (a "joint submission"), the judge is <strong>not bound</strong>
+        by that agreement and may impose a different sentence. The court must, however, follow
+        the test in <em>R. v. Anthony-Cook</em>, 2016 SCC 43, before departing from a joint submission.</p>`,
+      next: "trial_rights",
+    },
+    trial_rights: {
+      type: "agree", phase: "Waiver of trial rights",
+      title: "Waiver of trial rights — Charter ss. 7, 11(c), 11(d)",
+      body: `<p>You understand that by pleading guilty you are <strong>giving up</strong>:</p>
+        <ul>
+          <li>Your right to be presumed innocent;</li>
+          <li>Your right to require the Crown to prove every element beyond a reasonable doubt;</li>
+          <li>Your right to test the Crown's evidence by cross-examining its witnesses;</li>
+          <li>Your right to call defence evidence, including your right to testify yourself or to remain silent;</li>
+          <li>Your right to a trial in any of the available forums (provincial court / superior court, judge alone or judge and jury where applicable).</li>
+        </ul>`,
+      next: "sentencing_range",
+    },
+    sentencing_range: {
+      type: "agree", phase: "Sentencing range",
+      title: "Sentencing range discussed (not guaranteed)",
+      body: `<p>Counsel has discussed with you the likely sentencing range based on:</p>
+        <ul>
+          <li>The applicable maximum and any mandatory minimum;</li>
+          <li>Comparable case law;</li>
+          <li>Any joint submission, range, or upper-limit agreement with the Crown;</li>
+          <li>Mitigating and aggravating factors specific to your case.</li>
+        </ul>
+        <p>You understand the discussed range is a <strong>prediction, not a guarantee</strong>.</p>`,
+      next: "collateral",
+    },
+    collateral: {
+      type: "agree", phase: "Collateral consequences",
+      title: "Collateral consequences acknowledged",
+      body: `<p>You understand that beyond the sentence, conviction may carry
+        <strong>collateral consequences</strong> including, where applicable:</p>
+        <ul>
+          <li><strong>Immigration</strong>: inadmissibility under <em>IRPA</em> s. 36 (permanent residents and foreign nationals);</li>
+          <li><strong>Employment / professional licensing</strong>: disclosure obligations, suspension or loss of licence;</li>
+          <li><strong>DNA orders</strong> (designated offences);</li>
+          <li><strong>Firearms prohibition</strong> under Criminal Code ss. 109 / 110;</li>
+          <li><strong>SOIRA</strong> sex offender registry (designated sexual offences);</li>
+          <li><strong>Travel</strong>: bar or restriction on entry to other countries (e.g. United States);</li>
+          <li><strong>Driving</strong>: prohibitions / suspensions where the offence is driving-related;</li>
+          <li><strong>Family / child protection</strong>: implications for parenting and child welfare proceedings.</li>
+        </ul>
+        <div class="strategic">Counsel should record which of these apply to your situation.</div>`,
+      next: "appeal_rights",
+    },
+    appeal_rights: {
+      type: "agree", phase: "Appeal rights",
+      title: "Appeal rights explained",
+      body: `<p>You understand that:</p>
+        <ul>
+          <li>An appeal of a conviction entered on a guilty plea is generally <strong>limited</strong>;</li>
+          <li>You may apply to strike a guilty plea on appeal only on narrow grounds (involuntariness, lack of understanding, miscarriage of justice);</li>
+          <li>You retain the right to appeal the <strong>sentence</strong> if it is harsh or excessive (with leave).</li>
+        </ul>`,
+      next: "alternatives",
+    },
+    alternatives: {
+      type: "agree", phase: "Alternatives considered",
+      title: "Alternative resolutions considered",
+      body: `<p>You confirm that counsel has discussed with you the alternative
+        resolutions that were available, including, where applicable:</p>
+        <ul>
+          <li>Diversion / Alternative Measures;</li>
+          <li>Withdrawal of charges (Crown discretion);</li>
+          <li>Peace bond under s. 810;</li>
+          <li>Discharge — absolute or conditional (s. 730);</li>
+          <li>Trial.</li>
+        </ul>
+        <p>And that you have chosen to plead guilty after weighing those alternatives.</p>`,
+      next: "final",
+    },
+    final: {
+      type: "agree", phase: "Final instruction",
+      title: "Final instruction — enter the guilty plea",
+      body: `<p>Having reviewed and confirmed each step above, you instruct counsel
+        to enter a plea of <strong>guilty</strong> on your behalf to the charge(s)
+        described in this confirmation. You understand that on clicking <em>Agree</em>
+        below, this record is locked and a copy is retained by counsel.</p>`,
+      terminal: true,
+    },
+  },
+};
+
+const STORAGE_KEY = "instructit_criminal_guilty_plea_v1";
+
+function loadState() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return { current: TREE.entry, log: [], started_at: new Date().toISOString() };
+  try { return JSON.parse(raw); } catch { return { current: TREE.entry, log: [], started_at: new Date().toISOString() }; }
+}
+function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+function resetState() {
+  if (!confirm("Reset session? Record will be cleared.")) return;
+  localStorage.removeItem(STORAGE_KEY); state = loadState(); render();
+}
+
+async function sha256(text) {
+  const buf = new TextEncoder().encode(text);
+  const hash = await crypto.subtle.digest("SHA-256", buf);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
+}
+async function appendLog(entry) {
+  const prev = state.log.length ? state.log[state.log.length-1].hash : "GENESIS";
+  const stamped = { ...entry, ts: new Date().toISOString(), prev_hash: prev };
+  stamped.hash = await sha256(JSON.stringify(stamped));
+  state.log.push(stamped); saveState(state);
+}
+
+let state = loadState();
+const app = document.getElementById("app");
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function renderHeader() {
+  const bars = Object.keys(TREE.nodes).map(id => {
+    if (state.log.find(e => e.node === id)) return '<span class="done"></span>';
+    if (id === state.current) return '<span class="current"></span>';
+    return '<span></span>';
+  }).join("");
+  return `<header>
+    <h1>InstructIT — Criminal Guilty Plea</h1>
+    <div class="sub">Pre-plea client confirmation, recorded as time-stamped append-only evidence.</div>
+    <div class="matter"><strong>Matter:</strong> ${TREE.matter_label}<br>
+      <strong>Configuration:</strong> ${TREE.matter_subtitle}</div>
+    <div class="progress">${bars}</div>
+  </header>`;
+}
+
+function renderNode() {
+  const node = TREE.nodes[state.current];
+  if (!node) return `<div class="card"><h2>End</h2></div>`;
+  const auth = node.auth ? `<div class="auth">${node.auth}</div>` : "";
+  let actions = `<div class="actions">
+    <button class="agree" onclick="decide('agree')">I agree — proceed</button>
+    <button class="disagree" onclick="decide('disagree')">I disagree (note required)</button>
+    <button onclick="decide('defer')">Defer</button>
+  </div>`;
+  if (node.terminal) actions = `<div class="actions">
+    <button class="agree" onclick="decide('acknowledged')">Confirm and lock record</button>
+  </div>`;
+  return `<div class="card">
+    <div class="phase">${node.phase}</div>
+    <h2>${node.title}</h2>${auth}
+    <div class="body">${node.body}</div>
+    <div class="note" id="noteBox" style="display:none;">
+      <label for="note">Note to counsel (required if disagreeing)</label>
+      <textarea id="note" placeholder="Explain your reasoning..."></textarea>
+    </div>
+    ${actions}
+  </div>`;
+}
+
+function renderRecord() {
+  const entries = state.log.map(e => {
+    const cls = e.decision === "agree" || e.decision === "acknowledged" ? "agree"
+              : e.decision === "disagree" ? "disagree" : "agree";
+    const note = e.note ? `<div class="note-display">"${escapeHtml(e.note)}"</div>` : "";
+    return `<div class="entry">
+      <div class="stamp">${new Date(e.ts).toLocaleString()}</div>
+      <div class="heading">${escapeHtml(e.title)}</div>
+      <span class="decision ${cls}">${e.decision_label || e.decision}</span>
+      ${note}
+      <div class="stamp" style="margin-top:6px;">hash: <span class="hash">${e.hash.slice(0,16)}…</span></div>
+    </div>`;
+  }).join("");
+  return `<div class="record">
+    <h2>Confirmed Instructions Record</h2>
+    <div class="recmeta">Matter: ${TREE.matter_label}<br>
+      Configuration: ${TREE.matter_subtitle}<br>
+      Session started: ${new Date(state.started_at).toLocaleString()}<br>
+      Entries: ${state.log.length}</div>
+    ${entries || '<div class="entry"><em>No entries yet.</em></div>'}
+    <div class="footer">Records linked by SHA-256 hash chain (append-only). Genesis hash: GENESIS.</div>
+  </div>`;
+}
+
+function render() {
+  const node = TREE.nodes[state.current];
+  const showRecord = node?.terminal && state.log.find(e => e.node === state.current);
+  app.innerHTML = `${renderHeader()}
+    <div class="topbar">
+      <button class="reset" onclick="resetState()">Reset session</button>
+      <button onclick="window.print()">Print / Save PDF</button>
+    </div>
+    ${showRecord ? renderRecord() : renderNode()}
+    ${!showRecord && state.log.length ? `<div style="margin-top:24px;"><details><summary style="cursor:pointer;font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px;color:#5a5a5a;">View record so far (${state.log.length} entries)</summary><div style="margin-top:12px;">${renderRecord()}</div></details></div>` : ""}`;
+  const note = document.getElementById("noteBox");
+  if (note) document.querySelector("button.disagree")?.addEventListener("click", () => {
+    note.style.display = "block"; document.getElementById("note").focus();
+  });
+}
+
+async function decide(decision) {
+  const node = TREE.nodes[state.current];
+  let note = "";
+  if (decision === "disagree") {
+    note = document.getElementById("note")?.value?.trim() || "";
+    if (!note) { alert("Add a note explaining your disagreement."); return; }
+  }
+  await appendLog({
+    node: state.current, title: node.title,
+    decision,
+    decision_label: decision.charAt(0).toUpperCase() + decision.slice(1),
+    note,
+  });
+  if (decision === "disagree") {
+    alert("Disagreement recorded. Counsel will address before continuing."); render(); return;
+  }
+  if (node.terminal) { render(); return; }
+  if (decision === "defer") { render(); return; }
+  state.current = node.next; saveState(state); render();
+}
+
+window.decide = decide; window.resetState = resetState;
+render();
+</script>
+</body>
+</html>

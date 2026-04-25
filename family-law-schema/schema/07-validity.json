@@ -1,0 +1,442 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "validity.schema.json",
+  "title": "BC FLA Separation Agreement Validity Preconditions and Financial Disclosure Attestations",
+  "description": "Sub-schema protecting a BC Family Law Act separation agreement against set-aside under FLA s. 93, informed by Brandsema v. Brandsema (2009 SCC 10), Miglin v. Miglin (2003 SCC 24), and Hartshorne v. Hartshorne (2004 SCC 22).",
+  "type": "object",
+  "definitions": {
+    "Attestation": {
+      "type": "object",
+      "description": "A timestamped sworn or affirmed statement by a party.",
+      "properties": {
+        "attesting_party": { "type": "string", "description": "Identifier of the spouse making the attestation." },
+        "attestation_text": { "type": "string", "description": "Full text of the attestation." },
+        "signed_at_timestamp": { "type": "string", "format": "date-time", "description": "ISO 8601 timestamp when the attestation was signed." },
+        "confirmed": { "type": "boolean", "description": "Whether the party affirmed the attestation." }
+      },
+      "required": ["attesting_party", "attestation_text", "signed_at_timestamp", "confirmed"]
+    },
+    "ProceduralFairnessFactor": {
+      "type": "object",
+      "description": "A single procedural fairness factor evaluated under Brandsema.",
+      "properties": {
+        "factor_name": { "type": "string", "description": "Name of the procedural fairness factor." },
+        "satisfied": { "type": "boolean", "description": "Whether this factor is satisfied." },
+        "evidence_summary": { "type": "string", "description": "Summary of evidence supporting satisfaction or deficiency." }
+      },
+      "required": ["factor_name", "satisfied", "evidence_summary"]
+    },
+    "DisclosureItem": {
+      "type": "object",
+      "description": "A single financial disclosure document or record provided by a spouse.",
+      "properties": {
+        "category": {
+          "type": "string",
+          "enum": ["T1", "T4", "NoA", "employment_income_letter", "business_financials", "pension_statement", "real_property_appraisal", "account_statements", "debt_statements", "life_insurance_policies", "trust_documents", "corporate_records", "other"],
+          "description": "Category of financial disclosure document."
+        },
+        "date_provided": { "type": "string", "format": "date", "description": "Date the document was provided to the other party." },
+        "document_reference": { "type": "string", "description": "Unique reference or filename identifying the document." },
+        "recipient_acknowledgment_signed": { "type": "boolean", "description": "Whether the receiving spouse signed acknowledgment of receipt." }
+      },
+      "required": ["category", "date_provided", "document_reference", "recipient_acknowledgment_signed"]
+    },
+    "BehaviouralScreen": {
+      "type": "object",
+      "description": "A contemporaneous behavioural and capacity data point captured during the agreement process.",
+      "properties": {
+        "node_id": { "type": "string", "description": "Identifier of the decision node at which the snapshot was taken." },
+        "timestamp": { "type": "string", "format": "date-time", "description": "ISO 8601 timestamp of the snapshot." },
+        "expression_scores": {
+          "type": "object",
+          "description": "Affect-expression probability scores at this snapshot.",
+          "properties": {
+            "happy": { "type": "number", "minimum": 0, "maximum": 1, "description": "Probability score for happy expression." },
+            "neutral": { "type": "number", "minimum": 0, "maximum": 1, "description": "Probability score for neutral expression." },
+            "sad": { "type": "number", "minimum": 0, "maximum": 1, "description": "Probability score for sad expression." },
+            "fearful": { "type": "number", "minimum": 0, "maximum": 1, "description": "Probability score for fearful expression." },
+            "angry": { "type": "number", "minimum": 0, "maximum": 1, "description": "Probability score for angry expression." },
+            "surprised": { "type": "number", "minimum": 0, "maximum": 1, "description": "Probability score for surprised expression." },
+            "disgusted": { "type": "number", "minimum": 0, "maximum": 1, "description": "Probability score for disgusted expression." }
+          },
+          "required": ["happy", "neutral", "sad", "fearful", "angry", "surprised", "disgusted"]
+        },
+        "stress_score": { "type": "number", "minimum": 0, "maximum": 1, "description": "Composite stress score derived from expression and biometric signals." },
+        "stress_threshold": { "type": "number", "minimum": 0, "maximum": 1, "description": "Threshold above which additional confirmation is required." },
+        "exceeded": { "type": "boolean", "description": "Whether stress_score exceeded the threshold." },
+        "additional_confirmation_required": { "type": "boolean", "description": "Whether the system flagged this node for additional confirmation." },
+        "additional_confirmation_given": { "type": "boolean", "description": "Whether the party provided additional confirmation after the flag." }
+      },
+      "required": ["node_id", "timestamp", "expression_scores", "stress_score", "stress_threshold", "exceeded", "additional_confirmation_required", "additional_confirmation_given"]
+    }
+  },
+  "properties": {
+    "procedural_fairness": {
+      "type": "object",
+      "description": "Procedural fairness factors per Brandsema v. Brandsema, 2009 SCC 10, protecting against set-aside under FLA s. 93(3)(b) and (c).",
+      "properties": {
+        "independent_legal_advice": {
+          "type": "object",
+          "description": "Independent legal advice records for each spouse, per Brandsema and FLA s. 93(3)(b).",
+          "properties": {
+            "spouse_1": {
+              "type": "object",
+              "description": "ILA record for spouse 1.",
+              "properties": {
+                "received": { "type": "boolean", "description": "Whether spouse 1 received independent legal advice." },
+                "lawyer_name": { "type": "string", "description": "Full name of the advising lawyer." },
+                "firm": { "type": "string", "description": "Law firm of the advising lawyer." },
+                "date": { "type": "string", "format": "date", "description": "Date ILA was provided." },
+                "duration_minutes": { "type": "integer", "minimum": 0, "description": "Duration of the ILA session in minutes." },
+                "attestation_text": { "type": "string", "description": "Lawyer's certificate of independent legal advice text." }
+              },
+              "required": ["received", "attestation_text"]
+            },
+            "spouse_2": {
+              "type": "object",
+              "description": "ILA record for spouse 2.",
+              "properties": {
+                "received": { "type": "boolean", "description": "Whether spouse 2 received independent legal advice." },
+                "lawyer_name": { "type": "string", "description": "Full name of the advising lawyer." },
+                "firm": { "type": "string", "description": "Law firm of the advising lawyer." },
+                "date": { "type": "string", "format": "date", "description": "Date ILA was provided." },
+                "duration_minutes": { "type": "integer", "minimum": 0, "description": "Duration of the ILA session in minutes." },
+                "attestation_text": { "type": "string", "description": "Lawyer's certificate of independent legal advice text." }
+              },
+              "required": ["received", "attestation_text"]
+            }
+          },
+          "required": ["spouse_1", "spouse_2"]
+        },
+        "voluntariness": {
+          "type": "object",
+          "description": "Per-spouse voluntariness attestations addressing duress, coercion, and undue influence per Brandsema and FLA s. 93(3)(c).",
+          "properties": {
+            "spouse_1": {
+              "type": "object",
+              "properties": {
+                "confirmed": { "type": "boolean", "description": "Spouse 1 confirms the agreement was entered voluntarily." },
+                "no_duress": { "type": "boolean", "description": "Spouse 1 confirms no duress was present." },
+                "no_coercion": { "type": "boolean", "description": "Spouse 1 confirms no coercion was present." },
+                "no_undue_influence": { "type": "boolean", "description": "Spouse 1 confirms no undue influence was exerted." },
+                "attestation_text": { "type": "string", "description": "Full voluntariness attestation text." },
+                "signed_at_timestamp": { "type": "string", "format": "date-time", "description": "Timestamp of signing." }
+              },
+              "required": ["confirmed", "no_duress", "no_coercion", "no_undue_influence", "attestation_text", "signed_at_timestamp"]
+            },
+            "spouse_2": {
+              "type": "object",
+              "properties": {
+                "confirmed": { "type": "boolean", "description": "Spouse 2 confirms the agreement was entered voluntarily." },
+                "no_duress": { "type": "boolean", "description": "Spouse 2 confirms no duress was present." },
+                "no_coercion": { "type": "boolean", "description": "Spouse 2 confirms no coercion was present." },
+                "no_undue_influence": { "type": "boolean", "description": "Spouse 2 confirms no undue influence was exerted." },
+                "attestation_text": { "type": "string", "description": "Full voluntariness attestation text." },
+                "signed_at_timestamp": { "type": "string", "format": "date-time", "description": "Timestamp of signing." }
+              },
+              "required": ["confirmed", "no_duress", "no_coercion", "no_undue_influence", "attestation_text", "signed_at_timestamp"]
+            }
+          },
+          "required": ["spouse_1", "spouse_2"]
+        },
+        "equality_of_bargaining_position": {
+          "type": "object",
+          "description": "Assessment of bargaining power imbalance per Brandsema, relevant to FLA s. 93(3)(b).",
+          "properties": {
+            "assessment": { "type": "string", "description": "Narrative assessment of whether bargaining positions were equal." },
+            "vulnerabilities_acknowledged": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "List of acknowledged vulnerabilities (e.g., language barrier, financial dependence, family violence history)."
+            },
+            "accommodations_made": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "List of accommodations made to address identified vulnerabilities."
+            }
+          },
+          "required": ["assessment", "vulnerabilities_acknowledged", "accommodations_made"]
+        },
+        "time_to_consider": {
+          "type": "object",
+          "description": "Per-spouse record of time afforded to review the agreement before signing.",
+          "properties": {
+            "spouse_1": {
+              "type": "object",
+              "properties": {
+                "days_between_first_draft_and_signing": { "type": "integer", "minimum": 0, "description": "Calendar days between receipt of first draft and execution." },
+                "was_reasonable": { "type": "boolean", "description": "Whether the time afforded was reasonable in the circumstances." }
+              },
+              "required": ["days_between_first_draft_and_signing", "was_reasonable"]
+            },
+            "spouse_2": {
+              "type": "object",
+              "properties": {
+                "days_between_first_draft_and_signing": { "type": "integer", "minimum": 0, "description": "Calendar days between receipt of first draft and execution." },
+                "was_reasonable": { "type": "boolean", "description": "Whether the time afforded was reasonable in the circumstances." }
+              },
+              "required": ["days_between_first_draft_and_signing", "was_reasonable"]
+            }
+          },
+          "required": ["spouse_1", "spouse_2"]
+        },
+        "understanding": {
+          "type": "object",
+          "description": "Per-spouse confirmation that the agreement and its consequences were understood.",
+          "properties": {
+            "spouse_1": {
+              "type": "object",
+              "properties": {
+                "language_of_negotiation": { "type": "string", "description": "Primary language used in negotiations." },
+                "interpreter_used": { "type": "boolean", "description": "Whether an interpreter was used." },
+                "confirmed_understands_terms": { "type": "boolean", "description": "Spouse confirms understanding of the agreement terms." },
+                "confirmed_understands_consequences": { "type": "boolean", "description": "Spouse confirms understanding of the legal and financial consequences of the agreement." }
+              },
+              "required": ["language_of_negotiation", "interpreter_used", "confirmed_understands_terms", "confirmed_understands_consequences"]
+            },
+            "spouse_2": {
+              "type": "object",
+              "properties": {
+                "language_of_negotiation": { "type": "string", "description": "Primary language used in negotiations." },
+                "interpreter_used": { "type": "boolean", "description": "Whether an interpreter was used." },
+                "confirmed_understands_terms": { "type": "boolean", "description": "Spouse confirms understanding of the agreement terms." },
+                "confirmed_understands_consequences": { "type": "boolean", "description": "Spouse confirms understanding of the legal and financial consequences of the agreement." }
+              },
+              "required": ["language_of_negotiation", "interpreter_used", "confirmed_understands_terms", "confirmed_understands_consequences"]
+            }
+          },
+          "required": ["spouse_1", "spouse_2"]
+        }
+      },
+      "required": ["independent_legal_advice", "voluntariness", "equality_of_bargaining_position", "time_to_consider", "understanding"]
+    },
+    "substantive_fairness": {
+      "type": "object",
+      "description": "Substantive fairness analysis per Miglin v. Miglin, 2003 SCC 24 (Stage 1 and Stage 2) and Hartshorne v. Hartshorne, 2004 SCC 22, addressing FLA s. 93(3)(d) and (e) [VERIFY].",
+      "properties": {
+        "miglin_stage_1": {
+          "type": "object",
+          "description": "Miglin Stage 1: whether the agreement, at formation, substantially complied with the objectives of the FLA.",
+          "properties": {
+            "agreement_reflects_parties_intentions": { "type": "boolean", "description": "Whether the agreement reflects the genuine intentions of both parties at execution." },
+            "complies_with_fla_objectives": { "type": "boolean", "description": "Whether the agreement substantially complies with the objectives of the FLA (Part 5 spousal support, Part 5 property division) [VERIFY part references]." },
+            "fla_objectives_referenced": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Specific FLA objectives addressed (e.g., FLA s. 161 spousal support objectives, FLA s. 81 equal division presumption) [VERIFY section numbers]."
+            },
+            "departure_from_ssag_explained": {
+              "type": ["string", "null"],
+              "description": "Explanation for any departure from Spousal Support Advisory Guidelines ranges, or null if SSAG range is met."
+            },
+            "departure_from_equal_division_explained": {
+              "type": ["string", "null"],
+              "description": "Explanation for any departure from the FLA s. 81 presumption of equal division of family property, or null if equal division applies."
+            }
+          },
+          "required": ["agreement_reflects_parties_intentions", "complies_with_fla_objectives", "fla_objectives_referenced"]
+        },
+        "miglin_stage_2_anticipated_changes": {
+          "type": "array",
+          "description": "Foreseeable changes the parties contemplated at execution, documented to defeat later claims of unforeseen change under Miglin Stage 2.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "change_description": { "type": "string", "description": "Description of the anticipated change (e.g., career trajectory, child developmental phase, retirement timeline)." },
+              "how_agreement_addresses_it": { "type": "string", "description": "How the agreement accounts for or addresses this anticipated change." }
+            },
+            "required": ["change_description", "how_agreement_addresses_it"]
+          }
+        },
+        "hartshorne_circumstances": {
+          "type": "object",
+          "description": "Hartshorne factors relevant where there is an unequal division of property.",
+          "properties": {
+            "unequal_position_acknowledged": { "type": "boolean", "description": "Whether an unequal division of property or support is acknowledged." },
+            "why_unequal_division_substantively_fair": { "type": "string", "description": "Explanation of why the unequal division is substantively fair in the circumstances." },
+            "comparison_to_fla_default_division": { "type": "string", "description": "Comparison of the agreed division to the default equal-division result under FLA s. 81." }
+          },
+          "required": ["unequal_position_acknowledged", "why_unequal_division_substantively_fair", "comparison_to_fla_default_division"]
+        },
+        "acknowledgment_of_setaside_grounds": {
+          "type": "string",
+          "description": "Text acknowledging that the agreement may be set aside in limited circumstances under FLA s. 93, as interpreted in Brandsema, Miglin, and Hartshorne, and that both parties accept this residual risk."
+        }
+      },
+      "required": ["miglin_stage_1", "miglin_stage_2_anticipated_changes", "hartshorne_circumstances", "acknowledgment_of_setaside_grounds"]
+    },
+    "financial_disclosure_attestations": {
+      "type": "object",
+      "description": "Per-spouse financial disclosure attestations required to defend against set-aside under FLA s. 93(3)(a) (failure to disclose significant property or debts) [VERIFY].",
+      "properties": {
+        "spouse_1": {
+          "type": "object",
+          "properties": {
+            "disclosure_complete_attestation": {
+              "type": "object",
+              "description": "Attestation of full and complete financial disclosure by spouse 1.",
+              "properties": {
+                "confirmed": { "type": "boolean", "description": "Whether spouse 1 confirms disclosure is complete." },
+                "signed_at_timestamp": { "type": "string", "format": "date-time", "description": "Timestamp of the attestation." },
+                "attestation_text": { "type": "string", "description": "Full attestation text, e.g., 'I have made full and complete disclosure of all my assets, debts, income, and financial interests, and to the best of my knowledge nothing material has been omitted.'" }
+              },
+              "required": ["confirmed", "signed_at_timestamp", "attestation_text"]
+            },
+            "disclosure_documents_provided": {
+              "type": "array",
+              "description": "Inventory of financial disclosure documents provided by spouse 1.",
+              "items": { "$ref": "#/definitions/DisclosureItem" }
+            },
+            "valuation_methodology": {
+              "type": "array",
+              "description": "Valuation methods used for each significant asset disclosed by spouse 1.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "asset_id": { "type": "string", "description": "Identifier of the asset being valued." },
+                  "method_used": { "type": "string", "description": "Valuation method (e.g., market appraisal, book value, actuarial valuation, CRA assessment)." },
+                  "basis": { "type": "string", "description": "Basis or standard of value applied." },
+                  "qualified_appraiser_if_applicable": { "type": ["string", "null"], "description": "Name and credentials of the qualified appraiser, or null if no appraiser was used." }
+                },
+                "required": ["asset_id", "method_used", "basis"]
+              }
+            },
+            "non_disclosure_acknowledgment_by_other_spouse": {
+              "type": "object",
+              "description": "Spouse 2's acknowledgment regarding spouse 1's disclosure.",
+              "properties": {
+                "confirmed": { "type": "boolean", "description": "Whether spouse 2 confirms they are not aware of undisclosed material assets or debts of spouse 1." },
+                "attestation_text": { "type": "string", "description": "Full acknowledgment text, e.g., 'I acknowledge that I am not aware of any undisclosed material asset or debt of the other spouse.'" }
+              },
+              "required": ["confirmed", "attestation_text"]
+            }
+          },
+          "required": ["disclosure_complete_attestation", "disclosure_documents_provided", "valuation_methodology", "non_disclosure_acknowledgment_by_other_spouse"]
+        },
+        "spouse_2": {
+          "type": "object",
+          "properties": {
+            "disclosure_complete_attestation": {
+              "type": "object",
+              "description": "Attestation of full and complete financial disclosure by spouse 2.",
+              "properties": {
+                "confirmed": { "type": "boolean", "description": "Whether spouse 2 confirms disclosure is complete." },
+                "signed_at_timestamp": { "type": "string", "format": "date-time", "description": "Timestamp of the attestation." },
+                "attestation_text": { "type": "string", "description": "Full attestation text." }
+              },
+              "required": ["confirmed", "signed_at_timestamp", "attestation_text"]
+            },
+            "disclosure_documents_provided": {
+              "type": "array",
+              "description": "Inventory of financial disclosure documents provided by spouse 2.",
+              "items": { "$ref": "#/definitions/DisclosureItem" }
+            },
+            "valuation_methodology": {
+              "type": "array",
+              "description": "Valuation methods used for each significant asset disclosed by spouse 2.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "asset_id": { "type": "string", "description": "Identifier of the asset being valued." },
+                  "method_used": { "type": "string", "description": "Valuation method." },
+                  "basis": { "type": "string", "description": "Basis or standard of value applied." },
+                  "qualified_appraiser_if_applicable": { "type": ["string", "null"], "description": "Name and credentials of the qualified appraiser, or null." }
+                },
+                "required": ["asset_id", "method_used", "basis"]
+              }
+            },
+            "non_disclosure_acknowledgment_by_other_spouse": {
+              "type": "object",
+              "description": "Spouse 1's acknowledgment regarding spouse 2's disclosure.",
+              "properties": {
+                "confirmed": { "type": "boolean", "description": "Whether spouse 1 confirms they are not aware of undisclosed material assets or debts of spouse 2." },
+                "attestation_text": { "type": "string", "description": "Full acknowledgment text." }
+              },
+              "required": ["confirmed", "attestation_text"]
+            }
+          },
+          "required": ["disclosure_complete_attestation", "disclosure_documents_provided", "valuation_methodology", "non_disclosure_acknowledgment_by_other_spouse"]
+        },
+        "consequences_of_non_disclosure": {
+          "type": "string",
+          "description": "Text quoting FLA s. 93(3)(a) [VERIFY] consequence: a court may set aside or replace all or part of the agreement if a spouse failed to disclose significant property, debts, or other liabilities existing at the time the agreement was made."
+        }
+      },
+      "required": ["spouse_1", "spouse_2", "consequences_of_non_disclosure"]
+    },
+    "behavioural_and_capacity_screen": {
+      "type": "object",
+      "description": "Optional contemporaneous behavioural and capacity evidence to corroborate voluntariness and capacity at each decision node.",
+      "properties": {
+        "affect_monitor_used": { "type": "boolean", "description": "Whether an affect-monitoring tool was used during the agreement process." },
+        "affect_monitor_consent_attestation": { "type": "string", "description": "Text of consent attestation from both parties for use of the affect monitor." },
+        "affect_snapshots": {
+          "type": "array",
+          "description": "Array of affect snapshots captured at decision nodes.",
+          "items": { "$ref": "#/definitions/BehaviouralScreen" }
+        },
+        "capacity_attestation_per_spouse": {
+          "type": "object",
+          "description": "Per-spouse capacity attestations at execution.",
+          "properties": {
+            "spouse_1": {
+              "type": "object",
+              "properties": {
+                "confirmed_no_intoxication": { "type": "boolean", "description": "Spouse 1 confirms they were not under the influence of alcohol or drugs." },
+                "confirmed_mental_capacity_intact": { "type": "boolean", "description": "Spouse 1 confirms mental capacity to enter the agreement." },
+                "signed_timestamp": { "type": "string", "format": "date-time", "description": "Timestamp of the capacity attestation." }
+              },
+              "required": ["confirmed_no_intoxication", "confirmed_mental_capacity_intact", "signed_timestamp"]
+            },
+            "spouse_2": {
+              "type": "object",
+              "properties": {
+                "confirmed_no_intoxication": { "type": "boolean", "description": "Spouse 2 confirms they were not under the influence of alcohol or drugs." },
+                "confirmed_mental_capacity_intact": { "type": "boolean", "description": "Spouse 2 confirms mental capacity to enter the agreement." },
+                "signed_timestamp": { "type": "string", "format": "date-time", "description": "Timestamp of the capacity attestation." }
+              },
+              "required": ["confirmed_no_intoxication", "confirmed_mental_capacity_intact", "signed_timestamp"]
+            }
+          },
+          "required": ["spouse_1", "spouse_2"]
+        }
+      },
+      "required": ["affect_monitor_used", "capacity_attestation_per_spouse"]
+    },
+    "instructions_record": {
+      "type": "object",
+      "description": "Append-only, hash-chained confirmation log recording each party's decision at every node, providing tamper-evident proof of informed consent.",
+      "properties": {
+        "chain_genesis_hash": { "type": "string", "description": "SHA-256 hash seeding the chain, generated at session initialization." },
+        "entries": {
+          "type": "array",
+          "description": "Ordered array of decision-log entries, one per decision node.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sequence": { "type": "integer", "minimum": 0, "description": "Zero-indexed sequence number of this entry." },
+              "node_id": { "type": "string", "description": "Unique identifier of the decision node." },
+              "node_title": { "type": "string", "description": "Human-readable title of the decision node." },
+              "decision": {
+                "type": "string",
+                "enum": ["agree", "disagree", "defer", "factual", "acknowledged"],
+                "description": "Party's decision at this node."
+              },
+              "decision_label": { "type": "string", "description": "Human-readable label for the decision (e.g., 'I agree to waive spousal support')." },
+              "note": { "type": "string", "description": "Optional free-text note recorded by the party at this node." },
+              "ts": { "type": "string", "format": "date-time", "description": "ISO 8601 timestamp of the decision." },
+              "prev_hash": { "type": "string", "description": "SHA-256 hash of the previous entry, or chain_genesis_hash for the first entry." },
+              "hash": { "type": "string", "description": "SHA-256 hash of this entry (computed over sequence, node_id, decision, ts, and prev_hash)." },
+              "affect_snapshot_ref": { "type": ["string", "null"], "description": "Reference to a BehaviouralScreen node_id captured at this decision, or null if affect monitoring was not active." },
+              "stress_confirmed": { "type": "boolean", "description": "Whether any stress flag at this node was resolved by additional confirmation." }
+            },
+            "required": ["sequence", "node_id", "node_title", "decision", "decision_label", "ts", "prev_hash", "hash", "stress_confirmed"]
+          }
+        },
+        "final_hash": { "type": "string", "description": "SHA-256 hash of the last entry in the chain, locked at execution and recorded in the signed agreement." }
+      },
+      "required": ["chain_genesis_hash", "entries", "final_hash"]
+    }
+  },
+  "required": ["procedural_fairness", "substantive_fairness", "financial_disclosure_attestations", "behavioural_and_capacity_screen", "instructions_record"]
+}

@@ -1,0 +1,584 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "support.schema.json",
+  "title": "BC FLA Separation Agreement — Child Support and Spousal Support Sub-Schema",
+  "type": "object",
+  "definitions": {
+    "IncomeSource": {
+      "type": "object",
+      "properties": {
+        "source_name": {
+          "type": "string",
+          "description": "Name or category of income source (e.g., employment, self-employment, investment, pension, disability benefits)."
+        },
+        "annual_amount": {
+          "type": "number",
+          "description": "Gross annual amount from this source in CAD."
+        },
+        "taxable": {
+          "type": "boolean",
+          "description": "Whether this income source is taxable under the Income Tax Act, R.S.C. 1985, c. 1 (5th Supp.)."
+        },
+        "grossed_up_amount": {
+          "type": ["number", "null"],
+          "description": "If non-taxable, the grossed-up equivalent for guideline income purposes per Federal Child Support Guidelines s. 19(1)(h)."
+        },
+        "documentation": {
+          "type": "string",
+          "description": "Document substantiating this source (e.g., T4, T4A, T5, financial statement)."
+        }
+      },
+      "required": ["source_name", "annual_amount", "taxable"]
+    },
+    "SupportPayment": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "description": "Payment amount per period in CAD."
+        },
+        "frequency": {
+          "type": "string",
+          "enum": ["monthly", "biweekly", "semimonthly"],
+          "description": "How often the payment is made."
+        },
+        "payment_due_date": {
+          "type": "string",
+          "description": "Day or date within each period payment is due (e.g., '1st of each month')."
+        },
+        "payment_method": {
+          "type": "string",
+          "enum": ["direct_deposit", "e_transfer", "cheque", "FMEP"],
+          "description": "Method of payment. FMEP refers to BC Family Maintenance Enforcement Program enrollment."
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Date support payments commence."
+        }
+      },
+      "required": ["amount", "frequency", "start_date"]
+    },
+    "ReviewTrigger": {
+      "type": "object",
+      "properties": {
+        "trigger_event": {
+          "type": "string",
+          "description": "Event that triggers a support review (e.g., child completes secondary school, payor reaches age 65, recipient achieves self-sufficiency)."
+        },
+        "trigger_type": {
+          "type": "string",
+          "enum": ["scheduled_date", "milestone_event", "material_change"],
+          "description": "Classification of the trigger."
+        },
+        "anticipated_date": {
+          "type": ["string", "null"],
+          "format": "date",
+          "description": "Estimated date of trigger if ascertainable."
+        },
+        "review_process": {
+          "type": "string",
+          "enum": ["negotiation", "mediation", "med_arb", "arbitration", "court"],
+          "description": "Dispute resolution process to be followed upon trigger."
+        }
+      },
+      "required": ["trigger_event", "trigger_type", "review_process"]
+    },
+    "S7Expense": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string",
+          "enum": [
+            "child_care",
+            "medical_dental_premiums",
+            "healthcare_uninsured",
+            "primary_secondary_extracurricular",
+            "post_secondary",
+            "extraordinary_extracurricular"
+          ],
+          "description": "Category of special or extraordinary expense under Federal Child Support Guidelines s. 7. [VERIFY: s. 7 categories]"
+        },
+        "description": {
+          "type": "string",
+          "description": "Specific description of the expense."
+        },
+        "annual_amount_estimated": {
+          "type": "number",
+          "description": "Estimated gross annual cost in CAD."
+        },
+        "tax_deduction_credit": {
+          "type": "number",
+          "description": "Value of any tax deduction or credit attributable to this expense in CAD."
+        },
+        "net_after_tax": {
+          "type": "number",
+          "description": "Net annual cost after applying tax deductions or credits."
+        },
+        "proportional_share_payor": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Payor's proportional share of net expense, based on ratio of respective guideline incomes."
+        },
+        "proportional_share_recipient": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Recipient's proportional share of net expense."
+        },
+        "documentation_required": {
+          "type": "string",
+          "description": "Documents required to substantiate expense (e.g., receipts, invoices, enrollment confirmation)."
+        }
+      },
+      "required": [
+        "category",
+        "description",
+        "annual_amount_estimated",
+        "net_after_tax",
+        "proportional_share_payor",
+        "proportional_share_recipient"
+      ]
+    }
+  },
+  "properties": {
+    "income_determination": {
+      "type": "object",
+      "description": "Income determination for each spouse for guideline support purposes.",
+      "properties": {
+        "spouse_1": { "$ref": "#/properties/income_determination/$defs/SpouseIncome" },
+        "spouse_2": { "$ref": "#/properties/income_determination/$defs/SpouseIncome" }
+      },
+      "$defs": {
+        "SpouseIncome": {
+          "type": "object",
+          "properties": {
+            "line_15000_income_prior_year": {
+              "type": "number",
+              "description": "Total income per CRA T1 General, line 15000, for the most recent completed tax year."
+            },
+            "line_15000_income_current_estimate": {
+              "type": ["number", "null"],
+              "description": "Estimated current-year total income per line 15000 if materially different from prior year."
+            },
+            "imputed_income": {
+              "type": ["object", "null"],
+              "description": "Income imputed under Federal Child Support Guidelines s. 19, if applicable.",
+              "properties": {
+                "imputed_amount": {
+                  "type": "number",
+                  "description": "Amount of income imputed in CAD."
+                },
+                "basis": {
+                  "type": "string",
+                  "description": "Statutory basis for imputation (e.g., s. 19(1)(a) intentionally under-employed, s. 19(1)(f) exempt from tax). [VERIFY: s. 19 subsections]"
+                }
+              },
+              "required": ["imputed_amount", "basis"]
+            },
+            "self_employment_adjustments": {
+              "type": ["object", "null"],
+              "description": "Adjustments to self-employment income per Federal Child Support Guidelines ss. 17-18 (add back deductions not reflecting actual cash available). [VERIFY: ss. 17-18 scope]",
+              "properties": {
+                "gross_self_employment_income": { "type": "number" },
+                "disallowed_deductions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "deduction_type": { "type": "string" },
+                      "amount_added_back": { "type": "number" }
+                    }
+                  },
+                  "description": "Deductions added back to income (e.g., CCA, personal vehicle, home office)."
+                },
+                "adjusted_self_employment_income": { "type": "number" }
+              }
+            },
+            "non_taxable_income": {
+              "type": ["object", "null"],
+              "description": "Non-taxable income (e.g., disability benefits, workers' compensation) and grossed-up equivalent.",
+              "properties": {
+                "source": { "type": "string" },
+                "annual_amount": { "type": "number" },
+                "marginal_tax_rate_assumed": { "type": "number", "description": "Assumed marginal rate for gross-up." },
+                "grossed_up_amount": { "type": "number" }
+              }
+            },
+            "total_guideline_income": {
+              "type": "number",
+              "description": "Final guideline income for support calculation purposes."
+            },
+            "income_sources": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/IncomeSource" },
+              "description": "Itemized income sources."
+            },
+            "prescribed_income_documentation": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Documents exchanged or to be exchanged per Federal Child Support Guidelines s. 21 (e.g., T1 General, T4, Notice of Assessment, corporate financial statements). [VERIFY: s. 21 prescribed documents]"
+            },
+            "annual_disclosure_obligation": {
+              "type": "object",
+              "properties": {
+                "required": { "type": "boolean", "description": "Whether ongoing annual disclosure is required." },
+                "due_date": { "type": "string", "description": "Annual deadline (e.g., 'June 30 of each year')." },
+                "form_of_disclosure": {
+                  "type": "string",
+                  "description": "What must be provided (e.g., 'complete copy of T1 General, all T4/T4A/T5 slips, Notice of Assessment, and current financial statement if self-employed')."
+                }
+              },
+              "required": ["required"]
+            }
+          },
+          "required": ["line_15000_income_prior_year", "total_guideline_income", "prescribed_income_documentation", "annual_disclosure_obligation"]
+        }
+      },
+      "required": ["spouse_1", "spouse_2"]
+    },
+    "child_support": {
+      "type": "object",
+      "description": "Child support terms under the Federal Child Support Guidelines, SOR/97-175, and BC Family Law Act, S.B.C. 2011, c. 25, Part 7.",
+      "properties": {
+        "payor": {
+          "type": "string",
+          "enum": ["spouse_1", "spouse_2"],
+          "description": "The spouse obligated to pay child support."
+        },
+        "applicable_guideline": {
+          "type": "string",
+          "const": "Federal Child Support Guidelines, SOR/97-175",
+          "description": "Applicable guideline instrument."
+        },
+        "payor_guideline_income": {
+          "type": "number",
+          "description": "Payor's guideline income for table amount lookup."
+        },
+        "recipient_guideline_income": {
+          "type": ["number", "null"],
+          "description": "Recipient's guideline income, required for shared or split parenting arrangements under s. 8 or s. 9."
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "date_of_birth": { "type": "string", "format": "date" },
+              "child_of_marriage": {
+                "type": "boolean",
+                "description": "Whether child qualifies as child of the marriage per Divorce Act, R.S.C. 1985, c. 3 (2nd Supp.), s. 2(1), or child under FLA s. 146. [VERIFY: FLA s. 146 definition of child for support]"
+              }
+            }
+          },
+          "description": "Children for whom support is payable."
+        },
+        "parenting_arrangement_for_cs": {
+          "type": "string",
+          "enum": ["primary_residence", "shared_40_60_or_closer", "split"],
+          "description": "Parenting arrangement classification affecting calculation: primary (s. 3), shared (s. 9, each parent 40%+ time), split (s. 8)."
+        },
+        "table_amount": {
+          "type": "number",
+          "description": "Monthly table amount per applicable Federal Tables, BC schedule."
+        },
+        "set_off_calculation": {
+          "type": ["object", "null"],
+          "description": "Set-off calculation for shared or split parenting under s. 8 or s. 9.",
+          "properties": {
+            "spouse_1_table_amount": { "type": "number" },
+            "spouse_2_table_amount": { "type": "number" },
+            "set_off_amount": { "type": "number", "description": "Difference between the two table amounts." },
+            "higher_income_parent": { "type": "string", "enum": ["spouse_1", "spouse_2"] },
+            "additional_factors_considered": { "type": "string", "description": "Any s. 9(b)-(c) factors (increased costs of shared parenting, conditions/means/needs)." }
+          }
+        },
+        "payment": { "$ref": "#/definitions/SupportPayment" },
+        "fmep_enrollment": {
+          "type": "boolean",
+          "description": "Whether the order/agreement is enrolled with the BC Family Maintenance Enforcement Program."
+        },
+        "end_event": {
+          "type": "string",
+          "description": "Event upon which child support terminates (e.g., 'child ceases to be a child of the marriage per Divorce Act s. 2(1) or is no longer a child under FLA s. 146'). [VERIFY: FLA s. 146 and s. 147 re child support obligation end]"
+        },
+        "section_7_expenses": {
+          "type": "object",
+          "description": "Special or extraordinary expenses under Federal Child Support Guidelines s. 7.",
+          "properties": {
+            "expenses": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/S7Expense" }
+            },
+            "reconciliation_cadence": {
+              "type": "string",
+              "description": "How often s. 7 expenses are reconciled (e.g., 'quarterly with receipts within 30 days of quarter end')."
+            },
+            "pre_approval_required": {
+              "type": "boolean",
+              "description": "Whether both spouses must consent before incurring a new s. 7 expense."
+            }
+          },
+          "required": ["expenses", "reconciliation_cadence"]
+        }
+      },
+      "required": ["payor", "applicable_guideline", "payor_guideline_income", "parenting_arrangement_for_cs", "table_amount", "payment", "end_event"]
+    },
+    "retroactive_child_support": {
+      "type": ["object", "null"],
+      "description": "Retroactive child support claim, resolved per DBS v. SRG, 2006 SCC 37, and Michel v. Graydon, 2020 SCC 24. [VERIFY: Michel v. Graydon citation 2020 SCC 24]",
+      "properties": {
+        "claimed": {
+          "type": "boolean",
+          "description": "Whether a retroactive claim was made."
+        },
+        "resolved": {
+          "type": "boolean",
+          "description": "Whether the retroactive claim is fully resolved in this agreement."
+        },
+        "period_covered": {
+          "type": "object",
+          "properties": {
+            "from": { "type": "string", "format": "date" },
+            "to": { "type": "string", "format": "date" }
+          },
+          "description": "Period for which retroactive support is owed."
+        },
+        "amount_agreed": {
+          "type": "number",
+          "description": "Total retroactive amount agreed in CAD."
+        },
+        "payment_plan": {
+          "type": "string",
+          "description": "Terms for paying the retroactive amount (e.g., lump sum by date, instalments)."
+        }
+      },
+      "required": ["claimed", "resolved"]
+    },
+    "spousal_support": {
+      "type": "object",
+      "description": "Spousal support terms under FLA Part 7, Division 8, and the Spousal Support Advisory Guidelines (SSAG).",
+      "properties": {
+        "entitlement_basis": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["compensatory", "non_compensatory", "contractual"]
+          },
+          "description": "Basis of entitlement per Moge v. Moge, [1992] 3 SCR 813, and Bracklow v. Bracklow, [1999] 1 SCR 420."
+        },
+        "applicable_guideline": {
+          "type": "string",
+          "const": "Spousal Support Advisory Guidelines (SSAG), 2008",
+          "description": "Advisory framework used for quantum and duration."
+        },
+        "ssag_calculation": {
+          "type": "object",
+          "properties": {
+            "formula": {
+              "type": "string",
+              "enum": ["without_child_support", "with_child_support"],
+              "description": "SSAG formula applied."
+            },
+            "range_low_amount": { "type": "number", "description": "Low-end monthly amount." },
+            "range_mid_amount": { "type": "number", "description": "Mid-range monthly amount." },
+            "range_high_amount": { "type": "number", "description": "High-end monthly amount." },
+            "range_low_duration_months": { "type": ["integer", "null"], "description": "Low-end duration in months (null if indefinite)." },
+            "range_mid_duration_months": { "type": ["integer", "null"] },
+            "range_high_duration_months": { "type": ["integer", "null"] },
+            "agreed_position": {
+              "type": "string",
+              "enum": ["within_range", "above_range", "below_range"],
+              "description": "Where the agreed amount and duration fall relative to the SSAG range."
+            },
+            "reasons_for_position": {
+              "type": "string",
+              "description": "Explanation if amount/duration is above or below the SSAG range."
+            }
+          },
+          "required": ["formula", "range_low_amount", "range_mid_amount", "range_high_amount", "agreed_position"]
+        },
+        "payment": { "$ref": "#/definitions/SupportPayment" },
+        "duration": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["indefinite", "fixed_term", "to_review_event"],
+              "description": "Duration classification."
+            },
+            "end_date": {
+              "type": ["string", "null"],
+              "format": "date",
+              "description": "Fixed end date if applicable."
+            },
+            "review_event": {
+              "type": ["string", "null"],
+              "description": "Event triggering end or review if type is to_review_event."
+            }
+          },
+          "required": ["type"]
+        },
+        "indexation": {
+          "type": "object",
+          "description": "Annual cost-of-living adjustment.",
+          "properties": {
+            "indexed": { "type": "boolean" },
+            "index_reference": {
+              "type": ["string", "null"],
+              "description": "Index used (e.g., 'Statistics Canada CPI All-Items, Vancouver, B.C.')."
+            },
+            "adjustment_cadence": {
+              "type": ["string", "null"],
+              "description": "When adjustment takes effect (e.g., 'January 1 of each year')."
+            }
+          },
+          "required": ["indexed"]
+        },
+        "lump_sum_option": {
+          "type": ["object", "null"],
+          "description": "Lump sum spousal support in lieu of or in addition to periodic payments.",
+          "properties": {
+            "amount": { "type": "number" },
+            "present_value_discount_rate": { "type": "number", "description": "Discount rate used for present value calculation." },
+            "tax_characterization": {
+              "type": "string",
+              "description": "Tax treatment: generally not deductible to payor nor includable to recipient for lump sums per ITA."
+            }
+          },
+          "required": ["amount", "tax_characterization"]
+        },
+        "waiver": {
+          "type": ["object", "null"],
+          "description": "Waiver of spousal support, structured to withstand Miglin v. Miglin, 2003 SCC 24, Stage 1 and Stage 2 analysis.",
+          "properties": {
+            "spousal_support_waived": { "type": "boolean" },
+            "acknowledgment_compensatory_entitlement_waived": {
+              "type": "string",
+              "description": "Acknowledgment that the waiving spouse had or may have had a compensatory entitlement and the reasons for waiving it."
+            },
+            "acknowledgment_change_of_conditions": {
+              "type": "string",
+              "description": "Acknowledgment that conditions may change but the waiver is intended to be final and binding."
+            },
+            "acknowledgment_ila_on_waiver": {
+              "type": "boolean",
+              "description": "Confirmation that the waiving spouse received independent legal advice specifically on the spousal support waiver."
+            },
+            "reasons_for_waiver": {
+              "type": "string",
+              "description": "Reasons supporting the waiver (e.g., both spouses self-sufficient, short marriage, equalized by property division)."
+            }
+          },
+          "required": ["spousal_support_waived", "acknowledgment_compensatory_entitlement_waived", "acknowledgment_change_of_conditions", "acknowledgment_ila_on_waiver"]
+        }
+      },
+      "required": ["entitlement_basis", "applicable_guideline", "ssag_calculation", "duration"]
+    },
+    "support_security": {
+      "type": "object",
+      "description": "Security for support obligations.",
+      "properties": {
+        "life_insurance": {
+          "type": ["object", "null"],
+          "description": "Life insurance policy maintained to secure support obligations.",
+          "properties": {
+            "insurer": { "type": "string" },
+            "policy_number": { "type": "string" },
+            "face_amount": { "type": "number", "description": "Minimum face amount in CAD." },
+            "beneficiary_designation": { "type": "string", "description": "Irrevocable beneficiary designation (e.g., recipient spouse in trust for children)." },
+            "term": { "type": "string", "description": "Policy term (e.g., 'until youngest child ceases to be child of marriage and spousal support terminates')." },
+            "premium_payor": { "type": "string", "enum": ["spouse_1", "spouse_2"] },
+            "proof_of_coverage_cadence": { "type": "string", "description": "How often proof of coverage must be provided (e.g., 'annually by January 31')." }
+          },
+          "required": ["face_amount", "beneficiary_designation", "premium_payor", "proof_of_coverage_cadence"]
+        },
+        "charge_on_property": {
+          "type": ["object", "null"],
+          "description": "Charge registered against real property as security for support arrears or lump sum.",
+          "properties": {
+            "property_description": { "type": "string" },
+            "pid": { "type": "string", "description": "BC Land Title PID." },
+            "amount_secured": { "type": "number" },
+            "discharge_conditions": { "type": "string" }
+          }
+        },
+        "fmep_assignment": {
+          "type": "boolean",
+          "description": "Whether the agreement is assigned to the BC Family Maintenance Enforcement Program for enforcement."
+        }
+      }
+    },
+    "support_review_and_variation": {
+      "type": "object",
+      "description": "Review and variation provisions for child and spousal support.",
+      "properties": {
+        "scheduled_review_dates": {
+          "type": "array",
+          "items": { "type": "string", "format": "date" },
+          "description": "Specific future dates on which support will be reviewed."
+        },
+        "automatic_review_triggers": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ReviewTrigger" },
+          "description": "Events that automatically trigger a support review."
+        },
+        "material_change_threshold": {
+          "type": "string",
+          "description": "Definition of material change in circumstances sufficient to warrant variation (e.g., 'a change in income of 10% or more, or any change that, had it been known, would likely have resulted in a different order per Willick v. Willick, [1994] 3 SCR 670')."
+        },
+        "dispute_resolution_process": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["negotiation", "mediation", "med_arb", "arbitration", "court"]
+          },
+          "description": "Ordered sequence of dispute resolution steps before court application. FLA s. 4 encourages out-of-court resolution."
+        }
+      },
+      "required": ["automatic_review_triggers", "material_change_threshold", "dispute_resolution_process"]
+    },
+    "tax_treatment": {
+      "type": "object",
+      "description": "Income tax treatment of support payments under the Income Tax Act, R.S.C. 1985, c. 1 (5th Supp.).",
+      "properties": {
+        "child_support_tax_treatment": {
+          "type": "string",
+          "const": "not_deductible_not_includable",
+          "description": "Post-May 1997 child support: not deductible by payor, not includable by recipient, per ITA s. 56.1(4) and s. 60.1(4)."
+        },
+        "spousal_support_periodic_tax_treatment": {
+          "type": "object",
+          "description": "Periodic spousal support: deductible by payor under ITA s. 60(b), includable by recipient under ITA s. 56(1)(b). [VERIFY: s. 60(b) and s. 56(1)(b) current references]",
+          "properties": {
+            "deductible_to_payor": { "type": "boolean", "const": true },
+            "includable_to_recipient": { "type": "boolean", "const": true }
+          }
+        },
+        "lump_sum_spousal_support_tax_treatment": {
+          "type": "object",
+          "description": "Lump sum spousal support: generally not deductible to payor and not includable to recipient.",
+          "properties": {
+            "deductible_to_payor": { "type": "boolean", "const": false },
+            "includable_to_recipient": { "type": "boolean", "const": false }
+          }
+        },
+        "retroactive_support_tax_treatment": {
+          "type": "string",
+          "description": "Retroactive periodic spousal support may be deductible/includable in the years to which it relates; recipient may request CRA reassessment for prior years per ITA s. 60.1(3). Retroactive child support is not deductible/includable. [VERIFY: s. 60.1(3) applicability]"
+        }
+      },
+      "required": ["child_support_tax_treatment", "spousal_support_periodic_tax_treatment", "lump_sum_spousal_support_tax_treatment", "retroactive_support_tax_treatment"]
+    }
+  },
+  "required": [
+    "income_determination",
+    "child_support",
+    "spousal_support",
+    "support_security",
+    "support_review_and_variation",
+    "tax_treatment"
+  ]
+}

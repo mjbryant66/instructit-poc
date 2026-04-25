@@ -1,0 +1,67 @@
+{
+  "current": "final",
+  "started_at": "2026-04-24T19:55:00-07:00",
+  "affect_enabled": true,
+  "log": [
+    {
+      "node": "intro",
+      "title": "About this confirmation",
+      "decision": "agree",
+      "decision_label": "Agree",
+      "note": "",
+      "ts": "2026-04-24T19:55:30-07:00",
+      "prev_hash": "GENESIS",
+      "hash": "a1b2c3d4e5f60718",
+      "affect_snapshot": { "happy": 0.12, "neutral": 0.78, "sad": 0.04, "fearful": 0.02, "angry": 0.01, "surprised": 0.02, "disgusted": 0.01, "stress_score": 0.08 },
+      "stress_confirmed": false
+    },
+    {
+      "node": "ila",
+      "title": "Independent Legal Advice (ILA)",
+      "decision": "agree",
+      "decision_label": "Agree",
+      "note": "",
+      "ts": "2026-04-24T19:57:10-07:00",
+      "prev_hash": "a1b2c3d4e5f60718",
+      "hash": "b2c3d4e5f6071829",
+      "affect_snapshot": { "happy": 0.18, "neutral": 0.72, "sad": 0.05, "fearful": 0.02, "angry": 0.01, "surprised": 0.01, "disgusted": 0.01, "stress_score": 0.09 },
+      "stress_confirmed": false
+    },
+    {
+      "node": "disclosure",
+      "title": "Full and complete financial disclosure",
+      "decision": "agree",
+      "decision_label": "Agree",
+      "note": "",
+      "ts": "2026-04-24T19:58:42-07:00",
+      "prev_hash": "b2c3d4e5f6071829",
+      "hash": "c3d4e5f60718293a",
+      "affect_snapshot": { "happy": 0.05, "neutral": 0.65, "sad": 0.18, "fearful": 0.07, "angry": 0.02, "surprised": 0.02, "disgusted": 0.01, "stress_score": 0.28 },
+      "stress_confirmed": false
+    },
+    {
+      "node": "voluntariness",
+      "title": "Voluntariness — you are signing freely",
+      "decision": "agree",
+      "decision_label": "Agree (under stress-gate)",
+      "note": "",
+      "ts": "2026-04-24T20:00:15-07:00",
+      "prev_hash": "c3d4e5f60718293a",
+      "hash": "d4e5f60718293a4b",
+      "affect_snapshot": { "happy": 0.02, "neutral": 0.32, "sad": 0.28, "fearful": 0.22, "angry": 0.10, "surprised": 0.04, "disgusted": 0.02, "stress_score": 0.62 },
+      "stress_confirmed": true
+    },
+    {
+      "node": "final",
+      "title": "Final instruction — sign the agreement",
+      "decision": "acknowledged",
+      "decision_label": "Acknowledged",
+      "note": "",
+      "ts": "2026-04-24T20:05:00-07:00",
+      "prev_hash": "d4e5f60718293a4b",
+      "hash": "e5f60718293a4b5c",
+      "affect_snapshot": { "happy": 0.20, "neutral": 0.68, "sad": 0.05, "fearful": 0.03, "angry": 0.01, "surprised": 0.02, "disgusted": 0.01, "stress_score": 0.10 },
+      "stress_confirmed": false
+    }
+  ]
+}

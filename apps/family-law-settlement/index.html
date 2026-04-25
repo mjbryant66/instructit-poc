@@ -1,0 +1,895 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>InstructIT — Family Law Settlement Agreement (POC)</title>
+<style>
+  :root {
+    --bg: #faf8f5;
+    --ink: #1a1a1a;
+    --muted: #5a5a5a;
+    --rule: #d8d4cc;
+    --accent: #2b4a6b;
+    --agree: #2e7d32;
+    --warn: #b25400;
+    --alert: #b00020;
+    --paper: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+    font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    font-size: 17px; line-height: 1.55; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 32px 24px 96px; }
+  header { border-bottom: 1px solid var(--rule); padding-bottom: 20px; margin-bottom: 28px; }
+  header h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: 0.2px; }
+  header .sub { color: var(--muted); font-size: 14px; }
+  header .matter { margin-top: 12px; font-size: 14px; color: var(--muted); }
+  header .matter strong { color: var(--ink); }
+  .progress { display: flex; gap: 4px; margin: 16px 0 0; }
+  .progress span { flex: 1; height: 4px; background: var(--rule); border-radius: 2px; }
+  .progress span.done { background: var(--accent); }
+  .progress span.current { background: var(--accent); opacity: 0.5; }
+
+  .card { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
+    padding: 28px; box-shadow: 0 1px 0 rgba(0,0,0,0.02); }
+  .card .phase { color: var(--accent); font-size: 12px; letter-spacing: 1.2px;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+    font-family: ui-sans-serif, system-ui, sans-serif; }
+  .card h2 { font-size: 20px; margin: 0 0 12px; }
+  .card .auth { display: inline-block; font-size: 12px; color: var(--accent);
+    background: #e6ecf3; border: 1px solid #c4d2e3; padding: 3px 10px; border-radius: 999px;
+    margin-bottom: 14px; font-family: ui-sans-serif, system-ui, sans-serif; margin-right: 6px; }
+  .card .stress-gate { display: inline-block; font-size: 12px; color: var(--alert);
+    background: #ffe6ea; border: 1px solid #f3a3b1; padding: 3px 10px; border-radius: 999px;
+    margin-bottom: 14px; font-family: ui-sans-serif, system-ui, sans-serif; margin-right: 6px; }
+  .card .body { font-size: 16px; }
+  .card .body ul { padding-left: 22px; margin: 8px 0; }
+  .card .body li { margin: 6px 0; }
+  .strategic { font-size: 14px; color: var(--muted); border-left: 3px solid var(--rule);
+    padding: 4px 0 4px 14px; margin: 14px 0; font-style: italic; }
+
+  .actions { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+  button { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px;
+    padding: 10px 18px; border-radius: 6px; cursor: pointer; border: 1px solid var(--rule);
+    background: var(--paper); color: var(--ink); transition: 0.1s; }
+  button:hover { background: #f4f1ec; }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  button.primary:hover { background: #1f3a55; }
+  button.agree { background: var(--agree); color: #fff; border-color: var(--agree); }
+  button.agree:hover { background: #245a28; }
+  button.disagree { color: var(--warn); border-color: #f3c896; }
+  button.danger { background: var(--alert); color: #fff; border-color: var(--alert); }
+
+  .note { margin-top: 16px; }
+  .note label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px;
+    font-family: ui-sans-serif, system-ui, sans-serif; }
+  .note textarea { width: 100%; min-height: 70px; font-family: inherit; font-size: 15px;
+    padding: 10px 12px; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg);
+    resize: vertical; }
+
+  /* Affect monitor */
+  #affect-bar { position: fixed; bottom: 16px; right: 16px; width: 280px;
+    background: var(--paper); border: 1px solid var(--rule); border-radius: 8px;
+    padding: 12px; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); z-index: 50; }
+  #affect-bar .row { display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px; }
+  #affect-bar .row .label { color: var(--muted); }
+  #affect-bar .state { font-weight: 600; }
+  #affect-bar .state.ok { color: var(--agree); }
+  #affect-bar .state.warn { color: var(--warn); }
+  #affect-bar .state.alert { color: var(--alert); }
+  #affect-bar video { width: 100%; height: 80px; object-fit: cover; border-radius: 4px;
+    background: #000; transform: scaleX(-1); }
+  #affect-bar .privacy { color: var(--muted); font-size: 11px; margin-top: 6px; line-height: 1.4; }
+  #affect-bar .indicators { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px;
+    margin-top: 8px; font-size: 11px; }
+  #affect-bar .indicators .k { color: var(--muted); }
+  #affect-bar .indicators .v { text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* Stress modal */
+  .modal-bg { position: fixed; inset: 0; background: rgba(20,20,20,0.5); z-index: 100;
+    display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .modal { background: var(--paper); border-radius: 8px; max-width: 520px; padding: 28px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+  .modal h3 { margin: 0 0 12px; font-size: 20px; color: var(--alert); }
+  .modal p { font-size: 15px; color: var(--ink); }
+  .modal .actions { margin-top: 20px; }
+
+  /* Record view */
+  .record { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
+    padding: 32px; }
+  .record h2 { font-size: 22px; margin: 0 0 6px; }
+  .record .recmeta { color: var(--muted); font-size: 13px; margin-bottom: 20px;
+    font-family: ui-sans-serif, system-ui, sans-serif; }
+  .record .entry { border-top: 1px solid var(--rule); padding: 14px 0; }
+  .record .entry .stamp { font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .record .entry .heading { font-weight: 600; margin-bottom: 4px; }
+  .record .entry .decision { display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 12px; font-family: ui-sans-serif, system-ui, sans-serif; margin-right: 6px; }
+  .record .entry .decision.agree { background: #e8f4ea; color: #245a28; }
+  .record .entry .decision.disagree { background: #fbe9d7; color: #7a3800; }
+  .record .entry .decision.factual { background: #e6ecf3; color: #1f3a55; }
+  .record .entry .decision.stress-confirmed { background: #ffe6ea; color: #7a0014; }
+  .record .entry .note-display { color: var(--muted); font-size: 14px; margin-top: 6px;
+    border-left: 2px solid var(--rule); padding-left: 10px; }
+  .record .entry .affect-snapshot { font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 11px; color: var(--muted); background: var(--bg); padding: 6px 10px;
+    border-radius: 4px; margin-top: 6px; }
+  .record .footer { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--rule);
+    font-size: 12px; color: var(--muted); }
+  .record .hash { font-family: ui-monospace, "SF Mono", Menlo, monospace; word-break: break-all; }
+
+  @media print {
+    body { background: #fff; }
+    .actions, .topbar, .progress, #affect-bar { display: none !important; }
+    .card, .record { border: none; box-shadow: none; padding: 0; }
+    .wrap { padding: 0; max-width: 100%; }
+  }
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .topbar .reset { font-size: 12px; color: var(--muted); background: none; border: none;
+    cursor: pointer; padding: 0; text-decoration: underline; }
+  .topbar .reset:hover { color: var(--warn); }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.13/dist/face-api.min.js"></script>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<!-- Affect monitor (rendered when consented) -->
+<div id="affect-bar" style="display:none;">
+  <div class="row">
+    <div class="label">Affect monitor</div>
+    <div class="state" id="affect-state">initializing…</div>
+  </div>
+  <video id="affect-video" autoplay muted playsinline></video>
+  <div class="indicators" id="affect-indicators"></div>
+  <div class="privacy">Camera stream stays in this browser. No video, image, or
+    expression data leaves your device.</div>
+</div>
+
+<script>
+/* ============================================================
+   InstructIT — Family Law Settlement Agreement (POC)
+   Configuration: BC separation agreement client-instructions confirmation
+   Targets the BC LIF claims-data lament:
+     1. Missed limitation (FLA s. 198(5) negotiation-trap)
+     2. Settler's remorse post-mediation
+     3. Drafting mistakes in separation agreements
+   Authorities (verified via LimitGuard PRD memory 2026-04-22/23):
+     Rick v. Brandsema 2009 SCC 10
+     Miglin v. Miglin 2003 SCC 24 ¶82
+     Hartshorne v. Hartshorne 2004 SCC 22
+     Family Law Act s. 4 (set-aside / unconscionability)
+     Family Law Act s. 198 (limitation), s. 198(5) (mediation suspension)
+   [VERIFY] Counsel must review legal content before client deployment.
+   ============================================================ */
+
+const TREE = {
+  matter_label: "[Client name] — Separation Agreement",
+  matter_subtitle: "Family Law Act (BC) — Pre-execution Client Instructions",
+  entry: "intro",
+  nodes: {
+
+    intro: {
+      type: "agree",
+      phase: "Confirm posture",
+      title: "About this confirmation",
+      body: `
+        <p>This tool walks you through a structured confirmation of the
+        instructions you are giving counsel about your separation agreement,
+        <strong>before</strong> you sign it. It produces a time-stamped,
+        tamper-evident record that you and counsel both retain.</p>
+        <p>At each step you will be asked to <em>Agree</em>, <em>Disagree (with note)</em>,
+        or <em>Defer</em>. If you disagree with anything, the session pauses so
+        counsel can address your concern before continuing.</p>
+        <p>This session also includes an optional affect monitor to help screen
+        for signs of elevated stress at signing-critical steps. You will be
+        asked to opt in on the next screen.</p>
+      `,
+      next: "camera_optin",
+    },
+
+    camera_optin: {
+      type: "factual",
+      phase: "Privacy and consent",
+      title: "Affect monitor — opt in",
+      auth: "FLA s. 4 evidence support",
+      body: `
+        <p>Counsel can enable an in-browser affect monitor that watches for
+        signs of elevated stress (anxiety, fear, sadness) while you complete
+        the confirmation. If elevated stress is detected at a signing-critical
+        step, an extra confirmation prompt appears so you can pause, defer,
+        or reflect before continuing.</p>
+        <p><strong>Privacy:</strong> the camera stream stays inside this
+        browser tab. No video, image, or expression data ever leaves your
+        device. Nothing is uploaded to a server. The expression scores that
+        get recorded in the audit log are summary numbers only (e.g.
+        <code>fearful: 0.42</code>), not images.</p>
+        <p><strong>Why this matters:</strong> Family Law Act s. 4 allows a
+        court to set aside an agreement obtained under duress or where one
+        party did not freely agree. A contemporaneous behavioural screen,
+        recorded in an append-only log, is independent evidence on that
+        point — for and against.</p>
+      `,
+      options: [
+        { label: "Enable affect monitor (camera)", next: "ila", action: "enableCamera" },
+        { label: "Skip — confirmations only, no camera", next: "ila", action: "skipCamera" },
+      ],
+    },
+
+    ila: {
+      type: "agree",
+      phase: "Phase 1 — Procedural fairness",
+      auth: "Brandsema 2009 SCC 10",
+      title: "Independent Legal Advice (ILA)",
+      body: `
+        <p>You confirm that you have received independent legal advice on this
+        agreement from counsel of your choosing, and that you had a reasonable
+        opportunity to ask questions and have them answered.</p>
+        <p>The ILA covered, at minimum: the legal effect of the agreement, your
+        rights and entitlements under the <em>Family Law Act</em>, and the
+        consequences of giving them up by signing.</p>
+        <div class="strategic">If your ILA was incomplete or rushed, say so —
+        a Brandsema-style procedural fairness gap is one of the strongest
+        grounds a court has used to set agreements aside.</div>
+      `,
+      next: "disclosure",
+    },
+
+    disclosure: {
+      type: "agree",
+      phase: "Phase 1 — Procedural fairness",
+      auth: "Brandsema; Miglin Stage 1",
+      title: "Full and complete financial disclosure",
+      body: `
+        <p>You confirm that:</p>
+        <ul>
+          <li>You have made <strong>full and complete</strong> disclosure of all your
+          assets, debts, income, pensions, and other financial interests; and</li>
+          <li>To the best of your knowledge, your spouse has done the same; and</li>
+          <li>You are <strong>not aware of any undisclosed asset, debt, income, or
+          interest</strong> belonging to your spouse.</li>
+        </ul>
+        <div class="strategic">A material non-disclosure is among the most reliable
+        grounds for set-aside under <em>Brandsema</em>. If you suspect anything is
+        missing, disagree and tell counsel before signing.</div>
+      `,
+      next: "voluntariness",
+    },
+
+    voluntariness: {
+      type: "agree",
+      phase: "Phase 1 — Procedural fairness",
+      auth: "FLA s. 4(1)(a) — duress / coercion",
+      title: "Voluntariness — you are signing freely",
+      stress_gate: true,
+      body: `
+        <p>You confirm that you are entering into this agreement <strong>voluntarily</strong>,
+        and specifically that:</p>
+        <ul>
+          <li>No one has threatened you, coerced you, or pressured you into signing;</li>
+          <li>You are not signing because you are afraid of what will happen if you do not;</li>
+          <li>You have had enough time to consider the agreement;</li>
+          <li>You are not under the influence of alcohol, drugs, or any other substance
+          that affects your judgment right now.</li>
+        </ul>
+        <div class="strategic">Family Law Act s. 4(1)(a) lets a court set aside an
+        agreement entered into under duress, coercion, or undue influence. This is
+        the single most-litigated set-aside ground.</div>
+      `,
+      next: "capacity",
+    },
+
+    capacity: {
+      type: "agree",
+      phase: "Phase 1 — Procedural fairness",
+      auth: "FLA s. 4(1)(b)",
+      title: "Capacity to understand",
+      body: `
+        <p>You confirm that you understand:</p>
+        <ul>
+          <li>The nature of the agreement;</li>
+          <li>The rights you are giving up by signing;</li>
+          <li>The consequences of signing, including that the agreement is intended
+          to be final and binding subject to limited grounds for review.</li>
+        </ul>
+      `,
+      next: "property",
+    },
+
+    property: {
+      type: "agree",
+      phase: "Phase 2 — Substantive terms",
+      auth: "FLA Part 5 (property and debt)",
+      title: "Property and debt division",
+      body: `
+        <p>You confirm that you have read and understand the property and debt
+        division provisions of the agreement, including:</p>
+        <ul>
+          <li>What is being treated as <em>family property</em> and how it is divided;</li>
+          <li>What is being treated as <em>excluded property</em>;</li>
+          <li>How <em>family debt</em> is allocated between you and your spouse;</li>
+          <li>The treatment of the family home and any pensions.</li>
+        </ul>
+        <div class="strategic">[VERIFY] Counsel to insert specific values, asset
+        descriptions, and division percentages here for the live deployment.</div>
+      `,
+      next: "support",
+    },
+
+    support: {
+      type: "agree",
+      phase: "Phase 2 — Substantive terms",
+      auth: "FLA Parts 7 (child support), 8 (spousal support); Miglin",
+      title: "Support — child and spousal",
+      body: `
+        <p>You confirm that you understand the support arrangements in the
+        agreement, including:</p>
+        <ul>
+          <li>The amount, frequency, and duration of any spousal support;</li>
+          <li>The amount and structure of any child support, including any
+          variation from the Federal Child Support Guidelines and the basis
+          for that variation;</li>
+          <li>How and when support may be reviewed or terminated.</li>
+        </ul>
+        <div class="strategic">A spousal support waiver or unusual support structure
+        is the most common Miglin Stage 2 attack vector. Counsel should record
+        the explanation given here.</div>
+      `,
+      next: "parenting",
+    },
+
+    parenting: {
+      type: "agree",
+      phase: "Phase 2 — Substantive terms",
+      auth: "FLA Part 4 (children's best interests)",
+      title: "Parenting and time with children",
+      body: `
+        <p>You confirm that you understand the parenting arrangements in the
+        agreement (parenting time, decision-making responsibility, contact with
+        third parties), <strong>and</strong> that you understand any agreement
+        about children remains <em>always</em> subject to the court's
+        best-interests jurisdiction and can be varied if circumstances change
+        materially.</p>
+        <div class="strategic">If the agreement is property/support only and there
+        are no children, mark Defer and counsel will skip this on review.</div>
+      `,
+      next: "waiver",
+    },
+
+    waiver: {
+      type: "agree",
+      phase: "Phase 2 — What you give up",
+      title: "Waiver of further claims",
+      body: `
+        <p>You confirm that you understand which rights, claims, and remedies
+        you are <strong>waiving</strong> by signing this agreement, and that
+        the waivers are intended to be final.</p>
+      `,
+      next: "setaside_risk",
+    },
+
+    setaside_risk: {
+      type: "agree",
+      phase: "Phase 3 — Acknowledged risk",
+      auth: "Miglin; Hartshorne; Brandsema; FLA s. 4",
+      title: "Acknowledgment of set-aside risk and benefit",
+      body: `
+        <p>You confirm that counsel has explained that even after you sign,
+        the agreement <strong>can be set aside in limited circumstances</strong>,
+        including:</p>
+        <ul>
+          <li>Material non-disclosure, duress, coercion, or undue influence
+          (FLA s. 4 / <em>Brandsema</em>);</li>
+          <li>Substantial unfairness assessed against the FLA's objectives
+          and the parties' circumstances at the time of agreement and review
+          (<em>Miglin</em>; <em>Hartshorne</em>);</li>
+          <li>Other grounds the court recognizes in equity or contract.</li>
+        </ul>
+        <p>You acknowledge that signing does <strong>not</strong> eliminate
+        these doctrines, and that the agreement is intended to stand subject
+        to them.</p>
+      `,
+      next: "mediation_window",
+    },
+
+    mediation_window: {
+      type: "factual",
+      phase: "Phase 4 — Limitation awareness",
+      auth: "FLA s. 198(5)",
+      title: "Mediation window — start and end dates",
+      body: `
+        <p>FLA s. 198(5) suspends the running of the limitation period during
+        a qualifying family dispute resolution process (including mediation).
+        Counsel needs to record the start and end dates of any such process
+        for this matter so that the limitation period can be calculated
+        correctly.</p>
+        <p>This is the <strong>#1 high-value claim driver</strong> in BC Lawyers
+        Indemnity Fund family-law claims data: missed limitation periods caused
+        by miscalculating the s. 198(5) suspension window.</p>
+        <div class="strategic">[VERIFY] Counsel to record actual dates here.
+        Confirm with client that any mediation has formally ended.</div>
+      `,
+      options: [
+        { label: "No mediation occurred — clock ran continuously", next: "limitation_ack" },
+        { label: "Mediation occurred and has formally ended", next: "limitation_ack" },
+        { label: "Mediation is ongoing — clock currently suspended", next: "limitation_ack" },
+      ],
+    },
+
+    limitation_ack: {
+      type: "agree",
+      phase: "Phase 4 — Limitation awareness",
+      auth: "FLA s. 198",
+      title: "Acknowledgment of two-year limitation period",
+      body: `
+        <p>You confirm that counsel has explained that under FLA s. 198 there
+        is generally a <strong>two-year limitation period</strong> for starting
+        proceedings about property division and spousal support, running from
+        the date of separation (for married spouses, generally from the date
+        of divorce or annulment), subject to the s. 198(5) suspension during
+        any qualifying family dispute resolution.</p>
+        <p>You understand that signing this agreement does not necessarily
+        restart or extend that clock for any matter not finally settled by
+        the agreement.</p>
+      `,
+      next: "final",
+    },
+
+    final: {
+      type: "agree",
+      phase: "Phase 5 — Instruction to proceed",
+      auth: "Final instruction",
+      title: "Final instruction — sign the agreement",
+      stress_gate: true,
+      body: `
+        <p>Having reviewed and confirmed each of the steps above, you instruct
+        counsel that you are ready to <strong>sign this separation agreement</strong>
+        and that all of your prior confirmations remain accurate as of right now.</p>
+        <p>You understand that this is the final instruction step, and that on
+        clicking <em>Agree</em> below this confirmation record will be locked
+        and a copy retained by counsel.</p>
+      `,
+      terminal: true,
+    },
+  },
+};
+
+/* ============================================================
+   State + persistence
+   ============================================================ */
+
+const STORAGE_KEY = "instructit_family_law_v1";
+
+function loadState() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return {
+    current: TREE.entry,
+    log: [],
+    started_at: new Date().toISOString(),
+    affect_enabled: false,
+  };
+  try { return JSON.parse(raw); } catch {
+    return { current: TREE.entry, log: [], started_at: new Date().toISOString(), affect_enabled: false };
+  }
+}
+
+function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+
+function resetState() {
+  if (!confirm("Reset this instructions session? The current record will be cleared.")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  stopAffect();
+  state = loadState();
+  render();
+}
+
+/* ============================================================
+   Hash chain
+   ============================================================ */
+
+async function sha256(text) {
+  const buf = new TextEncoder().encode(text);
+  const hash = await crypto.subtle.digest("SHA-256", buf);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function appendLog(entry) {
+  const prev = state.log.length ? state.log[state.log.length - 1].hash : "GENESIS";
+  const stamped = {
+    ...entry,
+    ts: new Date().toISOString(),
+    prev_hash: prev,
+    affect_snapshot: affectSnapshot(),
+  };
+  stamped.hash = await sha256(JSON.stringify(stamped));
+  state.log.push(stamped);
+  saveState(state);
+}
+
+/* ============================================================
+   Affect monitor (face-api.js, browser-local)
+   ============================================================ */
+
+const STRESS_KEYS = ["fearful", "sad", "angry", "disgusted"];
+const STRESS_THRESHOLD = 0.45;
+let affectVideo = null;
+let affectInterval = null;
+let lastExpressions = null;
+let modelsLoaded = false;
+
+async function loadModels() {
+  if (modelsLoaded) return;
+  const url = "https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.13/model";
+  await faceapi.nets.tinyFaceDetector.loadFromUri(url);
+  await faceapi.nets.faceExpressionNet.loadFromUri(url);
+  modelsLoaded = true;
+}
+
+async function startAffect() {
+  if (state.affect_enabled) return;
+  try {
+    setAffectState("loading models…", "warn");
+    document.getElementById("affect-bar").style.display = "block";
+    await loadModels();
+    setAffectState("starting camera…", "warn");
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+    affectVideo = document.getElementById("affect-video");
+    affectVideo.srcObject = stream;
+    await new Promise(r => affectVideo.onloadedmetadata = r);
+    state.affect_enabled = true;
+    saveState(state);
+    setAffectState("monitoring", "ok");
+    affectInterval = setInterval(detectAffect, 1500);
+  } catch (e) {
+    console.warn("Affect monitor failed:", e);
+    setAffectState("unavailable", "alert");
+    state.affect_enabled = false;
+    saveState(state);
+  }
+}
+
+function stopAffect() {
+  if (affectInterval) clearInterval(affectInterval);
+  affectInterval = null;
+  if (affectVideo && affectVideo.srcObject) {
+    affectVideo.srcObject.getTracks().forEach(t => t.stop());
+    affectVideo.srcObject = null;
+  }
+  document.getElementById("affect-bar").style.display = "none";
+  state.affect_enabled = false;
+  saveState(state);
+}
+
+function setAffectState(text, cls) {
+  const el = document.getElementById("affect-state");
+  if (el) { el.textContent = text; el.className = "state " + cls; }
+}
+
+async function detectAffect() {
+  if (!affectVideo || affectVideo.readyState !== 4) return;
+  const opts = new faceapi.TinyFaceDetectorOptions({ inputSize: 160, scoreThreshold: 0.5 });
+  const result = await faceapi.detectSingleFace(affectVideo, opts).withFaceExpressions();
+  if (!result || !result.expressions) {
+    setAffectState("no face detected", "warn");
+    lastExpressions = null;
+    renderIndicators(null);
+    return;
+  }
+  const exp = result.expressions;
+  lastExpressions = exp;
+  const stressScore = STRESS_KEYS.reduce((s, k) => s + (exp[k] || 0), 0);
+  if (stressScore > STRESS_THRESHOLD) {
+    setAffectState(`elevated stress (${stressScore.toFixed(2)})`, "alert");
+  } else {
+    setAffectState(`calm (stress ${stressScore.toFixed(2)})`, "ok");
+  }
+  renderIndicators(exp);
+}
+
+function renderIndicators(exp) {
+  const el = document.getElementById("affect-indicators");
+  if (!exp) { el.innerHTML = ""; return; }
+  const keys = ["happy", "neutral", "sad", "fearful", "angry", "surprised"];
+  el.innerHTML = keys.map(k => `
+    <div class="k">${k}</div><div class="v">${(exp[k] || 0).toFixed(2)}</div>
+  `).join("");
+}
+
+function affectSnapshot() {
+  if (!state.affect_enabled || !lastExpressions) return null;
+  const e = lastExpressions;
+  return {
+    happy: +(e.happy || 0).toFixed(3),
+    neutral: +(e.neutral || 0).toFixed(3),
+    sad: +(e.sad || 0).toFixed(3),
+    fearful: +(e.fearful || 0).toFixed(3),
+    angry: +(e.angry || 0).toFixed(3),
+    surprised: +(e.surprised || 0).toFixed(3),
+    disgusted: +(e.disgusted || 0).toFixed(3),
+    stress_score: +STRESS_KEYS.reduce((s, k) => s + (e[k] || 0), 0).toFixed(3),
+  };
+}
+
+function isStressed() {
+  const snap = affectSnapshot();
+  return snap && snap.stress_score > STRESS_THRESHOLD;
+}
+
+/* ============================================================
+   Stress-gate modal
+   ============================================================ */
+
+function showStressGate(onConfirm, onDefer) {
+  const snap = affectSnapshot();
+  const score = snap ? snap.stress_score.toFixed(2) : "n/a";
+  const div = document.createElement("div");
+  div.className = "modal-bg";
+  div.innerHTML = `
+    <div class="modal">
+      <h3>Pause — elevated stress detected</h3>
+      <p>The affect monitor is currently reading <strong>elevated stress</strong>
+      (score ${score}, threshold ${STRESS_THRESHOLD}). This step is signing-critical
+      and the Family Law Act s. 4 requires that you proceed voluntarily and free
+      of duress.</p>
+      <p>You may:</p>
+      <ul>
+        <li><strong>Pause</strong> for a moment, take a breath, and re-confirm when ready;</li>
+        <li><strong>Defer</strong> this step and continue another time;</li>
+        <li><strong>Confirm anyway</strong> — your choice will be recorded along with
+        the elevated-stress reading as part of the audit log.</li>
+      </ul>
+      <div class="actions">
+        <button class="primary" onclick="(${onDefer})()">Defer this step</button>
+        <button class="agree" onclick="(${onConfirm.toString()})(); this.closest('.modal-bg').remove();">Confirm anyway</button>
+        <button onclick="this.closest('.modal-bg').remove();">Cancel</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(div);
+}
+
+/* ============================================================
+   Rendering
+   ============================================================ */
+
+let state = loadState();
+const app = document.getElementById("app");
+
+function renderHeader() {
+  const bars = Object.keys(TREE.nodes).map((id) => {
+    if (state.log.find(e => e.node === id)) return '<span class="done"></span>';
+    if (id === state.current) return '<span class="current"></span>';
+    return '<span></span>';
+  }).join("");
+  return `
+    <header>
+      <h1>InstructIT — Family Law Settlement</h1>
+      <div class="sub">Pre-execution client confirmation, with optional affect monitoring.</div>
+      <div class="matter"><strong>Matter:</strong> ${TREE.matter_label}<br>
+        <strong>Configuration:</strong> ${TREE.matter_subtitle}</div>
+      <div class="progress">${bars}</div>
+    </header>
+  `;
+}
+
+function renderNode() {
+  const node = TREE.nodes[state.current];
+  if (!node) return `<div class="card"><h2>End of tree</h2></div>`;
+
+  const auth = node.auth ? `<div class="auth">${node.auth}</div>` : "";
+  const gate = node.stress_gate ? `<div class="stress-gate">Stress-gate active</div>` : "";
+  let actions = "";
+
+  if (node.type === "agree") {
+    actions = `
+      <div class="actions">
+        <button class="agree" onclick="decide('agree')">I agree — proceed</button>
+        <button class="disagree" onclick="decide('disagree')">I disagree (note required)</button>
+        <button onclick="decide('defer')">Defer</button>
+      </div>
+    `;
+  } else if (node.type === "factual" && node.options) {
+    actions = `
+      <div class="actions">
+        ${node.options.map((o, i) =>
+          `<button class="primary" onclick="recordFactual(${i})">${o.label}</button>`
+        ).join("")}
+      </div>
+    `;
+  }
+
+  if (node.terminal) {
+    actions = `
+      <div class="actions">
+        <button class="agree" onclick="decide('acknowledged')">Confirm and lock record</button>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="card">
+      <div class="phase">${node.phase}</div>
+      <h2>${node.title}</h2>
+      ${auth}${gate}
+      <div class="body">${node.body}</div>
+      <div class="note" id="noteBox" style="display:none;">
+        <label for="note">Note to counsel (required if disagreeing)</label>
+        <textarea id="note" placeholder="Explain your reasoning..."></textarea>
+      </div>
+      ${actions}
+    </div>
+  `;
+}
+
+function renderRecord() {
+  const entries = state.log.map(e => {
+    let cls = "factual";
+    if (e.decision === "agree" || e.decision === "acknowledged") cls = "agree";
+    if (e.decision === "disagree") cls = "disagree";
+    if (e.stress_confirmed) cls = "stress-confirmed";
+    const note = e.note ? `<div class="note-display">"${escapeHtml(e.note)}"</div>` : "";
+    const affect = e.affect_snapshot ? `
+      <div class="affect-snapshot">affect: stress ${e.affect_snapshot.stress_score}
+      (fearful ${e.affect_snapshot.fearful}, sad ${e.affect_snapshot.sad},
+      angry ${e.affect_snapshot.angry}, neutral ${e.affect_snapshot.neutral},
+      happy ${e.affect_snapshot.happy})</div>
+    ` : "";
+    const stressFlag = e.stress_confirmed
+      ? `<div class="affect-snapshot" style="color:var(--alert);">⚠ confirmed under stress-gate (extra confirmation given)</div>` : "";
+    return `
+      <div class="entry">
+        <div class="stamp">${new Date(e.ts).toLocaleString()}</div>
+        <div class="heading">${escapeHtml(e.title)}</div>
+        <span class="decision ${cls}">${e.decision_label || e.decision}</span>
+        ${note}
+        ${affect}
+        ${stressFlag}
+        <div class="stamp" style="margin-top:6px;">hash: <span class="hash">${e.hash.slice(0,16)}…</span></div>
+      </div>
+    `;
+  }).join("");
+
+  return `
+    <div class="record">
+      <h2>Confirmed Instructions Record</h2>
+      <div class="recmeta">
+        Matter: ${TREE.matter_label}<br>
+        Configuration: ${TREE.matter_subtitle}<br>
+        Session started: ${new Date(state.started_at).toLocaleString()}<br>
+        Affect monitor: ${state.affect_enabled ? "enabled" : "disabled"}<br>
+        Entries: ${state.log.length}
+      </div>
+      ${entries || '<div class="entry"><em>No entries yet.</em></div>'}
+      <div class="footer">
+        Records linked by SHA-256 hash chain (append-only). Genesis hash: GENESIS.
+        Affect snapshots are summary expression scores, not images. Stress-gate
+        confirmations are flagged for evidentiary review.
+      </div>
+    </div>
+  `;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function render() {
+  const node = TREE.nodes[state.current];
+  const showRecord = node?.terminal && state.log.find(e => e.node === state.current);
+  app.innerHTML = `
+    ${renderHeader()}
+    <div class="topbar">
+      <button class="reset" onclick="resetState()">Reset session</button>
+      <button onclick="window.print()">Print / Save PDF</button>
+    </div>
+    ${showRecord ? renderRecord() : renderNode()}
+    ${!showRecord && state.log.length ? `
+      <div style="margin-top:24px;">
+        <details>
+          <summary style="cursor:pointer;font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px;color:#5a5a5a;">
+            View record so far (${state.log.length} entries)
+          </summary>
+          <div style="margin-top:12px;">${renderRecord()}</div>
+        </details>
+      </div>` : ""}
+  `;
+
+  const note = document.getElementById("noteBox");
+  if (note) {
+    document.querySelector("button.disagree")?.addEventListener("click", () => {
+      note.style.display = "block";
+      document.getElementById("note").focus();
+    });
+  }
+
+  // resume affect monitor on reload if previously enabled
+  if (state.affect_enabled && !affectInterval) {
+    startAffect();
+  }
+}
+
+async function _commitDecision(decision, stress_confirmed = false, note = "") {
+  const node = TREE.nodes[state.current];
+  await appendLog({
+    node: state.current,
+    title: node.title,
+    decision,
+    decision_label: stress_confirmed
+      ? `${decision.charAt(0).toUpperCase() + decision.slice(1)} (under stress-gate)`
+      : decision.charAt(0).toUpperCase() + decision.slice(1),
+    note,
+    stress_confirmed,
+  });
+
+  if (decision === "disagree") {
+    alert("Disagreement recorded. Counsel will address before proceeding to the next step.");
+    render();
+    return;
+  }
+  if (node.terminal) { render(); return; }
+  if (decision === "defer") { render(); return; }
+  state.current = node.next;
+  saveState(state);
+  render();
+}
+
+async function decide(decision) {
+  const node = TREE.nodes[state.current];
+  let note = "";
+
+  if (decision === "disagree") {
+    note = document.getElementById("note")?.value?.trim() || "";
+    if (!note) {
+      alert("Please add a note explaining your disagreement so counsel can address it.");
+      return;
+    }
+    await _commitDecision(decision, false, note);
+    return;
+  }
+
+  // Stress-gate: only on Agree at signing-critical nodes, when affect enabled
+  if ((decision === "agree" || decision === "acknowledged")
+      && node.stress_gate && state.affect_enabled && isStressed()) {
+    const onConfirm = `() => window._stressConfirmed('${decision}')`;
+    window._stressConfirmed = (d) => _commitDecision(d, true, "");
+    showStressGate(eval(onConfirm), () => {
+      document.querySelector(".modal-bg")?.remove();
+      _commitDecision("defer", false, "Deferred from stress-gate prompt");
+    });
+    return;
+  }
+
+  await _commitDecision(decision, false, "");
+}
+
+async function recordFactual(idx) {
+  const node = TREE.nodes[state.current];
+  const opt = node.options[idx];
+  if (opt.action === "enableCamera") await startAffect();
+  if (opt.action === "skipCamera") stopAffect();
+
+  await appendLog({
+    node: state.current,
+    title: node.title,
+    decision: "factual",
+    decision_label: opt.label,
+    note: "",
+  });
+  state.current = opt.next;
+  saveState(state);
+  render();
+}
+
+window.decide = decide;
+window.recordFactual = recordFactual;
+window.resetState = resetState;
+
+render();
+</script>
+</body>
+</html>

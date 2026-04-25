@@ -1,0 +1,261 @@
+{
+  "$schema_ref": "agreement.schema.json",
+  "matter_id": "EXAMPLE-2026-001",
+  "version": "0.1.0-poc",
+  "_NOTE": "Demo instance with fictional parties — Jane and John Example. Built to validate against agreement.schema.json with 0 ajv errors. All values are illustrative; do not use as a precedent.",
+  "parties": [
+    {
+      "role_label": "Spouse 1",
+      "legal_name": {
+        "first": "Jane",
+        "middle": "Marie",
+        "last": "Example"
+      },
+      "former_names": [],
+      "preferred_name": "Jane",
+      "date_of_birth": "1980-01-15",
+      "occupation": "Software engineer",
+      "employer": "Example Corp.",
+      "residential_address": {
+        "street_line_1": "123 Harwood St",
+        "city": "Vancouver",
+        "province_or_state": "British Columbia",
+        "postal_code": "V6Z 1A1",
+        "country": "Canada"
+      },
+      "email": "jane@example.com",
+      "phone": "+1-604-555-0101",
+      "solicitor": {
+        "name": "Counsel A",
+        "firm": "Example Law LLP",
+        "address": {
+          "street_line_1": "100 Hastings St",
+          "city": "Vancouver",
+          "province_or_state": "British Columbia",
+          "postal_code": "V6B 1R8",
+          "country": "Canada"
+        },
+        "lsbc_number": "12345",
+        "email": "counsela@example.com",
+        "phone": "+1-604-555-0201"
+      }
+    },
+    {
+      "role_label": "Spouse 2",
+      "legal_name": {
+        "first": "John",
+        "middle": null,
+        "last": "Example"
+      },
+      "former_names": [],
+      "preferred_name": "John",
+      "date_of_birth": "1979-08-22",
+      "occupation": "Architect",
+      "employer": "Example Architecture",
+      "residential_address": {
+        "street_line_1": "456 Davie St",
+        "city": "Vancouver",
+        "province_or_state": "British Columbia",
+        "postal_code": "V6Z 1A1",
+        "country": "Canada"
+      },
+      "email": "john@example.com",
+      "phone": "+1-604-555-0102",
+      "solicitor": {
+        "name": "Counsel B",
+        "firm": "Other Law LLP",
+        "address": {
+          "street_line_1": "200 Hastings St",
+          "city": "Vancouver",
+          "province_or_state": "British Columbia",
+          "postal_code": "V6B 1R8",
+          "country": "Canada"
+        },
+        "lsbc_number": "67890",
+        "email": "counselb@example.com",
+        "phone": "+1-604-555-0202"
+      }
+    }
+  ],
+  "relationship_status": {
+    "category": "married",
+    "marriage_date": "2008-06-21",
+    "marriage_place": "Vancouver, BC",
+    "cohabitation_start_date": null,
+    "separation_date": "2024-09-01",
+    "separation_finality": "date_agreed_for_purposes_of_this_agreement"
+  },
+  "valuation_date": {
+    "date": "2026-04-01",
+    "is_default": false,
+    "override_reason": "Parties agreed to use the date of the agreement reference."
+  },
+  "financial_disclosure_attestations": {
+    "spouse_1": {
+      "disclosure_complete_attestation": {
+        "confirmed": true,
+        "signed_at_timestamp": "2026-04-24T20:00:00-07:00",
+        "attestation_text": "I, Jane Marie Example, have made full and complete disclosure of all my assets, debts, income, and financial interests, and to the best of my knowledge nothing material has been omitted."
+      },
+      "disclosure_documents_provided": [
+        {
+          "category": "T1",
+          "date_provided": "2026-04-01",
+          "document_reference": "T1-2025-Jane",
+          "recipient_acknowledgment_signed": true
+        },
+        {
+          "category": "NoA",
+          "date_provided": "2026-04-01",
+          "document_reference": "NoA-2025-Jane",
+          "recipient_acknowledgment_signed": true
+        }
+      ],
+      "valuation_methodology": [],
+      "non_disclosure_acknowledgment_by_other_spouse": {
+        "confirmed": true,
+        "attestation_text": "I, John Example, am not aware of any undisclosed material asset or debt of Jane Marie Example."
+      }
+    },
+    "spouse_2": {
+      "disclosure_complete_attestation": {
+        "confirmed": true,
+        "signed_at_timestamp": "2026-04-24T20:05:00-07:00",
+        "attestation_text": "I, John Example, have made full and complete disclosure of all my assets, debts, income, and financial interests, and to the best of my knowledge nothing material has been omitted."
+      },
+      "disclosure_documents_provided": [
+        {
+          "category": "T1",
+          "date_provided": "2026-04-01",
+          "document_reference": "T1-2025-John",
+          "recipient_acknowledgment_signed": true
+        },
+        {
+          "category": "NoA",
+          "date_provided": "2026-04-01",
+          "document_reference": "NoA-2025-John",
+          "recipient_acknowledgment_signed": true
+        }
+      ],
+      "valuation_methodology": [],
+      "non_disclosure_acknowledgment_by_other_spouse": {
+        "confirmed": true,
+        "attestation_text": "I, Jane Marie Example, am not aware of any undisclosed material asset or debt of John Example."
+      }
+    },
+    "consequences_of_non_disclosure": "Failure to disclose material financial information may result in the agreement being set aside under FLA s. 93(3)(a) [VERIFY] and may give rise to compensation claims."
+  },
+  "procedural_fairness": {
+    "independent_legal_advice": {
+      "spouse_1": {
+        "received": true,
+        "lawyer_name": "Counsel A",
+        "firm": "Example Law LLP",
+        "date": "2026-04-20",
+        "duration_minutes": 90,
+        "attestation_text": "I confirm I received independent legal advice from Counsel A on 2026-04-20 over 90 minutes; the advice covered the legal effect of the agreement, my rights under the FLA, and the consequences of signing."
+      },
+      "spouse_2": {
+        "received": true,
+        "lawyer_name": "Counsel B",
+        "firm": "Other Law LLP",
+        "date": "2026-04-21",
+        "duration_minutes": 75,
+        "attestation_text": "I confirm I received independent legal advice from Counsel B on 2026-04-21 over 75 minutes; the advice covered the legal effect of the agreement, my rights under the FLA, and the consequences of signing."
+      }
+    },
+    "voluntariness": {
+      "spouse_1": {
+        "confirmed": true,
+        "no_duress": true,
+        "no_coercion": true,
+        "no_undue_influence": true,
+        "attestation_text": "I am signing this agreement voluntarily, free of duress, coercion, or undue influence.",
+        "signed_at_timestamp": "2026-04-24T20:00:00-07:00"
+      },
+      "spouse_2": {
+        "confirmed": true,
+        "no_duress": true,
+        "no_coercion": true,
+        "no_undue_influence": true,
+        "attestation_text": "I am signing this agreement voluntarily, free of duress, coercion, or undue influence.",
+        "signed_at_timestamp": "2026-04-24T20:05:00-07:00"
+      }
+    },
+    "equality_of_bargaining_position": {
+      "assessment": "The parties have comparable education, comparable earned income, separate counsel, and have negotiated over a period of months without time pressure.",
+      "vulnerabilities_acknowledged": [],
+      "accommodations_made": []
+    },
+    "time_to_consider": {
+      "spouse_1": {
+        "days_between_first_draft_and_signing": 21,
+        "was_reasonable": true
+      },
+      "spouse_2": {
+        "days_between_first_draft_and_signing": 21,
+        "was_reasonable": true
+      }
+    },
+    "understanding": {
+      "spouse_1": {
+        "language_of_negotiation": "English",
+        "interpreter_used": false,
+        "confirmed_understands_terms": true,
+        "confirmed_understands_consequences": true
+      },
+      "spouse_2": {
+        "language_of_negotiation": "English",
+        "interpreter_used": false,
+        "confirmed_understands_terms": true,
+        "confirmed_understands_consequences": true
+      }
+    }
+  },
+  "substantive_fairness": {
+    "miglin_stage_1": {
+      "agreement_reflects_parties_intentions": true,
+      "complies_with_fla_objectives": true,
+      "fla_objectives_referenced": [
+        "FLA s.84 family property division",
+        "FLA s.160 spousal support entitlement"
+      ],
+      "departure_from_ssag_explained": null,
+      "departure_from_equal_division_explained": null
+    },
+    "miglin_stage_2_anticipated_changes": [
+      {
+        "change_description": "Either party may experience career changes including promotion, unemployment, or retraining.",
+        "how_agreement_addresses_it": "Spousal support is reviewable on material change in circumstances; both parties have agreed annual income disclosure exchanges to support such review."
+      },
+      {
+        "change_description": "Children may have varying education costs as they progress through school.",
+        "how_agreement_addresses_it": "Section 7 expenses are shared in proportion to incomes recalculated annually."
+      }
+    ],
+    "hartshorne_circumstances": {
+      "unequal_position_acknowledged": false,
+      "why_unequal_division_substantively_fair": "Not applicable — the agreement provides for equal division of family property and is consistent with the FLA default.",
+      "comparison_to_fla_default_division": "Equal division consistent with FLA s. 81 [VERIFY] default."
+    },
+    "acknowledgment_of_setaside_grounds": "Parties acknowledge that the agreement may be set aside in limited circumstances under FLA s. 4 / Brandsema / Miglin / Hartshorne and accept this risk."
+  },
+  "instructions_record": {
+    "chain_genesis_hash": "GENESIS",
+    "entries": [
+      {
+        "sequence": 1,
+        "node_id": "intro",
+        "node_title": "About this confirmation",
+        "decision": "agree",
+        "decision_label": "Agree",
+        "note": "",
+        "ts": "2026-04-24T19:55:00-07:00",
+        "prev_hash": "GENESIS",
+        "hash": "abc123def456",
+        "stress_confirmed": false
+      }
+    ],
+    "final_hash": "abc123def456"
+  }
+}

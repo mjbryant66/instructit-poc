@@ -1,0 +1,701 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "property.schema.json",
+  "title": "BC FLA Property Division and Debt Allocation",
+  "description": "Sub-schema for property division and debt allocation in a British Columbia Family Law Act separation agreement. Statutory references marked [VERIFY] should be confirmed against the current Family Law Act, SBC 2011, c. 25.",
+  "type": "object",
+  "definitions": {
+    "Asset": {
+      "type": "object",
+      "description": "A family property asset record per FLA s. 84 [VERIFY].",
+      "properties": {
+        "asset_id": {
+          "type": "string",
+          "description": "Unique identifier for this asset within the agreement."
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "real_property",
+            "pension",
+            "rrsp",
+            "tfsa",
+            "non_registered_account",
+            "vehicle",
+            "personal",
+            "business",
+            "crypto",
+            "digital",
+            "other"
+          ],
+          "description": "Classification of the asset."
+        },
+        "description": {
+          "type": "string",
+          "description": "Plain-language description of the asset sufficient for identification."
+        },
+        "legal_title_holder": {
+          "type": "string",
+          "enum": ["spouse_1", "spouse_2", "joint", "third_party_with_beneficial_interest"],
+          "description": "Party holding legal title or registered ownership."
+        },
+        "acquisition_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Date the asset was acquired."
+        },
+        "acquisition_value": {
+          "type": "number",
+          "description": "Value of the asset at the time of acquisition, in CAD."
+        },
+        "valuation_method": {
+          "type": "string",
+          "enum": ["appraisal", "fmv_estimate", "book_value", "market_quote", "actuarial", "cra_assessment", "other"],
+          "description": "Method used to determine current value."
+        },
+        "current_value": {
+          "type": "number",
+          "description": "Fair market value of the asset as at the valuation date, in CAD."
+        },
+        "valuation_source": {
+          "type": "string",
+          "description": "Source or authority for the current value (e.g., 'BC Assessment 2026', 'Appraisal by J. Smith dated 2026-03-15')."
+        },
+        "encumbrances": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "Reference to a debt_id secured against this asset."
+          },
+          "description": "Array of debt_id references for debts secured against this asset."
+        },
+        "allocation": {
+          "$ref": "#/definitions/Allocation"
+        },
+        "equalization_payment": {
+          "type": "number",
+          "description": "Net equalization amount attributable to this asset. Positive = payable by spouse_1 to spouse_2; negative = reverse."
+        }
+      },
+      "required": ["asset_id", "category", "description", "legal_title_holder", "current_value", "allocation"]
+    },
+    "Debt": {
+      "type": "object",
+      "description": "A family debt record per FLA s. 86 [VERIFY].",
+      "properties": {
+        "debt_id": {
+          "type": "string",
+          "description": "Unique identifier for this debt within the agreement."
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "mortgage",
+            "line_of_credit",
+            "credit_card",
+            "personal_loan",
+            "tax",
+            "student_loan",
+            "business_debt",
+            "other"
+          ],
+          "description": "Classification of the debt."
+        },
+        "creditor": {
+          "type": "string",
+          "description": "Name of the creditor or financial institution."
+        },
+        "original_amount": {
+          "type": "number",
+          "description": "Original principal amount of the debt, in CAD."
+        },
+        "current_balance": {
+          "type": "number",
+          "description": "Outstanding balance as at the valuation date, in CAD."
+        },
+        "interest_rate": {
+          "type": "number",
+          "description": "Annual interest rate expressed as a percentage (e.g., 5.25)."
+        },
+        "monthly_payment": {
+          "type": "number",
+          "description": "Current required monthly payment, in CAD."
+        },
+        "secured_against": {
+          "type": ["string", "null"],
+          "description": "Reference to the asset_id this debt is secured against, or null if unsecured."
+        },
+        "legal_obligor": {
+          "type": "string",
+          "enum": ["spouse_1", "spouse_2", "joint"],
+          "description": "Party legally responsible for the debt per the creditor agreement."
+        },
+        "allocation": {
+          "$ref": "#/definitions/Allocation"
+        },
+        "indemnity_required": {
+          "type": "boolean",
+          "description": "Whether the non-allocated spouse is entitled to an indemnity from the allocated spouse for this debt."
+        }
+      },
+      "required": ["debt_id", "category", "creditor", "current_balance", "legal_obligor", "allocation", "indemnity_required"]
+    },
+    "Valuation": {
+      "type": "object",
+      "description": "Details supporting the valuation of a particular asset or interest.",
+      "properties": {
+        "valuation_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Date as of which the valuation was prepared."
+        },
+        "valuator_name": {
+          "type": "string",
+          "description": "Name and credentials of the valuator."
+        },
+        "valuation_method": {
+          "type": "string",
+          "description": "Methodology applied (income approach, asset approach, market approach, actuarial, etc.)."
+        },
+        "fair_market_value": {
+          "type": "number",
+          "description": "Concluded fair market value in CAD."
+        },
+        "report_reference": {
+          "type": "string",
+          "description": "File name or reference to the attached valuation report."
+        }
+      },
+      "required": ["valuation_date", "fair_market_value"]
+    },
+    "Allocation": {
+      "type": "object",
+      "description": "Specifies how an asset or debt is allocated between the spouses.",
+      "properties": {
+        "allocated_to": {
+          "type": "string",
+          "enum": ["spouse_1", "spouse_2", "sold_proceeds_split", "retained_jointly"],
+          "description": "Party receiving the asset or assuming the debt, or disposition method."
+        },
+        "split_ratio": {
+          "type": "string",
+          "pattern": "^[0-9]{1,3}:[0-9]{1,3}$",
+          "description": "Ratio of division if sold_proceeds_split or retained_jointly (e.g., '50:50', '60:40'). Spouse_1 share listed first."
+        }
+      },
+      "required": ["allocated_to"]
+    },
+    "RealProperty": {
+      "type": "object",
+      "description": "Extended record for real estate assets, supplementing the base Asset definition.",
+      "allOf": [
+        { "$ref": "#/definitions/Asset" }
+      ],
+      "properties": {
+        "pid": {
+          "type": "string",
+          "description": "Parcel Identifier (PID) registered at the BC Land Title Office."
+        },
+        "civic_address": {
+          "type": "string",
+          "description": "Municipal street address of the property."
+        },
+        "legal_description": {
+          "type": "string",
+          "description": "Full legal description as shown on the certificate of title."
+        },
+        "mortgage_details": {
+          "type": "object",
+          "description": "Details of the mortgage registered against this property.",
+          "properties": {
+            "lender": { "type": "string", "description": "Mortgage lender name." },
+            "account_number": { "type": "string", "description": "Mortgage account number." },
+            "balance": { "type": "number", "description": "Outstanding mortgage balance in CAD." },
+            "maturity_date": { "type": "string", "format": "date", "description": "Mortgage maturity or renewal date." },
+            "monthly_payment": { "type": "number", "description": "Monthly mortgage payment in CAD." }
+          }
+        },
+        "refinance_plan": {
+          "type": "object",
+          "description": "Terms for refinancing if one spouse is retaining the property.",
+          "properties": {
+            "deadline": { "type": "string", "format": "date", "description": "Date by which refinancing must be completed." },
+            "release_of_non_retaining_spouse": { "type": "boolean", "description": "Whether the non-retaining spouse must be released from the mortgage covenant." }
+          }
+        },
+        "sale_plan": {
+          "type": "object",
+          "description": "Terms if the property is to be listed and sold.",
+          "properties": {
+            "listing_deadline": { "type": "string", "format": "date", "description": "Date by which the property must be listed." },
+            "target_list_price": { "type": "number", "description": "Agreed list price in CAD, or null if to be set by agent." },
+            "listing_agent": { "type": "string", "description": "Agreed real estate agent or brokerage." },
+            "price_reduction_schedule": { "type": "string", "description": "Terms for price reductions if unsold (e.g., '5% reduction every 60 days')." },
+            "proceeds_split": { "$ref": "#/definitions/Allocation" }
+          }
+        },
+        "exclusive_possession": {
+          "type": "object",
+          "description": "Details of any exclusive possession arrangement or order.",
+          "properties": {
+            "granted_to": { "type": "string", "enum": ["spouse_1", "spouse_2"], "description": "Party granted exclusive possession." },
+            "from_date": { "type": "string", "format": "date", "description": "Start date of exclusive possession." },
+            "to_date": { "type": "string", "format": "date", "description": "End date or 'until_sale'." },
+            "court_order_reference": { "type": "string", "description": "Court file number if possession is court-ordered." }
+          }
+        },
+        "lto_transfer_instructions": {
+          "type": "object",
+          "description": "Instructions for Land Title Office transfer.",
+          "properties": {
+            "transfer_form": { "type": "string", "default": "Form A", "description": "LTO form to be used (typically Form A Transfer)." },
+            "ptt_exemption_claimed": { "type": "boolean", "description": "Whether Property Transfer Tax exemption under s. 14(4)(a) PTA [VERIFY] is claimed for transfers between separating spouses." },
+            "registration_deadline": { "type": "string", "format": "date", "description": "Date by which the transfer must be submitted for registration." }
+          }
+        }
+      },
+      "required": ["pid", "civic_address", "legal_description"]
+    },
+    "Pension": {
+      "type": "object",
+      "description": "Pension or RRSP division record.",
+      "properties": {
+        "plan_name": { "type": "string", "description": "Name of the pension plan or RRSP/RRIF institution." },
+        "plan_type": {
+          "type": "string",
+          "enum": ["defined_benefit", "defined_contribution", "rrsp", "rrif", "lira", "lif", "dpsp", "federal_pension", "other"],
+          "description": "Type of retirement savings or pension vehicle."
+        },
+        "plan_administrator": { "type": "string", "description": "Name and contact for the plan administrator." },
+        "member_spouse": {
+          "type": "string",
+          "enum": ["spouse_1", "spouse_2"],
+          "description": "The spouse who is the plan member."
+        },
+        "benefit_accrual_period": {
+          "type": "object",
+          "description": "Period used to calculate the proportionate share.",
+          "properties": {
+            "relationship_start": { "type": "string", "format": "date", "description": "Date relationship began for pension division purposes." },
+            "relationship_end": { "type": "string", "format": "date", "description": "Date relationship ended for pension division purposes." }
+          }
+        },
+        "division_method": {
+          "type": "string",
+          "enum": ["division_at_source", "lump_sum_transfer", "if_and_when", "reserved"],
+          "description": "Method of division. Division at source per BC PBSA Part 6 [VERIFY] for provincially regulated plans."
+        },
+        "bc_pbsa_forms": {
+          "type": "object",
+          "description": "Applicable BC Pension Benefits Standards Act forms for division at source.",
+          "properties": {
+            "form_p1_notice": { "type": "boolean", "description": "Whether Form P1 (Notice to Plan Administrator) is required [VERIFY]." },
+            "form_p2_agreement": { "type": "boolean", "description": "Whether Form P2 (Spouse's Agreement) is required [VERIFY]." },
+            "form_p9_waiver": { "type": "boolean", "description": "Whether Form P9 (Waiver) applies [VERIFY]." }
+          }
+        },
+        "federal_pbda_division": {
+          "type": "object",
+          "description": "For federally regulated pensions: division under the Pension Benefits Division Act, SC 1992, c. 46, Sch. II [VERIFY].",
+          "properties": {
+            "application_form": { "type": "string", "description": "Federal form required for division application." },
+            "maximum_division_percentage": { "type": "number", "default": 50, "description": "Maximum percentage transferable (generally 50%)." }
+          }
+        },
+        "actuarial_valuation": {
+          "$ref": "#/definitions/Valuation",
+          "description": "Actuarial valuation for defined benefit plans."
+        },
+        "rrsp_rollover": {
+          "type": "object",
+          "description": "RRSP transfer on relationship breakdown under ITA s. 146(16) [VERIFY].",
+          "properties": {
+            "transfer_amount": { "type": "number", "description": "Amount to be transferred in CAD." },
+            "form_t2220_required": { "type": "boolean", "default": true, "description": "Whether CRA Form T2220 (Transfer from an RRSP) must be filed [VERIFY]." },
+            "receiving_plan": { "type": "string", "description": "Name and account of the receiving RRSP or RRIF." },
+            "transfer_deadline": { "type": "string", "format": "date", "description": "Deadline for completing the transfer." }
+          }
+        },
+        "current_value": { "type": "number", "description": "Commuted or account value in CAD as at valuation date." },
+        "allocated_share_non_member": { "type": "number", "description": "Value or percentage allocated to the non-member spouse." }
+      },
+      "required": ["plan_name", "plan_type", "member_spouse", "division_method"]
+    },
+    "BusinessInterest": {
+      "type": "object",
+      "description": "Corporate shares, partnership interests, or sole proprietorship interests.",
+      "properties": {
+        "entity_name": { "type": "string", "description": "Legal name of the business entity." },
+        "entity_type": {
+          "type": "string",
+          "enum": ["corporation", "partnership", "sole_proprietorship", "professional_corporation", "other"],
+          "description": "Type of business entity."
+        },
+        "jurisdiction_of_incorporation": { "type": "string", "description": "Jurisdiction where the entity is incorporated or registered." },
+        "ownership_interest": {
+          "type": "object",
+          "properties": {
+            "holding_spouse": { "type": "string", "enum": ["spouse_1", "spouse_2"], "description": "Spouse holding the interest." },
+            "share_class": { "type": "string", "description": "Class and series of shares held, if applicable." },
+            "number_of_shares": { "type": "number", "description": "Number of shares held." },
+            "percentage_ownership": { "type": "number", "description": "Percentage of total equity held." }
+          }
+        },
+        "valuation": { "$ref": "#/definitions/Valuation" },
+        "valuation_approach": {
+          "type": "string",
+          "enum": ["income_approach", "asset_approach", "market_approach", "combination"],
+          "description": "Primary valuation methodology applied."
+        },
+        "disposition": {
+          "type": "string",
+          "enum": ["retained_by_holder", "buyout", "sold_to_third_party", "divided"],
+          "description": "How the business interest will be dealt with."
+        },
+        "buyout_terms": {
+          "type": "object",
+          "description": "Applicable if disposition is 'buyout'.",
+          "properties": {
+            "buyout_amount": { "type": "number", "description": "Total buyout price in CAD." },
+            "payment_schedule": { "type": "string", "description": "Lump sum or instalment terms." },
+            "security_for_payment": { "type": "string", "description": "Collateral or guarantee securing the buyout obligation." }
+          }
+        },
+        "non_compete": {
+          "type": "object",
+          "description": "Non-competition restrictions if the exiting spouse must refrain from competing.",
+          "properties": {
+            "duration_months": { "type": "integer", "description": "Duration of the non-compete in months." },
+            "geographic_scope": { "type": "string", "description": "Geographic limitation." },
+            "activity_scope": { "type": "string", "description": "Restricted activities." }
+          }
+        },
+        "non_solicitation": {
+          "type": "object",
+          "description": "Non-solicitation restrictions on the exiting spouse.",
+          "properties": {
+            "duration_months": { "type": "integer", "description": "Duration in months." },
+            "scope": { "type": "string", "description": "Employees, clients, or both." }
+          }
+        }
+      },
+      "required": ["entity_name", "entity_type", "ownership_interest", "disposition"]
+    },
+    "Account": {
+      "type": "object",
+      "description": "Financial account record (bank, brokerage, TFSA, non-registered investment, crypto wallet, etc.).",
+      "properties": {
+        "account_id": { "type": "string", "description": "Unique identifier for this account within the agreement." },
+        "institution": { "type": "string", "description": "Name of financial institution or platform." },
+        "account_type": {
+          "type": "string",
+          "enum": ["chequing", "savings", "brokerage", "tfsa", "non_registered_investment", "crypto_wallet", "gic", "other"],
+          "description": "Type of account."
+        },
+        "account_number_last_four": { "type": "string", "pattern": "^[0-9]{4}$", "description": "Last four digits of the account number for identification." },
+        "account_holder": {
+          "type": "string",
+          "enum": ["spouse_1", "spouse_2", "joint"],
+          "description": "Registered account holder."
+        },
+        "balance_at_valuation_date": { "type": "number", "description": "Account balance as at the valuation date, in CAD." },
+        "allocation": { "$ref": "#/definitions/Allocation" }
+      },
+      "required": ["account_id", "institution", "account_type", "account_holder", "balance_at_valuation_date", "allocation"]
+    }
+  },
+  "properties": {
+    "valuation_date": {
+      "type": "object",
+      "description": "Valuation date for family property per FLA s. 87 [VERIFY]. Default is the date of the agreement unless the parties agree otherwise.",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "The agreed valuation date."
+        },
+        "is_default": {
+          "type": "boolean",
+          "default": true,
+          "description": "True if the valuation date is the date of the agreement (FLA s. 87 default) [VERIFY]."
+        },
+        "override_reason": {
+          "type": "string",
+          "description": "If is_default is false, the reason the parties selected an alternative valuation date (e.g., 'date of separation', 'date of trial')."
+        }
+      },
+      "required": ["date"]
+    },
+    "family_property": {
+      "type": "array",
+      "description": "All family property within the meaning of FLA s. 84 [VERIFY]. Includes property owned by at least one spouse at the date of separation, regardless of when acquired, unless excluded under s. 85.",
+      "items": { "$ref": "#/definitions/Asset" }
+    },
+    "excluded_property": {
+      "type": "array",
+      "description": "Property excluded from family property under FLA s. 85 [VERIFY]. Growth in value during the relationship is family property per FLA s. 84(2)(g) [VERIFY].",
+      "items": {
+        "allOf": [
+          { "$ref": "#/definitions/Asset" },
+          {
+            "type": "object",
+            "properties": {
+              "exclusion_basis": {
+                "type": "string",
+                "enum": [
+                  "pre_relationship",
+                  "gift",
+                  "inheritance",
+                  "settlement_for_personal_injury",
+                  "trust_property",
+                  "traced_from_excluded"
+                ],
+                "description": "Statutory basis for exclusion under FLA s. 85(1) [VERIFY]."
+              },
+              "tracing_documentation": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "References to supporting documents establishing the tracing chain (e.g., 'Exhibit A: 2010 bank statement showing inheritance deposit')."
+              },
+              "value_at_relationship_start": {
+                "type": "number",
+                "description": "Value of the excluded property at the start of the relationship, in CAD."
+              },
+              "growth_in_value_during_relationship": {
+                "type": "number",
+                "description": "Increase in value during the relationship. This amount is family property and divisible under FLA s. 84(2)(g) [VERIFY]."
+              }
+            },
+            "required": ["exclusion_basis"]
+          }
+        ]
+      }
+    },
+    "family_debt": {
+      "type": "array",
+      "description": "All family debt within the meaning of FLA s. 86 [VERIFY]. Includes debt incurred during the relationship for a family purpose and debt incurred to acquire, maintain, or improve family property.",
+      "items": { "$ref": "#/definitions/Debt" }
+    },
+    "real_property": {
+      "type": "array",
+      "description": "Detailed records for each parcel of real property, supplementing the corresponding family_property entry.",
+      "items": { "$ref": "#/definitions/RealProperty" }
+    },
+    "pensions_and_rrsps": {
+      "type": "array",
+      "description": "Pension plans, RRSPs, RRIFs, LIRAs, LIFs, and DPSPs subject to division.",
+      "items": { "$ref": "#/definitions/Pension" }
+    },
+    "business_interests": {
+      "type": "array",
+      "description": "Corporate shares, partnership interests, and sole proprietorship interests that are family property.",
+      "items": { "$ref": "#/definitions/BusinessInterest" }
+    },
+    "personal_property": {
+      "type": "array",
+      "description": "Tangible personal property (furniture, jewelry, art, collectibles, etc.).",
+      "items": { "$ref": "#/definitions/Asset" }
+    },
+    "vehicles": {
+      "type": "array",
+      "description": "Motor vehicles, recreational vehicles, boats, and similar titled personal property.",
+      "items": {
+        "allOf": [
+          { "$ref": "#/definitions/Asset" },
+          {
+            "type": "object",
+            "properties": {
+              "vin": { "type": "string", "description": "Vehicle identification number." },
+              "year_make_model": { "type": "string", "description": "Year, make, and model of the vehicle." },
+              "registration_holder": { "type": "string", "enum": ["spouse_1", "spouse_2"], "description": "Party in whose name the vehicle is registered." }
+            }
+          }
+        ]
+      }
+    },
+    "financial_accounts": {
+      "type": "array",
+      "description": "Bank accounts, brokerage accounts, TFSAs, non-registered investments, and crypto wallets.",
+      "items": { "$ref": "#/definitions/Account" }
+    },
+    "equalization_payment_summary": {
+      "type": "object",
+      "description": "Summary calculation of the equalization payment.",
+      "properties": {
+        "total_family_property_fmv": { "type": "number", "description": "Aggregate fair market value of all family property in CAD." },
+        "total_family_debt": { "type": "number", "description": "Aggregate outstanding family debt in CAD." },
+        "net_family_property": { "type": "number", "description": "Total family property FMV minus total family debt." },
+        "division_ratio": {
+          "type": "string",
+          "pattern": "^[0-9]{1,3}:[0-9]{1,3}$",
+          "default": "50:50",
+          "description": "Division ratio. Default is 50:50 per FLA s. 81 [VERIFY]. Spouse_1 share listed first."
+        },
+        "unequal_division": {
+          "type": "object",
+          "description": "Applicable only if the parties agree to an unequal division. Courts may order unequal division under FLA s. 95 [VERIFY] where equal division would be significantly unfair.",
+          "properties": {
+            "claimed": { "type": "boolean", "description": "Whether unequal division is agreed." },
+            "fla_s95_factors": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Significant unfairness factors relied upon (e.g., 'duration of relationship', 'spouse's contribution to the other's career', 'debt incurred for non-family purposes')."
+            },
+            "agreed_ratio": { "type": "string", "pattern": "^[0-9]{1,3}:[0-9]{1,3}$", "description": "Agreed unequal ratio. Spouse_1 share first." }
+          }
+        },
+        "spouse_1_net_entitlement": { "type": "number", "description": "Spouse_1's calculated share of net family property in CAD." },
+        "spouse_2_net_entitlement": { "type": "number", "description": "Spouse_2's calculated share of net family property in CAD." },
+        "net_equalization_payment": {
+          "type": "object",
+          "description": "The net payment required to achieve the agreed division.",
+          "properties": {
+            "amount": { "type": "number", "description": "Equalization payment amount in CAD." },
+            "from": { "type": "string", "enum": ["spouse_1", "spouse_2"], "description": "Payor spouse." },
+            "to": { "type": "string", "enum": ["spouse_1", "spouse_2"], "description": "Payee spouse." }
+          },
+          "required": ["amount", "from", "to"]
+        },
+        "payment_terms": {
+          "type": "object",
+          "description": "Terms governing payment of the equalization amount.",
+          "properties": {
+            "method": { "type": "string", "enum": ["lump_sum", "instalments", "combination"], "description": "Payment method." },
+            "lump_sum_due_date": { "type": "string", "format": "date", "description": "Due date for lump sum payment, if applicable." },
+            "instalment_schedule": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "due_date": { "type": "string", "format": "date", "description": "Instalment due date." },
+                  "amount": { "type": "number", "description": "Instalment amount in CAD." }
+                }
+              },
+              "description": "Schedule of instalment payments."
+            },
+            "interest_rate": { "type": "number", "description": "Annual interest rate on outstanding balance, if any." },
+            "security": { "type": "string", "description": "Security or collateral for deferred payment (e.g., charge on real property, letter of credit)." }
+          }
+        }
+      },
+      "required": ["total_family_property_fmv", "total_family_debt", "net_family_property", "division_ratio", "net_equalization_payment"]
+    },
+    "tax_treatment": {
+      "type": "object",
+      "description": "Tax considerations and elections governing property transfers between the spouses.",
+      "properties": {
+        "spousal_rollover_ita_s73": {
+          "type": "object",
+          "description": "Automatic rollover at adjusted cost base under ITA s. 73 [VERIFY] for transfers between spouses.",
+          "properties": {
+            "applies": { "type": "boolean", "description": "Whether the s. 73 rollover applies to transfers under this agreement." },
+            "election_to_opt_out": { "type": "boolean", "description": "Whether the parties elect to transfer at FMV instead (triggering capital gains)." }
+          }
+        },
+        "capital_gains_exposure": {
+          "type": "array",
+          "description": "Assets where a capital gain or loss may be realized on transfer or sale.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "asset_id": { "type": "string", "description": "Reference to the asset_id." },
+              "adjusted_cost_base": { "type": "number", "description": "ACB of the asset in CAD." },
+              "estimated_gain_or_loss": { "type": "number", "description": "Estimated capital gain (positive) or loss (negative) in CAD." },
+              "responsible_party": { "type": "string", "enum": ["spouse_1", "spouse_2", "shared"], "description": "Party bearing the tax liability." }
+            }
+          }
+        },
+        "principal_residence_designation": {
+          "type": "object",
+          "description": "Agreement on principal residence designation under ITA s. 54 [VERIFY].",
+          "properties": {
+            "asset_id": { "type": "string", "description": "Reference to the real_property asset_id designated as principal residence." },
+            "designated_years": { "type": "string", "description": "Tax years for which the property is designated as principal residence." },
+            "designating_spouse": { "type": "string", "enum": ["spouse_1", "spouse_2", "both"], "description": "Spouse making the designation." }
+          }
+        },
+        "attribution_rules_acknowledgment": {
+          "type": "boolean",
+          "description": "Acknowledgment that ITA s. 74.5(3) [VERIFY] provides an exception to attribution rules for transfers pursuant to a separation agreement or court order."
+        },
+        "independent_tax_advice": {
+          "type": "boolean",
+          "description": "Whether each party confirms having received independent tax advice."
+        }
+      }
+    },
+    "implementation_and_transfer": {
+      "type": "object",
+      "description": "Mechanics for executing the property division and completing all required transfers.",
+      "properties": {
+        "implementation_deadline_days": {
+          "type": "integer",
+          "description": "Number of days after execution of the agreement within which all transfers and steps must be completed."
+        },
+        "title_transfers": {
+          "type": "array",
+          "description": "List of title transfers required.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "asset_id": { "type": "string", "description": "Reference to the asset being transferred." },
+              "from": { "type": "string", "enum": ["spouse_1", "spouse_2", "joint"], "description": "Transferor." },
+              "to": { "type": "string", "enum": ["spouse_1", "spouse_2"], "description": "Transferee." },
+              "transfer_method": { "type": "string", "description": "Method of transfer (e.g., 'Form A LTO transfer', 'ICBC transfer', 'broker DTC transfer')." },
+              "deadline": { "type": "string", "format": "date", "description": "Deadline for this specific transfer." }
+            }
+          }
+        },
+        "document_execution_authority": {
+          "type": "object",
+          "description": "Power of attorney or deemed signing provisions if a party fails to execute required documents.",
+          "properties": {
+            "irrevocable_poa_granted": { "type": "boolean", "description": "Whether each party grants the other an irrevocable power of attorney to execute transfer documents if they fail to do so." },
+            "deemed_signing_clause": { "type": "boolean", "description": "Whether the agreement itself operates as authority for registration in the event of non-compliance." }
+          }
+        },
+        "escrow": {
+          "type": "object",
+          "description": "Escrow arrangements for funds or documents pending completion.",
+          "properties": {
+            "escrow_agent": { "type": "string", "description": "Name of the escrow agent (typically one party's solicitor)." },
+            "items_in_escrow": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "List of documents or funds held in escrow."
+            },
+            "release_conditions": { "type": "string", "description": "Conditions that must be satisfied for release of escrowed items." }
+          }
+        },
+        "default_and_breach": {
+          "type": "object",
+          "description": "Remedies available if a party fails to comply with the implementation obligations.",
+          "properties": {
+            "notice_period_days": { "type": "integer", "description": "Number of days' written notice required before a default is triggered." },
+            "remedies": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Available remedies (e.g., 'specific performance', 'costs on a full indemnity basis', 'interest at the post-judgment rate under the Court Order Interest Act [VERIFY]', 'registration of the agreement as a court order under FLA s. 44 [VERIFY]')."
+            },
+            "interest_on_late_payment": {
+              "type": "object",
+              "description": "Interest accruing on late equalization or other payments.",
+              "properties": {
+                "rate": { "type": "number", "description": "Annual interest rate as a percentage." },
+                "basis": { "type": "string", "description": "Statutory or contractual basis for the rate (e.g., 'Court Order Interest Act, RSBC 1996, c. 79 [VERIFY]')." }
+              }
+            }
+          }
+        }
+      },
+      "required": ["implementation_deadline_days"]
+    }
+  },
+  "required": [
+    "valuation_date",
+    "family_property",
+    "family_debt",
+    "equalization_payment_summary",
+    "implementation_and_transfer"
+  ]
+}

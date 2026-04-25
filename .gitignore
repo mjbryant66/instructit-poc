@@ -1,0 +1,26 @@
+# Dependencies (re-installable via npm install)
+node_modules/
+package-lock.json
+
+# Generated artifacts (re-creatable from sources)
+*.docx
+schema/instructit-export.json
+
+# OS / editor noise
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
+
+# Local env / secrets (none here, but good hygiene)
+.env
+.env.*
+
+# Build output
+dist/
+build/
+
+# Temp
+/tmp/
+*.tmp
