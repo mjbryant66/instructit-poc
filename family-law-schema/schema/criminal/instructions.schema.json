@@ -1,0 +1,1016 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://justack.ai/schemas/criminal-guilty-plea-instructions/v1",
+  "title": "Criminal Code s. 606 — Client-Confirmed Plea Instructions",
+  "type": "object",
+  "$defs": {
+    "collateral_sub": {
+      "type": "object",
+      "description": "Common shape for a collateral-consequence category: was it applicable, was it explained, was it acknowledged, and the attestation text.",
+      "properties": {
+        "applicable": {
+          "type": "boolean",
+          "description": "True if this category of collateral consequence applies to the accused."
+        },
+        "explained": {
+          "type": "boolean",
+          "description": "True if counsel explained this category to the accused."
+        },
+        "acknowledged": {
+          "type": "boolean",
+          "description": "True if the accused acknowledges the consequence."
+        },
+        "attestation_text": {
+          "type": "string",
+          "description": "Verbatim attestation as recorded in the audit log."
+        }
+      },
+      "required": [
+        "applicable",
+        "explained",
+        "acknowledged",
+        "attestation_text"
+      ]
+    },
+    "hash_chain_entry": {
+      "type": "object",
+      "description": "Single entry in the append-only SHA-256 hash-chained audit log.",
+      "properties": {
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "1-based sequence index."
+        },
+        "node_id": {
+          "type": "string",
+          "description": "Identifier of the confirmation node."
+        },
+        "node_title": {
+          "type": "string",
+          "description": "Human-readable title of the node."
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "agree",
+            "disagree",
+            "defer",
+            "factual",
+            "acknowledged"
+          ],
+          "description": "Decision recorded for this node."
+        },
+        "decision_label": {
+          "type": "string",
+          "description": "Display-friendly decision label."
+        },
+        "note": {
+          "type": "string",
+          "description": "Free-text note (required if decision == disagree)."
+        },
+        "ts": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp."
+        },
+        "prev_hash": {
+          "type": "string",
+          "description": "Hash of the previous entry, or GENESIS for the first."
+        },
+        "hash": {
+          "type": "string",
+          "description": "SHA-256 hex digest of this entry."
+        },
+        "stress_confirmed": {
+          "type": "boolean",
+          "description": "True if this entry was committed under an elevated-stress override (family-law variant only; default false in criminal)."
+        },
+        "affect_snapshot_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional reference to a behavioural-snapshot record, or null."
+        }
+      },
+      "required": [
+        "sequence",
+        "node_id",
+        "node_title",
+        "decision",
+        "ts",
+        "prev_hash",
+        "hash"
+      ]
+    }
+  },
+  "properties": {
+    "matter": {
+      "type": "object",
+      "description": "Identifies the court matter for which plea instructions are recorded.",
+      "properties": {
+        "court_level": {
+          "type": "string",
+          "enum": [
+            "Provincial Court",
+            "Superior Court of Justice",
+            "Supreme Court of British Columbia"
+          ],
+          "description": "Level of court where plea will be entered."
+        },
+        "province": {
+          "type": "string",
+          "enum": [
+            "BC",
+            "ON"
+          ],
+          "description": "Province of jurisdiction."
+        },
+        "registry_or_courthouse": {
+          "type": "string",
+          "description": "Court registry or courthouse name."
+        },
+        "information_indictment_number": {
+          "type": "string",
+          "description": "Information or indictment file number."
+        },
+        "scheduled_plea_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Date the plea is scheduled to be entered."
+        },
+        "presiding_judicial_officer": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Name of the presiding judge or justice if known."
+        }
+      },
+      "required": [
+        "court_level",
+        "province",
+        "information_indictment_number",
+        "scheduled_plea_date"
+      ]
+    },
+    "accused": {
+      "type": "object",
+      "description": "Identifying and status information for the accused person.",
+      "properties": {
+        "full_legal_name": {
+          "type": "string",
+          "description": "Full legal name as it appears on the Information or Indictment."
+        },
+        "date_of_birth": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of birth of the accused."
+        },
+        "citizenship_immigration_status": {
+          "type": "string",
+          "enum": [
+            "Canadian citizen",
+            "permanent resident",
+            "foreign national",
+            "refugee claimant",
+            "unknown"
+          ],
+          "description": "Citizenship or immigration status, relevant to IRPA s. 36 collateral consequences."
+        },
+        "preferred_language": {
+          "type": "string",
+          "description": "Preferred language of the accused (relevant to s. 530 language rights)."
+        },
+        "interpreter_required": {
+          "type": "boolean",
+          "description": "Whether a court interpreter is required."
+        },
+        "capacity_status": {
+          "type": "string",
+          "enum": [
+            "capable",
+            "capacity_question_raised",
+            "capable_per_s_672_22"
+          ],
+          "description": "Fitness to instruct counsel. [VERIFY] s. 672.22 Criminal Code (presumption of fitness)."
+        }
+      },
+      "required": [
+        "full_legal_name",
+        "date_of_birth",
+        "citizenship_immigration_status",
+        "preferred_language",
+        "interpreter_required",
+        "capacity_status"
+      ]
+    },
+    "counsel": {
+      "type": "object",
+      "description": "Identifying information for defence counsel on record.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of counsel."
+        },
+        "firm": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Law firm name, if applicable."
+        },
+        "law_society_number": {
+          "type": "string",
+          "description": "LSBC or LSO licence number."
+        },
+        "law_society": {
+          "type": "string",
+          "enum": [
+            "LSBC",
+            "LSO"
+          ],
+          "description": "Governing law society."
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "defence",
+            "agent"
+          ],
+          "description": "Whether counsel acts as counsel of record or designated agent."
+        },
+        "date_retained": {
+          "type": "string",
+          "format": "date",
+          "description": "Date counsel was retained."
+        },
+        "retainer_scope": {
+          "type": "string",
+          "enum": [
+            "full",
+            "limited"
+          ],
+          "description": "Whether retainer covers full representation or is limited in scope."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Professional email address of counsel."
+        }
+      },
+      "required": [
+        "name",
+        "law_society_number",
+        "law_society",
+        "role",
+        "date_retained",
+        "retainer_scope"
+      ]
+    },
+    "charges": {
+      "type": "array",
+      "description": "Array of each count on the Information or Indictment to which instructions pertain.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "count_number": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Count number on the Information or Indictment."
+          },
+          "criminal_code_section": {
+            "type": "string",
+            "description": "Statutory section (e.g. 'CC s. 267(a)')."
+          },
+          "offence_description": {
+            "type": "string",
+            "description": "Plain-language description of the offence."
+          },
+          "election": {
+            "type": "string",
+            "enum": [
+              "summary",
+              "indictable",
+              "hybrid_proceeded_summary",
+              "hybrid_proceeded_indictable",
+              "not_applicable"
+            ],
+            "description": "Mode of trial election or Crown election on hybrid offences."
+          },
+          "maximum_sentence": {
+            "type": "string",
+            "description": "Statutory maximum sentence for the elected mode."
+          },
+          "mandatory_minimum": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Mandatory minimum sentence, if any, or null."
+          },
+          "plea": {
+            "type": "string",
+            "enum": [
+              "guilty",
+              "not_guilty"
+            ],
+            "description": "Plea to be entered on this count."
+          }
+        },
+        "required": [
+          "count_number",
+          "criminal_code_section",
+          "offence_description",
+          "election",
+          "maximum_sentence",
+          "plea"
+        ]
+      }
+    },
+    "agreed_facts": {
+      "type": "object",
+      "description": "Factual basis for the plea as required by s. 606(1.1) [VERIFY].",
+      "properties": {
+        "narrative": {
+          "type": "string",
+          "description": "Text of the agreed or anticipated facts."
+        },
+        "attached_file_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Reference ID or URI to an attached document, if any."
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "Crown_brief",
+            "agreed_statement",
+            "viva_voce"
+          ],
+          "description": "Source of the factual basis."
+        },
+        "reviewed_with_client": {
+          "type": "boolean",
+          "description": "Whether the facts were reviewed with the accused."
+        },
+        "date_reviewed": {
+          "type": "string",
+          "format": "date",
+          "description": "Date on which the facts were reviewed with the accused."
+        }
+      },
+      "required": [
+        "narrative",
+        "source",
+        "reviewed_with_client",
+        "date_reviewed"
+      ]
+    },
+    "admission": {
+      "type": "object",
+      "description": "Client's admission of essential elements for each guilty-plea count.",
+      "properties": {
+        "per_charge": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "count_number": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Corresponding count number."
+              },
+              "essential_elements_admitted": {
+                "type": "boolean",
+                "description": "Whether the accused admits each essential element of the offence."
+              },
+              "attestation_text": {
+                "type": "string",
+                "description": "Client's own-words attestation for this count."
+              }
+            },
+            "required": [
+              "count_number",
+              "essential_elements_admitted",
+              "attestation_text"
+            ]
+          },
+          "minItems": 1
+        },
+        "aggregate_confirmation": {
+          "type": "boolean",
+          "description": "Aggregate confirmation that the accused admits guilt on all counts to which a guilty plea is entered."
+        },
+        "aggregate_attestation_text": {
+          "type": "string",
+          "description": "Aggregate attestation statement."
+        }
+      },
+      "required": [
+        "per_charge",
+        "aggregate_confirmation"
+      ]
+    },
+    "voluntariness": {
+      "type": "object",
+      "description": "Confirmation that the plea is voluntary per s. 606(1.1)(b) [VERIFY].",
+      "properties": {
+        "confirmed_voluntary": {
+          "type": "boolean",
+          "description": "Accused confirms the plea is voluntary."
+        },
+        "no_threats": {
+          "type": "boolean",
+          "description": "Accused confirms no threats were made to induce the plea."
+        },
+        "no_inducement_other_than_on_record": {
+          "type": "boolean",
+          "description": "No promises or inducements beyond what is recorded in the plea agreement or joint submission."
+        },
+        "no_substance_impairment": {
+          "type": "boolean",
+          "description": "Accused confirms they are not impaired by drugs, alcohol, or medication at time of instructions."
+        },
+        "attestation_text": {
+          "type": "string",
+          "description": "Free-text voluntariness attestation."
+        },
+        "signed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of voluntariness confirmation."
+        }
+      },
+      "required": [
+        "confirmed_voluntary",
+        "no_threats",
+        "no_inducement_other_than_on_record",
+        "no_substance_impairment",
+        "attestation_text",
+        "signed_at"
+      ]
+    },
+    "consequences_acknowledged": {
+      "type": "object",
+      "description": "Accused's acknowledgment of immediate consequences of a guilty plea.",
+      "properties": {
+        "conviction_understood": {
+          "type": "boolean",
+          "description": "Understands a guilty plea results in a conviction (unless a discharge is granted)."
+        },
+        "sentence_will_follow": {
+          "type": "boolean",
+          "description": "Understands a sentence will be imposed."
+        },
+        "criminal_record_understood": {
+          "type": "boolean",
+          "description": "Understands that a conviction (not a discharge) results in a criminal record."
+        },
+        "attestation_text": {
+          "type": "string",
+          "description": "Attestation text for consequences acknowledgment."
+        }
+      },
+      "required": [
+        "conviction_understood",
+        "sentence_will_follow",
+        "criminal_record_understood",
+        "attestation_text"
+      ]
+    },
+    "court_not_bound_acknowledged": {
+      "type": "object",
+      "description": "Acknowledgment that the sentencing court is not bound by a joint submission; R v Anthony-Cook, 2016 SCC 43 test explained.",
+      "properties": {
+        "joint_submission_understood": {
+          "type": "boolean",
+          "description": "Understands the court may depart from a joint submission."
+        },
+        "anthony_cook_test_explained": {
+          "type": "boolean",
+          "description": "Counsel explained the public-interest test from R v Anthony-Cook, 2016 SCC 43."
+        },
+        "attestation_text": {
+          "type": "string",
+          "description": "Attestation for court-not-bound acknowledgment."
+        }
+      },
+      "required": [
+        "joint_submission_understood",
+        "anthony_cook_test_explained",
+        "attestation_text"
+      ]
+    },
+    "trial_rights_waived": {
+      "type": "object",
+      "description": "Enumeration of Charter and procedural trial rights waived by entering a guilty plea.",
+      "properties": {
+        "waivers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "right_name": {
+                "type": "string",
+                "enum": [
+                  "presumption_of_innocence",
+                  "Crown_burden_of_proof_beyond_reasonable_doubt",
+                  "right_to_cross_examine",
+                  "right_to_call_defence_evidence",
+                  "right_to_silence",
+                  "forum_choice_judge_alone_or_jury",
+                  "fitness_inquiry_s_672_11",
+                  "language_rights_s_530"
+                ],
+                "description": "Identifier for the specific right. [VERIFY] s. 672.11 for fitness inquiry."
+              },
+              "explained": {
+                "type": "boolean",
+                "description": "Whether this right was explained to the accused."
+              },
+              "waived": {
+                "type": "boolean",
+                "description": "Whether the accused knowingly waives this right."
+              },
+              "attestation_text": {
+                "type": "string",
+                "description": "Attestation for waiver of this specific right."
+              }
+            },
+            "required": [
+              "right_name",
+              "explained",
+              "waived",
+              "attestation_text"
+            ]
+          }
+        }
+      },
+      "required": [
+        "waivers"
+      ]
+    },
+    "sentencing_range_discussed": {
+      "type": "object",
+      "description": "Record of the sentencing range and form discussed with the accused.",
+      "properties": {
+        "discussed_low": {
+          "type": "string",
+          "description": "Low end of the range discussed (e.g. '6 months probation')."
+        },
+        "discussed_mid": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Mid-range estimate discussed, if applicable."
+        },
+        "discussed_high": {
+          "type": "string",
+          "description": "High end of the range discussed."
+        },
+        "discussed_form": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "custody",
+              "conditional_sentence",
+              "probation",
+              "fine",
+              "absolute_discharge",
+              "conditional_discharge",
+              "suspended_sentence",
+              "intermittent_sentence"
+            ]
+          },
+          "description": "Forms of sentence discussed."
+        },
+        "is_joint_submission": {
+          "type": "boolean",
+          "description": "Whether a joint submission on sentence has been reached."
+        },
+        "joint_submission_detail": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Description of the joint submission, if any."
+        },
+        "prediction_not_guarantee_acknowledged": {
+          "type": "boolean",
+          "description": "Accused acknowledges counsel's range discussion is a prediction, not a guarantee."
+        },
+        "attestation_text": {
+          "type": "string",
+          "description": "Attestation for sentencing discussion."
+        }
+      },
+      "required": [
+        "discussed_low",
+        "discussed_high",
+        "discussed_form",
+        "is_joint_submission",
+        "prediction_not_guarantee_acknowledged",
+        "attestation_text"
+      ]
+    },
+    "collateral_consequences_acknowledged": {
+      "type": "object",
+      "description": "Collateral consequences discussed and acknowledged, per R v Wong, 2018 SCC 25 duty.",
+      "properties": {
+        "immigration": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/collateral_sub"
+            }
+          ],
+          "description": "Immigration consequences under IRPA s. 36 (inadmissibility / deportation). [VERIFY] IRPA s. 36(1) serious criminality, s. 36(2) criminality."
+        },
+        "employment_licensing": {
+          "$ref": "#/$defs/collateral_sub",
+          "description": "Impact on professional licences, employment, or vulnerable-sector checks."
+        },
+        "dna_order": {
+          "type": "object",
+          "properties": {
+            "designated_offence": {
+              "type": "boolean",
+              "description": "Whether the offence is a designated offence under s. 487.04 [VERIFY] for DNA order."
+            },
+            "primary_or_secondary": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "primary",
+                "secondary",
+                null
+              ],
+              "description": "Primary or secondary designated offence classification."
+            },
+            "explained": {
+              "type": "boolean"
+            },
+            "acknowledged": {
+              "type": "boolean"
+            },
+            "attestation_text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "designated_offence",
+            "explained",
+            "acknowledged"
+          ]
+        },
+        "firearms_prohibition": {
+          "type": "object",
+          "properties": {
+            "applicable": {
+              "type": "boolean",
+              "description": "Whether a firearms prohibition applies."
+            },
+            "prohibition_type": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "s_109_mandatory",
+                "s_110_discretionary",
+                null
+              ],
+              "description": "Type of prohibition under CC ss. 109 or 110."
+            },
+            "explained": {
+              "type": "boolean"
+            },
+            "acknowledged": {
+              "type": "boolean"
+            },
+            "attestation_text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "applicable",
+            "explained",
+            "acknowledged"
+          ]
+        },
+        "soira_registration": {
+          "$ref": "#/$defs/collateral_sub",
+          "description": "Sex Offender Information Registration Act obligations, if designated offence. [VERIFY] SOIRA ss. 490.011 et seq."
+        },
+        "travel_us": {
+          "$ref": "#/$defs/collateral_sub",
+          "description": "Impact on ability to travel to the United States (US inadmissibility)."
+        },
+        "driving_prohibition": {
+          "$ref": "#/$defs/collateral_sub",
+          "description": "Driving prohibition under CC s. 320.24 [VERIFY] or provincial legislation."
+        },
+        "family_cps_implications": {
+          "$ref": "#/$defs/collateral_sub",
+          "description": "Potential family law and child protection service implications."
+        }
+      },
+      "required": [
+        "immigration",
+        "employment_licensing",
+        "dna_order",
+        "firearms_prohibition",
+        "soira_registration",
+        "travel_us",
+        "driving_prohibition",
+        "family_cps_implications"
+      ]
+    },
+    "appeal_rights_acknowledged": {
+      "type": "object",
+      "description": "Acknowledgment of limited appeal rights following a guilty plea.",
+      "properties": {
+        "appeal_from_plea_limited_explained": {
+          "type": "boolean",
+          "description": "Counsel explained that appeals from a guilty plea are narrow (R v Taillefer, 2003 SCC 70 [VERIFY]; s. 686(1)(a)(iii))."
+        },
+        "sentence_appeal_right_explained": {
+          "type": "boolean",
+          "description": "Counsel explained the right to seek leave to appeal sentence under s. 675(1)(b) [VERIFY]."
+        },
+        "attestation_text": {
+          "type": "string",
+          "description": "Attestation for appeal-rights acknowledgment."
+        }
+      },
+      "required": [
+        "appeal_from_plea_limited_explained",
+        "sentence_appeal_right_explained",
+        "attestation_text"
+      ]
+    },
+    "alternatives_considered": {
+      "type": "object",
+      "description": "Record of alternative dispositions discussed with the accused before guilty-plea instructions.",
+      "properties": {
+        "diversion": {
+          "type": "object",
+          "properties": {
+            "discussed": {
+              "type": "boolean",
+              "description": "Whether diversion/alternative measures (s. 717 [VERIFY]) were discussed."
+            },
+            "available": {
+              "type": "boolean",
+              "description": "Whether diversion was available in this case."
+            },
+            "why_not_pursued": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Reason diversion was not pursued, if applicable."
+            }
+          },
+          "required": [
+            "discussed",
+            "available"
+          ]
+        },
+        "withdrawal": {
+          "type": "object",
+          "properties": {
+            "discussed": {
+              "type": "boolean"
+            },
+            "available": {
+              "type": "boolean"
+            },
+            "why_not_pursued": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "discussed",
+            "available"
+          ]
+        },
+        "peace_bond_810": {
+          "type": "object",
+          "properties": {
+            "discussed": {
+              "type": "boolean",
+              "description": "Whether a s. 810 peace bond was discussed."
+            },
+            "available": {
+              "type": "boolean"
+            },
+            "why_not_pursued": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "discussed",
+            "available"
+          ]
+        },
+        "discharge_730_absolute": {
+          "type": "object",
+          "properties": {
+            "discussed": {
+              "type": "boolean",
+              "description": "Whether an absolute discharge under s. 730 was discussed."
+            },
+            "available": {
+              "type": "boolean"
+            },
+            "why_not_pursued": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "discussed",
+            "available"
+          ]
+        },
+        "discharge_730_conditional": {
+          "type": "object",
+          "properties": {
+            "discussed": {
+              "type": "boolean",
+              "description": "Whether a conditional discharge under s. 730 was discussed."
+            },
+            "available": {
+              "type": "boolean"
+            },
+            "why_not_pursued": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "discussed",
+            "available"
+          ]
+        },
+        "trial": {
+          "type": "object",
+          "properties": {
+            "discussed": {
+              "type": "boolean",
+              "description": "Whether proceeding to trial was discussed."
+            },
+            "available": {
+              "type": "boolean"
+            },
+            "why_not_pursued": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "discussed",
+            "available"
+          ]
+        }
+      },
+      "required": [
+        "diversion",
+        "withdrawal",
+        "peace_bond_810",
+        "discharge_730_absolute",
+        "discharge_730_conditional",
+        "trial"
+      ]
+    },
+    "final_instruction_to_plead": {
+      "type": "object",
+      "description": "The accused's final, confirmed instruction to counsel to enter a guilty plea.",
+      "properties": {
+        "instruction_to_plead_guilty": {
+          "type": "boolean",
+          "description": "True if the accused instructs counsel to enter a guilty plea."
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "all_guilty_counts",
+            "per_count"
+          ],
+          "description": "Whether instruction covers all guilty-plea counts or is given per count."
+        },
+        "per_count_instructions": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "count_number": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "plead_guilty": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "count_number",
+              "plead_guilty"
+            ]
+          },
+          "description": "Per-count instructions if scope is per_count; null otherwise."
+        },
+        "date_of_intended_plea": {
+          "type": "string",
+          "format": "date",
+          "description": "Date on which the plea is to be entered."
+        },
+        "attestation_text": {
+          "type": "string",
+          "description": "Final attestation in the accused's own words."
+        },
+        "signed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of final instruction signature."
+        }
+      },
+      "required": [
+        "instruction_to_plead_guilty",
+        "scope",
+        "date_of_intended_plea",
+        "attestation_text",
+        "signed_at"
+      ]
+    },
+    "instructions_record": {
+      "type": "object",
+      "description": "Append-only hash-chain audit log of each confirmation-tree node traversal.",
+      "properties": {
+        "chain_genesis_hash": {
+          "type": "string",
+          "const": "GENESIS",
+          "description": "Sentinel value for the first entry's prev_hash."
+        },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/hash_chain_entry"
+          }
+        },
+        "final_hash": {
+          "type": "string",
+          "description": "SHA-256 hex digest of the last entry in the chain; serves as the integrity seal for the full record."
+        }
+      },
+      "required": [
+        "chain_genesis_hash",
+        "entries",
+        "final_hash"
+      ]
+    }
+  },
+  "required": [
+    "matter",
+    "accused",
+    "counsel",
+    "charges",
+    "agreed_facts",
+    "admission",
+    "voluntariness",
+    "consequences_acknowledged",
+    "court_not_bound_acknowledged",
+    "trial_rights_waived",
+    "sentencing_range_discussed",
+    "collateral_consequences_acknowledged",
+    "appeal_rights_acknowledged",
+    "alternatives_considered",
+    "final_instruction_to_plead",
+    "instructions_record"
+  ],
+  "additionalProperties": false
+}

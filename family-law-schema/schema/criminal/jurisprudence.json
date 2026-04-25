@@ -1,0 +1,160 @@
+{
+  "$id": "criminal-guilty-plea-jurisprudence.json",
+  "jurisdictions_covered": ["SCC", "ON CA", "BC CA"],
+  "node_to_authorities": {
+    "charge": [
+      {
+        "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
+        "court": "SCC",
+        "holding": "The trial judge has a duty to ensure the accused understands the nature of the charge before accepting a guilty plea. The charge must be read and the accused must indicate understanding of its essential elements.",
+        "application": "Before confirming the plea, verify the client can identify the specific offence(s), including the statutory provision, and articulate the essential elements in their own words."
+      },
+      {
+        "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
+        "court": "ONCA",
+        "holding": "The first element of a valid guilty plea inquiry requires that the accused understand the nature of the allegations and the precise charge being admitted. The Court of Appeal identified this as the first of five mandatory components.",
+        "application": "Use this to anchor the charge-confirmation node: counsel must walk the client through the Information or Indictment, confirm each count, and record that the client understands what conduct is alleged."
+      }
+    ],
+    "admission": [
+      {
+        "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
+        "court": "SCC",
+        "holding": "A valid guilty plea requires an admission of the essential factual ingredients of the offence. The plea must reflect a voluntary acknowledgment that the accused committed the acts constituting each element.",
+        "application": "Confirm the client admits the factual basis for each element of the offence. Record that the agreed statement of facts or Crown summary was reviewed and the client agrees it is substantially accurate."
+      },
+      {
+        "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
+        "court": "ONCA",
+        "holding": "The second element of the five-part inquiry requires the accused to admit the essential elements of the offence, not merely acknowledge the charge exists.",
+        "application": "Distinguish between understanding the charge (node 1) and admitting guilt (node 2). The client must affirmatively state they did the acts and had the requisite mental state."
+      }
+    ],
+    "voluntariness": [
+      {
+        "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
+        "court": "SCC",
+        "holding": "A guilty plea must be voluntary and not the product of fear, threats, inducements not forming part of the plea agreement, or lack of understanding. An involuntary plea is a nullity.",
+        "application": "Confirm the client is not pleading guilty due to coercion, pressure from third parties, or promises outside the plea agreement. Record that the decision is the client's own, made freely."
+      },
+      {
+        "style_of_cause": "R. v. Hanemaayer, 2008 ONCA 580",
+        "court": "ONCA",
+        "holding": "A guilty plea entered under overwhelming pressure, where the accused maintained factual innocence but pleaded guilty to avoid risk, may be withdrawn as a miscarriage of justice even years later.",
+        "application": "Use as a cautionary authority: probe whether the client is pleading guilty solely to avoid trial risk despite maintaining innocence. If so, flag that this creates a basis for later withdrawal and may indicate the plea is not truly voluntary."
+      }
+    ],
+    "consequences": [
+      {
+        "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
+        "court": "ONCA",
+        "holding": "The accused must understand the nature and consequences of the plea, including the potential penalty. This is the third element of the five-part inquiry.",
+        "application": "Confirm the client understands the maximum and minimum penalties, mandatory ancillary orders (DNA, SOIRA, weapons prohibitions, driving prohibitions), and any mandatory minimum sentences."
+      },
+      {
+        "style_of_cause": "R. v. T. (N.), 2014 SCC 64 [VERIFY neutral citation]",
+        "court": "SCC",
+        "holding": "Where an accused is uninformed of legally relevant consequences at the time of the plea, including immigration consequences and mandatory ancillary orders, the plea may be found invalid.",
+        "application": "Use to require that counsel canvass all mandatory and significant discretionary consequences before the client confirms the plea, and that the confirmation tool records the client was advised of each."
+      }
+    ],
+    "court_not_bound": [
+      {
+        "style_of_cause": "R. v. Anthony-Cook, 2016 SCC 43",
+        "court": "SCC",
+        "holding": "A joint submission on sentence should not be departed from unless the proposed sentence would bring the administration of justice into disrepute or would otherwise be contrary to the public interest. The court retains the discretion to reject a joint submission under this test.",
+        "application": "Confirm the client understands that even where a joint submission exists, the sentencing judge is not bound by it and may impose a different sentence. Record that the client accepts the risk of judicial departure."
+      },
+      {
+        "style_of_cause": "R. v. Quick, 2016 ONCA 95 [VERIFY neutral citation]",
+        "court": "ONCA",
+        "holding": "Where a trial judge departs from a joint submission, the public interest test from Anthony-Cook applies. A joint submission that is not contrary to the public interest should be accepted.",
+        "application": "Use to explain to the client both the strength of a joint submission and its limits. The client should understand the high threshold for departure but that the court retains ultimate sentencing authority."
+      }
+    ],
+    "trial_rights": [
+      {
+        "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
+        "court": "SCC",
+        "holding": "By entering a guilty plea, the accused waives the right to a trial, including the right to require the Crown to prove the case beyond a reasonable doubt, the right to cross-examine witnesses, and the right to call evidence.",
+        "application": "Confirm the client understands they are waiving the presumption of innocence, the right to a trial by judge or jury, the right to test the Crown's evidence, and the right to remain silent at trial."
+      },
+      {
+        "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
+        "court": "ONCA",
+        "holding": "The fourth element of the valid plea inquiry requires the accused to understand the right to a trial and that the plea waives that right.",
+        "application": "Use a checklist approach: confirm waiver of right to trial, right to make full answer and defence, right to preliminary inquiry (where applicable), and right to require proof beyond a reasonable doubt."
+      }
+    ],
+    "sentencing_range": [
+      {
+        "style_of_cause": "R. v. Anthony-Cook, 2016 SCC 43",
+        "court": "SCC",
+        "holding": "The public interest test governs joint submissions. The Court outlined the importance of certainty in plea negotiations, meaning the agreed sentencing range or joint position is a core component of informed consent to the plea.",
+        "application": "Confirm the client understands the specific joint submission or sentencing range counsel will advocate for, the maximum and minimum sentences available at law, and that the range discussed is counsel's best assessment, not a guarantee."
+      },
+      {
+        "style_of_cause": "R. v. Stiles, 2017 BCCA 6 [VERIFY neutral citation and year]",
+        "court": "BCCA",
+        "holding": "[VERIFY] Addressed the application of the Anthony-Cook public interest test in British Columbia and the obligation of counsel to inform the accused of the realistic sentencing range before entering a plea.",
+        "application": "[VERIFY] Use as BC-specific authority to confirm the sentencing-range node applies with equal force in that jurisdiction. Verify holding before relying."
+      }
+    ],
+    "collateral": [
+      {
+        "style_of_cause": "R. v. Wong, 2018 SCC 25",
+        "court": "SCC",
+        "holding": "Immigration consequences of a guilty plea are sufficiently serious that failure to advise of them may render the plea uninformed. Where a legally relevant consequence was not understood, the plea may be withdrawn.",
+        "application": "Confirm the client has been advised of all collateral consequences including immigration status (deportation, inadmissibility), employment and professional licensing, travel restrictions, and any other consequences specific to their circumstances."
+      },
+      {
+        "style_of_cause": "R. v. T. (N.), 2014 SCC 64 [VERIFY neutral citation]",
+        "court": "SCC",
+        "holding": "Defence counsel has a duty to inform the accused of legally relevant consequences, which extends beyond the direct penal consequences to include serious collateral consequences that a reasonable person in the accused's position would wish to know.",
+        "application": "Use to define the scope of collateral consequences counsel must canvass. The confirmation tool should include a checklist of common collateral consequences and a free-text field for case-specific consequences."
+      }
+    ],
+    "appeal": [
+      {
+        "style_of_cause": "R. v. Hanemaayer, 2008 ONCA 580",
+        "court": "ONCA",
+        "holding": "A guilty plea may be withdrawn on appeal where fresh evidence demonstrates a miscarriage of justice, including where the plea was entered by an innocent person under circumstances amounting to an abuse of process or fundamental unfairness.",
+        "application": "Confirm the client understands that a guilty plea severely limits appeal rights. An appeal from a guilty plea is generally restricted to jurisdictional issues, the validity of the plea itself, or the fitness of the sentence."
+      },
+      {
+        "style_of_cause": "R. v. Wong, 2018 SCC 25",
+        "court": "SCC",
+        "holding": "An accused may seek to withdraw a guilty plea on appeal where they can demonstrate that the plea was uninformed due to lack of awareness of legally relevant consequences, applying a balancing of interests that includes prejudice to the Crown.",
+        "application": "Confirm the client understands the limited and difficult nature of post-plea appeal rights, and that the purpose of this confirmation tool is to ensure all information is provided now so that grounds to challenge the plea do not arise later."
+      }
+    ],
+    "alternatives": [
+      {
+        "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
+        "court": "SCC",
+        "holding": "The voluntariness of a guilty plea presupposes that the accused was aware of available alternatives, including proceeding to trial, and chose to plead guilty with knowledge of those options.",
+        "application": "Confirm the client was advised of all realistic alternatives: proceeding to trial, diversion or alternative measures (where available), resolution to lesser or included offences, adjournments for further disclosure review, and any pre-trial applications that could affect the Crown's case."
+      },
+      {
+        "style_of_cause": "Criminal Code, R.S.C. 1985, c. C-46, s. 606 (as amended by S.C. 2002, c. 13 [VERIFY precise amending statute])",
+        "court": "other",
+        "holding": "Section 606(1.1) codifies the court's duty to satisfy itself that the accused is making the plea voluntarily and understands that the plea is an admission of the essential elements, that the court is not bound by any agreement, and that the court may accept the plea. Section 606(1.2) permits the court to refuse to accept the plea where satisfied it is uninformed or involuntary.",
+        "application": "The statutory framework underpins every node of this tool. The confirmation process should mirror and exceed the s. 606(1.1) inquiry to ensure the record demonstrates compliance with both the statutory and common law requirements."
+      }
+    ],
+    "final": [
+      {
+        "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
+        "court": "ONCA",
+        "holding": "The fifth element of the valid plea inquiry is that the accused, having been informed of all the above, expressly and unequivocally confirms the intention to plead guilty.",
+        "application": "The final node captures the client's express confirmation that they wish to proceed with the guilty plea after having been taken through all preceding nodes. Record an unequivocal affirmative response and timestamp."
+      },
+      {
+        "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
+        "court": "SCC",
+        "holding": "The totality of the plea inquiry must demonstrate a free and informed decision by the accused to plead guilty. The cumulative record of the inquiry is what the court relies upon.",
+        "application": "Use this as the capstone authority: the final confirmation represents the culmination of all prior nodes and must be recorded as the client's definitive, informed, and voluntary instruction to enter the plea."
+      }
+    ]
+  }
+}

@@ -43,6 +43,19 @@ instructit-poc/
     └── separation-agreement-draft.docx  # Demo render output
 ```
 
+## Criminal artifacts (added 2026-04-24, second pass)
+
+In addition to the family-law schema, the criminal POC has been backed by three structured GC.AI-generated artifacts at `family-law-schema/schema/criminal/`:
+
+- **`jurisprudence.json`** — leading authorities mapped to each of the 11 confirmation nodes. Anchors: *Adgey* (SCC), *T (R.)* (ON CA), *Hanemaayer* (ON CA), *Anthony-Cook* (SCC), *Wong* (SCC), *T (N.)* (SCC). 7 `[VERIFY]`.
+- **`bar-guidance.json`** — law-society and criminal-bar guidance per node from LSBC, LSO, CBA Criminal Justice Section, and the Criminal Lawyers' Association (Ontario). 21 `[VERIFY]`.
+- **`instructions.schema.json`** — JSON Schema 2020-12 (16 top-level required properties, 2 `$defs`). Compiles clean. 11 `[VERIFY]`.
+- **`sample-filled.json`** — demo instance for fictional accused. Does not yet validate clean (field-name drift between sample and GC.AI-emitted schema); closing the gap is a downstream task.
+
+The `apps/criminal-guilty-plea/index.html` browser POC loads `data/jurisprudence.json` and `data/bar-guidance.json` on init and renders an expandable "Supporting authorities" block under each confirmation node, exposing the case + rule citations the lawyer is implicitly relying on at that step.
+
+**Total `[VERIFY]` markers across both POCs: 70 (family-law) + 39 (criminal) = 109.**
+
 ## Why this exists
 
 The **BC Lawyers Indemnity Fund** (LIF) flagged family-law claims at

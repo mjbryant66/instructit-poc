@@ -1,0 +1,156 @@
+{
+  "$schema_ref": "instructions.schema.json",
+  "_NOTE": "Demo instance for an InstructIT criminal-guilty-plea matter. Fictional accused 'Sam Sample' charged under Criminal Code s. 348(1)(b). All values illustrative; not a precedent.",
+
+  "matter": {
+    "court_level": "Provincial Court",
+    "province": "British Columbia",
+    "registry": "Vancouver",
+    "information_number": "00000-1",
+    "indictment_number": null,
+    "scheduled_plea_date": "2026-05-15",
+    "presiding_judicial_officer": "Hon. Judge [VERIFY]"
+  },
+
+  "accused": {
+    "legal_name": { "first": "Sam", "middle": null, "last": "Sample" },
+    "date_of_birth": "1990-03-12",
+    "citizenship_status": "Canadian citizen",
+    "preferred_language": "English",
+    "interpreter_required": false,
+    "capacity_status": "capable"
+  },
+
+  "counsel": {
+    "name": "Defence Counsel",
+    "firm": "Example Law LLP",
+    "law_society_number": "12345",
+    "law_society_jurisdiction": "LSBC",
+    "role": "defence",
+    "date_retained": "2026-04-01",
+    "scope_of_retainer": "full"
+  },
+
+  "charges": [
+    {
+      "count_number": 1,
+      "criminal_code_section": "348(1)(b)",
+      "offence_description": "Break and enter and commit indictable offence",
+      "election": "indictable",
+      "max_sentence": "Life imprisonment (dwelling) / 10 years (other)",
+      "mandatory_minimum": null,
+      "plea": "guilty"
+    }
+  ],
+
+  "agreed_facts": {
+    "narrative_text": "Counsel and Crown have agreed on a statement of facts dated 2026-04-20.",
+    "attached_file_reference": "agreed-facts-2026-04-20.pdf",
+    "source": "agreed_statement",
+    "reviewed_with_client": true,
+    "date_reviewed": "2026-04-22"
+  },
+
+  "admission": {
+    "per_charge": [
+      { "count_number": 1, "essential_elements_admitted": true, "attestation_text": "I admit the essential elements of count 1 as set out in the agreed facts." }
+    ],
+    "aggregate_confirmation": true
+  },
+
+  "voluntariness": {
+    "confirmed": true,
+    "no_threat": true,
+    "no_inducement_other_than_record": true,
+    "no_substance_impairment": true,
+    "attestation_text": "I am pleading guilty voluntarily; no threats, no inducements other than what is on the record, and I am not under the influence of anything that affects my judgment.",
+    "signed_at_timestamp": "2026-04-24T18:00:00-07:00"
+  },
+
+  "consequences_acknowledged": {
+    "conviction_understood": true,
+    "sentence_will_follow": true,
+    "criminal_record_understood": true,
+    "attestation_text": "I understand a conviction will be entered, the court will impose a sentence, and the conviction will appear on my record."
+  },
+
+  "court_not_bound_acknowledged": {
+    "joint_submission_understood": true,
+    "anthony_cook_test_explained": true,
+    "attestation_text": "I understand the judge is not bound by any sentence agreement and may impose a different sentence subject to the public-interest test in R. v. Anthony-Cook, 2016 SCC 43."
+  },
+
+  "trial_rights_waived": [
+    { "right_name": "Presumption of innocence", "explained": true, "waived": true, "attestation_text": "I waive my right to be presumed innocent." },
+    { "right_name": "Crown burden of proof beyond reasonable doubt", "explained": true, "waived": true, "attestation_text": "I waive my right to require the Crown to prove every element beyond a reasonable doubt." },
+    { "right_name": "Cross-examination", "explained": true, "waived": true, "attestation_text": "I waive my right to test the Crown's evidence by cross-examination." },
+    { "right_name": "Defence evidence", "explained": true, "waived": true, "attestation_text": "I waive my right to call defence evidence including testifying myself." },
+    { "right_name": "Right to remain silent", "explained": true, "waived": true, "attestation_text": "I waive my right to remain silent." },
+    { "right_name": "Forum choice (judge alone vs jury)", "explained": true, "waived": true, "attestation_text": "I waive my right to elect the forum for trial where applicable." }
+  ],
+
+  "sentencing_range_discussed": {
+    "discussed_low": "12 months suspended",
+    "discussed_mid": "24 months",
+    "discussed_high": "36 months",
+    "discussed_form": "custody",
+    "is_joint_submission": true,
+    "joint_submission_amount": "18 months custody",
+    "prediction_not_guarantee_acknowledged": true,
+    "attestation_text": "Counsel discussed the range; I understand the discussed range is a prediction, not a guarantee, and the judge may impose a different sentence."
+  },
+
+  "collateral_consequences_acknowledged": {
+    "immigration": { "applicable": false, "explained": true, "acknowledged": true, "attestation_text": "Counsel reviewed; not applicable as accused is a Canadian citizen." },
+    "employment_licensing": { "applicable": true, "explained": true, "acknowledged": true, "attestation_text": "Counsel reviewed potential employment and licensing impact." },
+    "dna_order": { "designated_offence": false, "applicable": false, "explained": true, "acknowledged": true, "attestation_text": "Not a designated DNA offence." },
+    "firearms_prohibition": { "applicable": true, "section": "s. 110", "explained": true, "acknowledged": true, "attestation_text": "Counsel reviewed s. 110 discretionary firearms prohibition." },
+    "soira_registration": { "applicable": false, "explained": true, "acknowledged": true, "attestation_text": "Not a designated sexual offence." },
+    "travel_us": { "applicable": true, "explained": true, "acknowledged": true, "attestation_text": "US entry may be barred under US immigration law." },
+    "driving_prohibition": { "applicable": false, "explained": true, "acknowledged": true, "attestation_text": "Not a driving-related offence." },
+    "family_cps_implications": { "applicable": false, "explained": true, "acknowledged": true, "attestation_text": "No current family-court implications." }
+  },
+
+  "appeal_rights_acknowledged": {
+    "appeal_from_plea_limited_explained": true,
+    "sentence_appeal_retained": true,
+    "attestation_text": "I understand appeal from a guilty plea is limited; I retain a sentence appeal subject to leave."
+  },
+
+  "alternatives_considered": {
+    "diversion": { "discussed": true, "available": false, "why_not_pursued": "Crown did not consent to diversion." },
+    "withdrawal": { "discussed": true, "available": false, "why_not_pursued": "Crown not prepared to withdraw." },
+    "peace_bond_810": { "discussed": true, "available": false, "why_not_pursued": "Substantive offence; Crown did not propose peace bond." },
+    "discharge_730_absolute": { "discussed": true, "available": false, "why_not_pursued": "Crown opposed; range not appropriate." },
+    "discharge_730_conditional": { "discussed": true, "available": false, "why_not_pursued": "Same — Crown opposed." },
+    "trial": { "discussed": true, "available": true, "why_not_pursued": "Accused chose to plead after weighing alternatives." }
+  },
+
+  "final_instruction_to_plead": {
+    "instruction_to_plead_guilty": true,
+    "scope": "all charges",
+    "date_of_intended_plea": "2026-05-15",
+    "attestation_text": "I instruct counsel to enter a plea of guilty to count 1 on 2026-05-15.",
+    "signed_at_timestamp": "2026-04-24T18:30:00-07:00"
+  },
+
+  "instructions_record": {
+    "chain_genesis_hash": "GENESIS",
+    "entries": [
+      {
+        "sequence": 1,
+        "node_id": "intro",
+        "node_title": "About this confirmation",
+        "decision": "agree",
+        "decision_label": "Agree",
+        "note": "",
+        "ts": "2026-04-24T17:30:00-07:00",
+        "prev_hash": "GENESIS",
+        "hash": "abc1234567890def",
+        "stress_confirmed": false,
+        "affect_snapshot_ref": null
+      }
+    ],
+    "final_hash": "abc1234567890def"
+  }
+}

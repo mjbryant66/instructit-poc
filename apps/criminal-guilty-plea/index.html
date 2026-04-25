@@ -266,6 +266,56 @@ async function appendLog(entry) {
 let state = loadState();
 const app = document.getElementById("app");
 
+// Authorities loaded asynchronously from data/. Keys must match TREE node keys.
+// Mapping: jurisprudence.node_to_authorities & bar-guidance.node_to_guidance use
+// "court_not_bound" / "trial_rights" / "appeal" / "alternatives" / "final" — but
+// our tree uses "not_bound" / "trial_rights" / "appeal_rights" / "alternatives" /
+// "final". Map by alias.
+const AUTH_NODE_ALIAS = {
+  charge: "charge",
+  admission: "admission",
+  voluntariness: "voluntariness",
+  consequences: "consequences",
+  not_bound: "court_not_bound",
+  trial_rights: "trial_rights",
+  sentencing_range: "sentencing_range",
+  collateral: "collateral",
+  appeal_rights: "appeal",
+  alternatives: "alternatives",
+  final: "final",
+};
+let JURISPRUDENCE = {};
+let BAR_GUIDANCE = {};
+async function loadAuthorities() {
+  try {
+    const [jur, bar] = await Promise.all([
+      fetch("data/jurisprudence.json").then(r => r.ok ? r.json() : null),
+      fetch("data/bar-guidance.json").then(r => r.ok ? r.json() : null),
+    ]);
+    if (jur && jur.node_to_authorities) JURISPRUDENCE = jur.node_to_authorities;
+    if (bar && bar.node_to_guidance) BAR_GUIDANCE = bar.node_to_guidance;
+  } catch (e) {
+    // Probably file:// without fetch support — degrade gracefully.
+    console.info("Authorities not loaded (running file://?); node-level citations will be omitted.", e);
+  }
+}
+function renderAuthoritiesFor(nodeKey) {
+  const alias = AUTH_NODE_ALIAS[nodeKey] || nodeKey;
+  const cases = JURISPRUDENCE[alias] || [];
+  const guides = BAR_GUIDANCE[alias] || [];
+  if (!cases.length && !guides.length) return "";
+  const escAuth = (s) => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const caseHtml = cases.map(c => `<li><strong>${escAuth(c.style_of_cause)}</strong> (${escAuth(c.court)}) — ${escAuth(c.holding)}</li>`).join("");
+  const guideHtml = guides.map(g => `<li><strong>${escAuth(g.source_key)} ${escAuth(g.rule_or_section || "")}</strong> — ${escAuth(g.gist)}</li>`).join("");
+  return `
+    <details style="margin-top:18px;font-size:13px;color:#5a5a5a;font-family:ui-sans-serif,system-ui,sans-serif;">
+      <summary style="cursor:pointer;">Supporting authorities (${cases.length} case${cases.length===1?"":"s"}, ${guides.length} bar-guidance entr${guides.length===1?"y":"ies"})</summary>
+      ${caseHtml ? `<div style="margin-top:8px;"><strong>Jurisprudence</strong><ul style="margin:4px 0 8px 20px;">${caseHtml}</ul></div>` : ""}
+      ${guideHtml ? `<div><strong>Law-society / criminal-bar guidance</strong><ul style="margin:4px 0 8px 20px;">${guideHtml}</ul></div>` : ""}
+    </details>
+  `;
+}
+
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
@@ -301,6 +351,7 @@ function renderNode() {
     <div class="phase">${node.phase}</div>
     <h2>${node.title}</h2>${auth}
     <div class="body">${node.body}</div>
+    ${renderAuthoritiesFor(state.current)}
     <div class="note" id="noteBox" style="display:none;">
       <label for="note">Note to counsel (required if disagreeing)</label>
       <textarea id="note" placeholder="Explain your reasoning..."></textarea>
@@ -371,7 +422,7 @@ async function decide(decision) {
 }
 
 window.decide = decide; window.resetState = resetState;
-render();
+loadAuthorities().finally(render);
 </script>
 </body>
 </html>
