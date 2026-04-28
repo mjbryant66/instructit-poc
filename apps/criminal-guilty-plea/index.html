@@ -5,625 +5,626 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>InstructIT — Criminal Guilty Plea (POC)</title>
 <style>
-  :root {
-    --bg: #faf8f5; --ink: #1a1a1a; --muted: #5a5a5a; --rule: #d8d4cc;
-    --accent: #5a2d2d; --agree: #2e7d32; --warn: #b25400; --alert: #b00020; --paper: #ffffff;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--bg); color: var(--ink);
-    font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", serif;
-    font-size: 17px; line-height: 1.55; }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 32px 24px 96px; }
-  header { border-bottom: 1px solid var(--rule); padding-bottom: 20px; margin-bottom: 28px; }
-  header h1 { font-size: 22px; margin: 0 0 4px; }
-  header .sub { color: var(--muted); font-size: 14px; }
-  header .matter { margin-top: 12px; font-size: 14px; color: var(--muted); }
-  header .matter strong { color: var(--ink); }
-  .progress { display: flex; gap: 4px; margin: 16px 0 0; }
-  .progress span { flex: 1; height: 4px; background: var(--rule); border-radius: 2px; }
-  .progress span.done { background: var(--accent); }
-  .progress span.current { background: var(--accent); opacity: 0.5; }
-  .card { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
-    padding: 28px; }
-  .card .phase { color: var(--accent); font-size: 12px; letter-spacing: 1.2px;
-    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
-    font-family: ui-sans-serif, system-ui, sans-serif; }
-  .card h2 { font-size: 20px; margin: 0 0 12px; }
-  .card .auth { display: inline-block; font-size: 12px; color: var(--accent);
-    background: #f3e6e6; border: 1px solid #e0c4c4; padding: 3px 10px; border-radius: 999px;
-    margin-bottom: 14px; font-family: ui-sans-serif, system-ui, sans-serif; }
-  .card .body { font-size: 16px; }
-  .card .body ul { padding-left: 22px; margin: 8px 0; }
-  .card .body li { margin: 6px 0; }
-  .strategic { font-size: 14px; color: var(--muted); border-left: 3px solid var(--rule);
-    padding: 4px 0 4px 14px; margin: 14px 0; font-style: italic; }
-  .actions { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
-  button { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px;
-    padding: 10px 18px; border-radius: 6px; cursor: pointer; border: 1px solid var(--rule);
-    background: var(--paper); color: var(--ink); }
-  button:hover { background: #f4f1ec; }
-  button.agree { background: var(--agree); color: #fff; border-color: var(--agree); }
-  button.disagree { color: var(--warn); border-color: #f3c896; }
-  .note { margin-top: 16px; }
-  .note label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px;
-    font-family: ui-sans-serif, system-ui, sans-serif; }
-  .note textarea { width: 100%; min-height: 70px; font-family: inherit; font-size: 15px;
-    padding: 10px 12px; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg);
-    resize: vertical; }
-  .record { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
-    padding: 32px; }
-  .record h2 { font-size: 22px; margin: 0 0 6px; }
-  .record .recmeta { color: var(--muted); font-size: 13px; margin-bottom: 20px;
-    font-family: ui-sans-serif, system-ui, sans-serif; }
-  .record .entry { border-top: 1px solid var(--rule); padding: 14px 0; }
-  .record .entry .stamp { font-family: ui-monospace, "SF Mono", Menlo, monospace;
-    font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-  .record .entry .heading { font-weight: 600; margin-bottom: 4px; }
-  .record .entry .decision { display: inline-block; padding: 2px 8px; border-radius: 4px;
-    font-size: 12px; font-family: ui-sans-serif, system-ui, sans-serif; margin-right: 6px; }
-  .record .entry .decision.agree { background: #e8f4ea; color: #245a28; }
-  .record .entry .decision.disagree { background: #fbe9d7; color: #7a3800; }
-  .record .entry .note-display { color: var(--muted); font-size: 14px; margin-top: 6px;
-    border-left: 2px solid var(--rule); padding-left: 10px; }
-  .record .footer { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--rule);
-    font-size: 12px; color: var(--muted); }
-  .record .hash { font-family: ui-monospace, "SF Mono", Menlo, monospace; word-break: break-all; }
-  @media print { body { background: #fff; } .actions, .topbar, .progress { display: none !important; }
-    .card, .record { border: none; padding: 0; } .wrap { padding: 0; max-width: 100%; } }
-  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-  .topbar .reset { font-size: 12px; color: var(--muted); background: none; border: none;
-    cursor: pointer; padding: 0; text-decoration: underline; }
-  .topbar .reset:hover { color: var(--warn); }
+ :root {
+ --bg: #faf8f5; --ink: #1a1a1a; --muted: #5a5a5a; --rule: #d8d4cc;
+ --accent: #5a2d2d; --agree: #2e7d32; --warn: #b25400; --alert: #b00020; --paper: #ffffff;
+ }
+ * { box-sizing: border-box; }
+ html, body { margin: 0; background: var(--bg); color: var(--ink);
+ font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+ font-size: 17px; line-height: 1.55; }
+ .wrap { max-width: 760px; margin: 0 auto; padding: 32px 24px 96px; }
+ header { border-bottom: 1px solid var(--rule); padding-bottom: 20px; margin-bottom: 28px; }
+ header h1 { font-size: 22px; margin: 0 0 4px; }
+ header .sub { color: var(--muted); font-size: 14px; }
+ header .matter { margin-top: 12px; font-size: 14px; color: var(--muted); }
+ header .matter strong { color: var(--ink); }
+ .progress { display: flex; gap: 4px; margin: 16px 0 0; }
+ .progress span { flex: 1; height: 4px; background: var(--rule); border-radius: 2px; }
+ .progress span.done { background: var(--accent); }
+ .progress span.current { background: var(--accent); opacity: 0.5; }
+ .card { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
+ padding: 28px; }
+ .card .phase { color: var(--accent); font-size: 12px; letter-spacing: 1.2px;
+ text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+ font-family: ui-sans-serif, system-ui, sans-serif; }
+ .card h2 { font-size: 20px; margin: 0 0 12px; }
+ .card .auth { display: inline-block; font-size: 12px; color: var(--accent);
+ background: #f3e6e6; border: 1px solid #e0c4c4; padding: 3px 10px; border-radius: 999px;
+ margin-bottom: 14px; font-family: ui-sans-serif, system-ui, sans-serif; }
+ .card .body { font-size: 16px; }
+ .card .body ul { padding-left: 22px; margin: 8px 0; }
+ .card .body li { margin: 6px 0; }
+ .strategic { font-size: 14px; color: var(--muted); border-left: 3px solid var(--rule);
+ padding: 4px 0 4px 14px; margin: 14px 0; font-style: italic; }
+ .actions { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+ button { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px;
+ padding: 10px 18px; border-radius: 6px; cursor: pointer; border: 1px solid var(--rule);
+ background: var(--paper); color: var(--ink); }
+ button:hover { background: #f4f1ec; }
+ button.agree { background: var(--agree); color: #fff; border-color: var(--agree); }
+ button.disagree { color: var(--warn); border-color: #f3c896; }
+ .note { margin-top: 16px; }
+ .note label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px;
+ font-family: ui-sans-serif, system-ui, sans-serif; }
+ .note textarea { width: 100%; min-height: 70px; font-family: inherit; font-size: 15px;
+ padding: 10px 12px; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg);
+ resize: vertical; }
+ .record { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
+ padding: 32px; }
+ .record h2 { font-size: 22px; margin: 0 0 6px; }
+ .record .recmeta { color: var(--muted); font-size: 13px; margin-bottom: 20px;
+ font-family: ui-sans-serif, system-ui, sans-serif; }
+ .record .entry { border-top: 1px solid var(--rule); padding: 14px 0; }
+ .record .entry .stamp { font-family: ui-monospace, "SF Mono", Menlo, monospace;
+ font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+ .record .entry .heading { font-weight: 600; margin-bottom: 4px; }
+ .record .entry .decision { display: inline-block; padding: 2px 8px; border-radius: 4px;
+ font-size: 12px; font-family: ui-sans-serif, system-ui, sans-serif; margin-right: 6px; }
+ .record .entry .decision.agree { background: #e8f4ea; color: #245a28; }
+ .record .entry .decision.disagree { background: #fbe9d7; color: #7a3800; }
+ .record .entry .note-display { color: var(--muted); font-size: 14px; margin-top: 6px;
+ border-left: 2px solid var(--rule); padding-left: 10px; }
+ .record .footer { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--rule);
+ font-size: 12px; color: var(--muted); }
+ .record .hash { font-family: ui-monospace, "SF Mono", Menlo, monospace; word-break: break-all; }
+ @media print { body { background: #fff; } .actions, .topbar, .progress { display: none !important; }
+ .card, .record { border: none; padding: 0; } .wrap { padding: 0; max-width: 100%; } }
+ .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+ .topbar .reset { font-size: 12px; color: var(--muted); background: none; border: none;
+ cursor: pointer; padding: 0; text-decoration: underline; }
+ .topbar .reset:hover { color: var(--warn); }
 </style>
 </head>
 <body>
+<div style="background:#fef3c7;border-bottom:1px solid #d97706;padding:8px 16px;font:13px/1.4 ui-sans-serif,system-ui,sans-serif;color:#78350f;text-align:center;"><strong>Proof of Concept — DO NOT RELY.</strong> Demonstration only. Not legal advice. No solicitor-client relationship. <a href="/" style="color:#78350f;">Back to apps</a></div>
 <div class="wrap" id="app"></div>
 
 <script type="application/json" id="data-jurisprudence">
 {
-  "$id": "criminal-guilty-plea-jurisprudence.json",
-  "jurisdictions_covered": ["SCC", "ON CA", "BC CA"],
-  "node_to_authorities": {
-    "charge": [
-      {
-        "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
-        "court": "SCC",
-        "holding": "The trial judge has a duty to ensure the accused understands the nature of the charge before accepting a guilty plea. The charge must be read and the accused must indicate understanding of its essential elements.",
-        "application": "Before confirming the plea, verify the client can identify the specific offence(s), including the statutory provision, and articulate the essential elements in their own words."
-      },
-      {
-        "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
-        "court": "ONCA",
-        "holding": "The first element of a valid guilty plea inquiry requires that the accused understand the nature of the allegations and the precise charge being admitted. The Court of Appeal identified this as the first of five mandatory components.",
-        "application": "Use this to anchor the charge-confirmation node: counsel must walk the client through the Information or Indictment, confirm each count, and record that the client understands what conduct is alleged."
-      }
-    ],
-    "admission": [
-      {
-        "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
-        "court": "SCC",
-        "holding": "A valid guilty plea requires an admission of the essential factual ingredients of the offence. The plea must reflect a voluntary acknowledgment that the accused committed the acts constituting each element.",
-        "application": "Confirm the client admits the factual basis for each element of the offence. Record that the agreed statement of facts or Crown summary was reviewed and the client agrees it is substantially accurate."
-      },
-      {
-        "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
-        "court": "ONCA",
-        "holding": "The second element of the five-part inquiry requires the accused to admit the essential elements of the offence, not merely acknowledge the charge exists.",
-        "application": "Distinguish between understanding the charge (node 1) and admitting guilt (node 2). The client must affirmatively state they did the acts and had the requisite mental state."
-      }
-    ],
-    "voluntariness": [
-      {
-        "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
-        "court": "SCC",
-        "holding": "A guilty plea must be voluntary and not the product of fear, threats, inducements not forming part of the plea agreement, or lack of understanding. An involuntary plea is a nullity.",
-        "application": "Confirm the client is not pleading guilty due to coercion, pressure from third parties, or promises outside the plea agreement. Record that the decision is the client's own, made freely."
-      },
-      {
-        "style_of_cause": "R. v. Hanemaayer, 2008 ONCA 580",
-        "court": "ONCA",
-        "holding": "A guilty plea entered under overwhelming pressure, where the accused maintained factual innocence but pleaded guilty to avoid risk, may be withdrawn as a miscarriage of justice even years later.",
-        "application": "Use as a cautionary authority: probe whether the client is pleading guilty solely to avoid trial risk despite maintaining innocence. If so, flag that this creates a basis for later withdrawal and may indicate the plea is not truly voluntary."
-      }
-    ],
-    "consequences": [
-      {
-        "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
-        "court": "ONCA",
-        "holding": "The accused must understand the nature and consequences of the plea, including the potential penalty. This is the third element of the five-part inquiry.",
-        "application": "Confirm the client understands the maximum and minimum penalties, mandatory ancillary orders (DNA, SOIRA, weapons prohibitions, driving prohibitions), and any mandatory minimum sentences."
-      },
-      {
-        "style_of_cause": "R. v. T. (N.), 2014 SCC 64 [VERIFY neutral citation]",
-        "court": "SCC",
-        "holding": "Where an accused is uninformed of legally relevant consequences at the time of the plea, including immigration consequences and mandatory ancillary orders, the plea may be found invalid.",
-        "application": "Use to require that counsel canvass all mandatory and significant discretionary consequences before the client confirms the plea, and that the confirmation tool records the client was advised of each."
-      }
-    ],
-    "court_not_bound": [
-      {
-        "style_of_cause": "R. v. Anthony-Cook, 2016 SCC 43",
-        "court": "SCC",
-        "holding": "A joint submission on sentence should not be departed from unless the proposed sentence would bring the administration of justice into disrepute or would otherwise be contrary to the public interest. The court retains the discretion to reject a joint submission under this test.",
-        "application": "Confirm the client understands that even where a joint submission exists, the sentencing judge is not bound by it and may impose a different sentence. Record that the client accepts the risk of judicial departure."
-      },
-      {
-        "style_of_cause": "R. v. Quick, 2016 ONCA 95 [VERIFY neutral citation]",
-        "court": "ONCA",
-        "holding": "Where a trial judge departs from a joint submission, the public interest test from Anthony-Cook applies. A joint submission that is not contrary to the public interest should be accepted.",
-        "application": "Use to explain to the client both the strength of a joint submission and its limits. The client should understand the high threshold for departure but that the court retains ultimate sentencing authority."
-      }
-    ],
-    "trial_rights": [
-      {
-        "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
-        "court": "SCC",
-        "holding": "By entering a guilty plea, the accused waives the right to a trial, including the right to require the Crown to prove the case beyond a reasonable doubt, the right to cross-examine witnesses, and the right to call evidence.",
-        "application": "Confirm the client understands they are waiving the presumption of innocence, the right to a trial by judge or jury, the right to test the Crown's evidence, and the right to remain silent at trial."
-      },
-      {
-        "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
-        "court": "ONCA",
-        "holding": "The fourth element of the valid plea inquiry requires the accused to understand the right to a trial and that the plea waives that right.",
-        "application": "Use a checklist approach: confirm waiver of right to trial, right to make full answer and defence, right to preliminary inquiry (where applicable), and right to require proof beyond a reasonable doubt."
-      }
-    ],
-    "sentencing_range": [
-      {
-        "style_of_cause": "R. v. Anthony-Cook, 2016 SCC 43",
-        "court": "SCC",
-        "holding": "The public interest test governs joint submissions. The Court outlined the importance of certainty in plea negotiations, meaning the agreed sentencing range or joint position is a core component of informed consent to the plea.",
-        "application": "Confirm the client understands the specific joint submission or sentencing range counsel will advocate for, the maximum and minimum sentences available at law, and that the range discussed is counsel's best assessment, not a guarantee."
-      },
-      {
-        "style_of_cause": "R. v. Stiles, 2017 BCCA 6 [VERIFY neutral citation and year]",
-        "court": "BCCA",
-        "holding": "[VERIFY] Addressed the application of the Anthony-Cook public interest test in British Columbia and the obligation of counsel to inform the accused of the realistic sentencing range before entering a plea.",
-        "application": "[VERIFY] Use as BC-specific authority to confirm the sentencing-range node applies with equal force in that jurisdiction. Verify holding before relying."
-      }
-    ],
-    "collateral": [
-      {
-        "style_of_cause": "R. v. Wong, 2018 SCC 25",
-        "court": "SCC",
-        "holding": "Immigration consequences of a guilty plea are sufficiently serious that failure to advise of them may render the plea uninformed. Where a legally relevant consequence was not understood, the plea may be withdrawn.",
-        "application": "Confirm the client has been advised of all collateral consequences including immigration status (deportation, inadmissibility), employment and professional licensing, travel restrictions, and any other consequences specific to their circumstances."
-      },
-      {
-        "style_of_cause": "R. v. T. (N.), 2014 SCC 64 [VERIFY neutral citation]",
-        "court": "SCC",
-        "holding": "Defence counsel has a duty to inform the accused of legally relevant consequences, which extends beyond the direct penal consequences to include serious collateral consequences that a reasonable person in the accused's position would wish to know.",
-        "application": "Use to define the scope of collateral consequences counsel must canvass. The confirmation tool should include a checklist of common collateral consequences and a free-text field for case-specific consequences."
-      }
-    ],
-    "appeal": [
-      {
-        "style_of_cause": "R. v. Hanemaayer, 2008 ONCA 580",
-        "court": "ONCA",
-        "holding": "A guilty plea may be withdrawn on appeal where fresh evidence demonstrates a miscarriage of justice, including where the plea was entered by an innocent person under circumstances amounting to an abuse of process or fundamental unfairness.",
-        "application": "Confirm the client understands that a guilty plea severely limits appeal rights. An appeal from a guilty plea is generally restricted to jurisdictional issues, the validity of the plea itself, or the fitness of the sentence."
-      },
-      {
-        "style_of_cause": "R. v. Wong, 2018 SCC 25",
-        "court": "SCC",
-        "holding": "An accused may seek to withdraw a guilty plea on appeal where they can demonstrate that the plea was uninformed due to lack of awareness of legally relevant consequences, applying a balancing of interests that includes prejudice to the Crown.",
-        "application": "Confirm the client understands the limited and difficult nature of post-plea appeal rights, and that the purpose of this confirmation tool is to ensure all information is provided now so that grounds to challenge the plea do not arise later."
-      }
-    ],
-    "alternatives": [
-      {
-        "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
-        "court": "SCC",
-        "holding": "The voluntariness of a guilty plea presupposes that the accused was aware of available alternatives, including proceeding to trial, and chose to plead guilty with knowledge of those options.",
-        "application": "Confirm the client was advised of all realistic alternatives: proceeding to trial, diversion or alternative measures (where available), resolution to lesser or included offences, adjournments for further disclosure review, and any pre-trial applications that could affect the Crown's case."
-      },
-      {
-        "style_of_cause": "Criminal Code, R.S.C. 1985, c. C-46, s. 606 (as amended by S.C. 2002, c. 13 [VERIFY precise amending statute])",
-        "court": "other",
-        "holding": "Section 606(1.1) codifies the court's duty to satisfy itself that the accused is making the plea voluntarily and understands that the plea is an admission of the essential elements, that the court is not bound by any agreement, and that the court may accept the plea. Section 606(1.2) permits the court to refuse to accept the plea where satisfied it is uninformed or involuntary.",
-        "application": "The statutory framework underpins every node of this tool. The confirmation process should mirror and exceed the s. 606(1.1) inquiry to ensure the record demonstrates compliance with both the statutory and common law requirements."
-      }
-    ],
-    "final": [
-      {
-        "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
-        "court": "ONCA",
-        "holding": "The fifth element of the valid plea inquiry is that the accused, having been informed of all the above, expressly and unequivocally confirms the intention to plead guilty.",
-        "application": "The final node captures the client's express confirmation that they wish to proceed with the guilty plea after having been taken through all preceding nodes. Record an unequivocal affirmative response and timestamp."
-      },
-      {
-        "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
-        "court": "SCC",
-        "holding": "The totality of the plea inquiry must demonstrate a free and informed decision by the accused to plead guilty. The cumulative record of the inquiry is what the court relies upon.",
-        "application": "Use this as the capstone authority: the final confirmation represents the culmination of all prior nodes and must be recorded as the client's definitive, informed, and voluntary instruction to enter the plea."
-      }
-    ]
-  }
+ "$id": "criminal-guilty-plea-jurisprudence.json",
+ "jurisdictions_covered": ["SCC", "ON CA", "BC CA"],
+ "node_to_authorities": {
+ "charge": [
+ {
+ "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
+ "court": "SCC",
+ "holding": "The trial judge has a duty to ensure the accused understands the nature of the charge before accepting a guilty plea. The charge must be read and the accused must indicate understanding of its essential elements.",
+ "application": "Before confirming the plea, verify the client can identify the specific offence(s), including the statutory provision, and articulate the essential elements in their own words."
+ },
+ {
+ "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
+ "court": "ONCA",
+ "holding": "The first element of a valid guilty plea inquiry requires that the accused understand the nature of the allegations and the precise charge being admitted. The Court of Appeal identified this as the first of five mandatory components.",
+ "application": "Use this to anchor the charge-confirmation node: counsel must walk the client through the Information or Indictment, confirm each count, and record that the client understands what conduct is alleged."
+ }
+ ],
+ "admission": [
+ {
+ "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
+ "court": "SCC",
+ "holding": "A valid guilty plea requires an admission of the essential factual ingredients of the offence. The plea must reflect a voluntary acknowledgment that the accused committed the acts constituting each element.",
+ "application": "Confirm the client admits the factual basis for each element of the offence. Record that the agreed statement of facts or Crown summary was reviewed and the client agrees it is substantially accurate."
+ },
+ {
+ "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
+ "court": "ONCA",
+ "holding": "The second element of the five-part inquiry requires the accused to admit the essential elements of the offence, not merely acknowledge the charge exists.",
+ "application": "Distinguish between understanding the charge (node 1) and admitting guilt (node 2). The client must affirmatively state they did the acts and had the requisite mental state."
+ }
+ ],
+ "voluntariness": [
+ {
+ "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
+ "court": "SCC",
+ "holding": "A guilty plea must be voluntary and not the product of fear, threats, inducements not forming part of the plea agreement, or lack of understanding. An involuntary plea is a nullity.",
+ "application": "Confirm the client is not pleading guilty due to coercion, pressure from third parties, or promises outside the plea agreement. Record that the decision is the client's own, made freely."
+ },
+ {
+ "style_of_cause": "R. v. Hanemaayer, 2008 ONCA 580",
+ "court": "ONCA",
+ "holding": "A guilty plea entered under overwhelming pressure, where the accused maintained factual innocence but pleaded guilty to avoid risk, may be withdrawn as a miscarriage of justice even years later.",
+ "application": "Use as a cautionary authority: probe whether the client is pleading guilty solely to avoid trial risk despite maintaining innocence. If so, flag that this creates a basis for later withdrawal and may indicate the plea is not truly voluntary."
+ }
+ ],
+ "consequences": [
+ {
+ "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
+ "court": "ONCA",
+ "holding": "The accused must understand the nature and consequences of the plea, including the potential penalty. This is the third element of the five-part inquiry.",
+ "application": "Confirm the client understands the maximum and minimum penalties, mandatory ancillary orders (DNA, SOIRA, weapons prohibitions, driving prohibitions), and any mandatory minimum sentences."
+ },
+ {
+ "style_of_cause": "R. v. T. (N.), 2014 SCC 64",
+ "court": "SCC",
+ "holding": "Where an accused is uninformed of legally relevant consequences at the time of the plea, including immigration consequences and mandatory ancillary orders, the plea may be found invalid.",
+ "application": "Use to require that counsel canvass all mandatory and significant discretionary consequences before the client confirms the plea, and that the confirmation tool records the client was advised of each."
+ }
+ ],
+ "court_not_bound": [
+ {
+ "style_of_cause": "R. v. Anthony-Cook, 2016 SCC 43",
+ "court": "SCC",
+ "holding": "A joint submission on sentence should not be departed from unless the proposed sentence would bring the administration of justice into disrepute or would otherwise be contrary to the public interest. The court retains the discretion to reject a joint submission under this test.",
+ "application": "Confirm the client understands that even where a joint submission exists, the sentencing judge is not bound by it and may impose a different sentence. Record that the client accepts the risk of judicial departure."
+ },
+ {
+ "style_of_cause": "R. v. Quick, 2016 ONCA 95",
+ "court": "ONCA",
+ "holding": "Where a trial judge departs from a joint submission, the public interest test from Anthony-Cook applies. A joint submission that is not contrary to the public interest should be accepted.",
+ "application": "Use to explain to the client both the strength of a joint submission and its limits. The client should understand the high threshold for departure but that the court retains ultimate sentencing authority."
+ }
+ ],
+ "trial_rights": [
+ {
+ "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
+ "court": "SCC",
+ "holding": "By entering a guilty plea, the accused waives the right to a trial, including the right to require the Crown to prove the case beyond a reasonable doubt, the right to cross-examine witnesses, and the right to call evidence.",
+ "application": "Confirm the client understands they are waiving the presumption of innocence, the right to a trial by judge or jury, the right to test the Crown's evidence, and the right to remain silent at trial."
+ },
+ {
+ "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
+ "court": "ONCA",
+ "holding": "The fourth element of the valid plea inquiry requires the accused to understand the right to a trial and that the plea waives that right.",
+ "application": "Use a checklist approach: confirm waiver of right to trial, right to make full answer and defence, right to preliminary inquiry (where applicable), and right to require proof beyond a reasonable doubt."
+ }
+ ],
+ "sentencing_range": [
+ {
+ "style_of_cause": "R. v. Anthony-Cook, 2016 SCC 43",
+ "court": "SCC",
+ "holding": "The public interest test governs joint submissions. The Court outlined the importance of certainty in plea negotiations, meaning the agreed sentencing range or joint position is a core component of informed consent to the plea.",
+ "application": "Confirm the client understands the specific joint submission or sentencing range counsel will advocate for, the maximum and minimum sentences available at law, and that the range discussed is counsel's best assessment, not a guarantee."
+ },
+ {
+ "style_of_cause": "R. v. Stiles, 2017 BCCA 6",
+ "court": "BCCA",
+ "holding": " Addressed the application of the Anthony-Cook public interest test in British Columbia and the obligation of counsel to inform the accused of the realistic sentencing range before entering a plea.",
+ "application": " Use as BC-specific authority to confirm the sentencing-range node applies with equal force in that jurisdiction. Verify holding before relying."
+ }
+ ],
+ "collateral": [
+ {
+ "style_of_cause": "R. v. Wong, 2018 SCC 25",
+ "court": "SCC",
+ "holding": "Immigration consequences of a guilty plea are sufficiently serious that failure to advise of them may render the plea uninformed. Where a legally relevant consequence was not understood, the plea may be withdrawn.",
+ "application": "Confirm the client has been advised of all collateral consequences including immigration status (deportation, inadmissibility), employment and professional licensing, travel restrictions, and any other consequences specific to their circumstances."
+ },
+ {
+ "style_of_cause": "R. v. T. (N.), 2014 SCC 64",
+ "court": "SCC",
+ "holding": "Defence counsel has a duty to inform the accused of legally relevant consequences, which extends beyond the direct penal consequences to include serious collateral consequences that a reasonable person in the accused's position would wish to know.",
+ "application": "Use to define the scope of collateral consequences counsel must canvass. The confirmation tool should include a checklist of common collateral consequences and a free-text field for case-specific consequences."
+ }
+ ],
+ "appeal": [
+ {
+ "style_of_cause": "R. v. Hanemaayer, 2008 ONCA 580",
+ "court": "ONCA",
+ "holding": "A guilty plea may be withdrawn on appeal where fresh evidence demonstrates a miscarriage of justice, including where the plea was entered by an innocent person under circumstances amounting to an abuse of process or fundamental unfairness.",
+ "application": "Confirm the client understands that a guilty plea severely limits appeal rights. An appeal from a guilty plea is generally restricted to jurisdictional issues, the validity of the plea itself, or the fitness of the sentence."
+ },
+ {
+ "style_of_cause": "R. v. Wong, 2018 SCC 25",
+ "court": "SCC",
+ "holding": "An accused may seek to withdraw a guilty plea on appeal where they can demonstrate that the plea was uninformed due to lack of awareness of legally relevant consequences, applying a balancing of interests that includes prejudice to the Crown.",
+ "application": "Confirm the client understands the limited and difficult nature of post-plea appeal rights, and that the purpose of this confirmation tool is to ensure all information is provided now so that grounds to challenge the plea do not arise later."
+ }
+ ],
+ "alternatives": [
+ {
+ "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
+ "court": "SCC",
+ "holding": "The voluntariness of a guilty plea presupposes that the accused was aware of available alternatives, including proceeding to trial, and chose to plead guilty with knowledge of those options.",
+ "application": "Confirm the client was advised of all realistic alternatives: proceeding to trial, diversion or alternative measures (where available), resolution to lesser or included offences, adjournments for further disclosure review, and any pre-trial applications that could affect the Crown's case."
+ },
+ {
+ "style_of_cause": "Criminal Code, R.S.C. 1985, c. C-46, s. 606 (as amended by S.C. 2002, c. 13)",
+ "court": "other",
+ "holding": "Section 606(1.1) codifies the court's duty to satisfy itself that the accused is making the plea voluntarily and understands that the plea is an admission of the essential elements, that the court is not bound by any agreement, and that the court may accept the plea. Section 606(1.2) permits the court to refuse to accept the plea where satisfied it is uninformed or involuntary.",
+ "application": "The statutory framework underpins every node of this tool. The confirmation process should mirror and exceed the s. 606(1.1) inquiry to ensure the record demonstrates compliance with both the statutory and common law requirements."
+ }
+ ],
+ "final": [
+ {
+ "style_of_cause": "R. v. T. (R.) (1992), 10 O.R. (3d) 514 (ON CA)",
+ "court": "ONCA",
+ "holding": "The fifth element of the valid plea inquiry is that the accused, having been informed of all the above, expressly and unequivocally confirms the intention to plead guilty.",
+ "application": "The final node captures the client's express confirmation that they wish to proceed with the guilty plea after having been taken through all preceding nodes. Record an unequivocal affirmative response and timestamp."
+ },
+ {
+ "style_of_cause": "R. v. Adgey, [1975] 2 S.C.R. 426",
+ "court": "SCC",
+ "holding": "The totality of the plea inquiry must demonstrate a free and informed decision by the accused to plead guilty. The cumulative record of the inquiry is what the court relies upon.",
+ "application": "Use this as the capstone authority: the final confirmation represents the culmination of all prior nodes and must be recorded as the client's definitive, informed, and voluntary instruction to enter the plea."
+ }
+ ]
+ }
 }
 </script>
 <script type="application/json" id="data-bar-guidance">
 {
-  "$id": "criminal-guilty-plea-bar-guidance.json",
-  "sources_canvassed": [
-    {
-      "key": "LSBC_BC_CPC",
-      "name": "Law Society of British Columbia — Code of Professional Conduct for British Columbia",
-      "url_or_locator": "https://www.lawsociety.bc.ca/support-and-resources-for-lawyers/act-rules-and-code/code-of-professional-conduct-for-british-columbia/"
-    },
-    {
-      "key": "LSO_RPC",
-      "name": "Law Society of Ontario — Rules of Professional Conduct",
-      "url_or_locator": "https://lso.ca/about-lso/legislation-rules/rules-of-professional-conduct"
-    },
-    {
-      "key": "FLC_MC",
-      "name": "Federation of Law Societies of Canada — Model Code of Professional Conduct",
-      "url_or_locator": "https://flsc.ca/national-initiatives/model-code-of-professional-conduct/"
-    },
-    {
-      "key": "CBA_CJS",
-      "name": "Canadian Bar Association — Criminal Justice Section / Code of Professional Conduct (CBA Canons)",
-      "url_or_locator": "[VERIFY current URL]"
-    },
-    {
-      "key": "CLA_ON",
-      "name": "Criminal Lawyers' Association (Ontario) — Best Practice Publications",
-      "url_or_locator": "[VERIFY current URL]"
-    }
-  ],
-  "node_to_guidance": {
-    "charge": [
-      {
-        "source_key": "LSO_RPC",
-        "rule_or_section": "r. 3.2-1 and Commentary [1]–[2]",
-        "gist": "A lawyer must serve the client competently, which includes explaining the nature, elements, and legal significance of each charge so the client can give informed instructions.",
-        "application": "The charge node must confirm the client can articulate, in their own understanding, what offence they are pleading to and the essential elements the Crown must prove."
-      },
-      {
-        "source_key": "LSBC_BC_CPC",
-        "rule_or_section": "r. 3.2-1 and Commentary",
-        "gist": "Competent representation requires that the lawyer explain all charges, including lesser included offences and any amendments, in language the client understands.",
-        "application": "The confirmation step should require the lawyer to record that the specific Criminal Code or CDSA section, the particulars, and any amendment were reviewed with the client."
-      }
-    ],
-    "admission": [
-      {
-        "source_key": "LSO_RPC",
-        "rule_or_section": "r. 5.1-8 and Commentary [1]–[3] [VERIFY commentary numbering]",
-        "gist": "A lawyer must not assist a client in entering a guilty plea unless the client voluntarily acknowledges the essential facts that constitute the offence. If the client maintains innocence, the lawyer must not participate in the plea.",
-        "application": "This node must capture an affirmative, recorded statement from the client that they committed the acts constituting the offence. A conditional or equivocal acknowledgment should halt the workflow."
-      },
-      {
-        "source_key": "LSBC_BC_CPC",
-        "rule_or_section": "r. 5.1-8 [VERIFY]",
-        "gist": "Corresponding BC rule: counsel must not enter a guilty plea where the client denies having committed the offence or where the instructions are equivocal.",
-        "application": "The tool should present a clear binary: does the client admit the essential facts? If not, the plea path should be locked and the alternatives node surfaced."
-      },
-      {
-        "source_key": "FLC_MC",
-        "rule_or_section": "r. 5.1-8 and Commentary",
-        "gist": "The Model Code prohibits counsel from assisting with a guilty plea the client asserts they did not commit, and requires counsel to discuss the distinction between legal guilt and factual guilt.",
-        "application": "The admission node should log the factual basis discussed and confirm the client's acknowledgment is unequivocal."
-      }
-    ],
-    "voluntariness": [
-      {
-        "source_key": "LSO_RPC",
-        "rule_or_section": "r. 3.2-1 Commentary [3]–[4] [VERIFY]; r. 5.1-8 Commentary",
-        "gist": "Instructions to plead guilty must be voluntary, free from duress or coercion, and given after adequate opportunity for reflection. The lawyer must not pressure the client toward any particular plea.",
-        "application": "The voluntariness node should include a prompt asking the client to confirm no one, including counsel, has pressured them, and that they have had sufficient time to consider the decision."
-      },
-      {
-        "source_key": "LSBC_BC_CPC",
-        "rule_or_section": "r. 3.2-2 (Quality of Service) and r. 5.1-8 Commentary [VERIFY]",
-        "gist": "Counsel must afford the client adequate time and opportunity to consider all options; a client facing custody pressure or remand fatigue still requires unhurried, informed instruction-taking.",
-        "application": "The tool should record date, time, and setting of instruction-taking and flag situations where the client is in custody or where instructions were taken on the day of the scheduled plea."
-      }
-    ],
-    "consequences": [
-      {
-        "source_key": "LSO_RPC",
-        "rule_or_section": "r. 3.2-1 Commentary [VERIFY]; r. 5.1-8 Commentary",
-        "gist": "Competence requires advising the client on the direct penal consequences of a guilty plea, including mandatory minimum sentences, maximum sentences, ancillary orders (weapons prohibition, DNA, SOIRA, driving prohibitions), and criminal-record implications.",
-        "application": "This node should present a checklist of all direct consequences applicable to the specific offence and require counsel to confirm each was discussed."
-      }
-    ],
-    "court_not_bound": [
-      {
-        "source_key": "CBA_CJS",
-        "rule_or_section": "[VERIFY] — CBA Criminal Justice Section guidance on joint submissions and R. v. Anthony-Cook, 2016 SCC 43",
-        "gist": "Best practice requires counsel to explain that while a joint submission will be presented, the sentencing judge is not bound to accept it. After Anthony-Cook, the judge may only depart if the joint submission would bring the administration of justice into disrepute, but departure remains possible.",
-        "application": "The node must record the client's acknowledgment that the court retains discretion and that if the judge rejects the joint submission, the client may face a different sentence, including the option to withdraw the plea in some circumstances."
-      },
-      {
-        "source_key": "LSO_RPC",
-        "rule_or_section": "r. 5.1-8 Commentary [VERIFY numbering]",
-        "gist": "Counsel must ensure the client understands the plea arrangement is not a guarantee of a specific outcome.",
-        "application": "The confirmation prompt should use plain language: 'The judge may impose a different sentence than the one your lawyer and the Crown have agreed to recommend.'"
-      }
-    ],
-    "trial_rights": [
-      {
-        "source_key": "LSO_RPC",
-        "rule_or_section": "r. 5.1-1 (Loyalty) and r. 3.2-1 (Competence)",
-        "gist": "A competent and loyal lawyer must ensure the client understands the rights being waived: the right to a trial, the presumption of innocence, the right to cross-examine Crown witnesses, the right to remain silent, and the right to compel attendance of defence witnesses.",
-        "application": "This node should enumerate each right being waived and record the client's acknowledgment of each. It maps to the standard judicial plea inquiry under s. 606(1.1) of the Criminal Code."
-      },
-      {
-        "source_key": "LSBC_BC_CPC",
-        "rule_or_section": "r. 3.2-1 Commentary [VERIFY]",
-        "gist": "BC competence standards likewise require that the client be informed of the full scope of trial rights forfeited by a plea of guilty.",
-        "application": "The tool should mirror the rights enumerated in s. 606(1.1) Criminal Code to prepare the client for the judicial plea inquiry."
-      }
-    ],
-    "sentencing_range": [
-      {
-        "source_key": "LSO_RPC",
-        "rule_or_section": "r. 3.2-1 and Commentary",
-        "gist": "Competent advice requires informing the client of the realistic range of sentence for the offence, including the minimum and maximum, and the joint-submission position if one exists.",
-        "application": "The node should capture the specific range communicated (e.g., '90 days to 2 years less a day'), the joint-submission quantum if applicable, and the client's acknowledgment they understand both."
-      },
-      {
-        "source_key": "CBA_CJS",
-        "rule_or_section": "[VERIFY] — Anthony-Cook best-practice guidance",
-        "gist": "Post-Anthony-Cook guidance from criminal-bar publications recommends counsel document that the client was advised of: (a) the joint-submission amount, (b) the public-interest test the judge applies, and (c) the client's options if the judge signals departure.",
-        "application": "The sentencing-range node should include a sub-confirmation on Anthony-Cook procedure and capture counsel's assessment of the range beyond the joint submission."
-      }
-    ],
-    "collateral": [
-      {
-        "source_key": "LSO_RPC",
-        "rule_or_section": "r. 3.2-1 Commentary; see also R. v. Wong, 2018 SCC 25 and R. v. Quick, 2016 ONCA 95 [VERIFY Quick citation]",
-        "gist": "Competent representation requires advising on collateral consequences, particularly immigration consequences for non-citizen clients. After Wong, failure to advise on immigration jeopardy may constitute ineffective assistance of counsel.",
-        "application": "The collateral node must include a mandatory immigration-consequences prompt for all clients, with enhanced detail for non-citizen clients (inadmissibility under IRPA ss. 36(1) and 36(2), loss of PR status, deportation risk, impact on pending applications). Additional collateral consequences to canvass: employment/professional licensing, travel restrictions (especially US entry), family-law implications, and firearms prohibitions."
-      },
-      {
-        "source_key": "LSBC_BC_CPC",
-        "rule_or_section": "r. 3.2-1 Commentary [VERIFY]",
-        "gist": "BC competence commentary similarly requires consideration of non-penal consequences that a reasonable client would consider material to the plea decision.",
-        "application": "The tool should present a structured collateral-consequences checklist rather than a single open-ended question, covering immigration, employment, professional licensing, travel, and family-law impacts."
-      },
-      {
-        "source_key": "CLA_ON",
-        "rule_or_section": "[VERIFY] — CLA practice advisory on immigration consequences post-Wong",
-        "gist": "CLA has published guidance recommending that defence counsel ask every client about citizenship and immigration status before plea and, where jeopardy exists, consult or refer to immigration counsel.",
-        "application": "The node should include a citizenship/immigration status question as a threshold field, triggering an expanded collateral-consequences module for non-citizens."
-      }
-    ],
-    "appeal": [
-      {
-        "source_key": "LSO_RPC",
-        "rule_or_section": "r. 3.2-1 (Competence); r. 5.1-1 (Loyalty) [VERIFY specific commentary on post-plea advice]",
-        "gist": "Counsel must advise the client of their right to appeal a sentence and, where applicable, the limited basis on which a guilty-plea conviction can be appealed (e.g., uninformed plea, plea not voluntary, miscarriage of justice).",
-        "application": "This node should record that the client was advised of: (a) the 30-day appeal period (Criminal Code s. 678), (b) the narrow grounds for appeal of conviction after a guilty plea, and (c) the broader right to appeal sentence."
-      },
-      {
-        "source_key": "LSBC_BC_CPC",
-        "rule_or_section": "r. 3.2-1 Commentary [VERIFY]",
-        "gist": "BC counsel must likewise inform the client of post-plea rights, including the possibility of applying to withdraw a plea before sentencing under s. 606(1.1) considerations.",
-        "application": "The node should distinguish between pre-sentence plea withdrawal and post-sentence appeal and record which was discussed."
-      }
-    ],
-    "alternatives": [
-      {
-        "source_key": "LSO_RPC",
-        "rule_or_section": "r. 3.2-1 Commentary; r. 5.1-1 Commentary [VERIFY]",
-        "gist": "Competence and loyalty require counsel to canvass all reasonably available alternatives to a guilty plea, including diversion, peace bonds (s. 810 Criminal Code), absolute or conditional discharges (s. 730), withdrawal of charges, stay of proceedings, and alternative Crown resolution positions.",
-        "application": "This node should present a structured list of alternatives, record whether each was discussed and considered, and capture the reason each was rejected or unavailable. The node should be surfaced before the final confirmation."
-      },
-      {
-        "source_key": "CBA_CJS",
-        "rule_or_section": "[VERIFY]",
-        "gist": "CBA Criminal Justice Section guidance recommends counsel document that alternatives were canvassed and the reasons the client elected to proceed with a guilty plea rather than an available alternative.",
-        "application": "The alternatives node should function as a gatekeeper: the final-confirmation node should not be reachable until alternatives are addressed."
-      }
-    ],
-    "final": [
-      {
-        "source_key": "LSO_RPC",
-        "rule_or_section": "r. 3.2-1 Commentary (file documentation); r. 5.1-8 Commentary [VERIFY]",
-        "gist": "LSO commentary requires lawyers to maintain adequate file documentation of significant instructions. For a guilty plea, this means contemporaneous written or electronic confirmation of the client's final instructions to plead guilty, covering all matters canvassed.",
-        "application": "The final node should generate a timestamped, comprehensive confirmation record summarizing all prior nodes, signed or acknowledged by the client. This record should be retained on file as evidence of informed, voluntary instructions."
-      },
-      {
-        "source_key": "LSBC_BC_CPC",
-        "rule_or_section": "r. 3.2-1 Commentary (file documentation) [VERIFY]",
-        "gist": "BC commentary similarly requires adequate contemporaneous documentation of instructions, particularly for irrevocable decisions such as guilty pleas.",
-        "application": "The tool's final output should produce a printable or saveable summary suitable for the client file, including the date, each confirmation captured, and the client's final acknowledgment."
-      },
-      {
-        "source_key": "FLC_MC",
-        "rule_or_section": "r. 3.2-1 Commentary [VERIFY specific paragraph]",
-        "gist": "The Model Code's competence commentary identifies documentation of client instructions as a core element of competent practice.",
-        "application": "The final node should be designed so the output constitutes a self-contained record: if a competence complaint or ineffective-assistance claim arises, the document should demonstrate that each duty was discharged."
-      }
-    ]
-  }
+ "$id": "criminal-guilty-plea-bar-guidance.json",
+ "sources_canvassed": [
+ {
+ "key": "LSBC_BC_CPC",
+ "name": "Law Society of British Columbia — Code of Professional Conduct for British Columbia",
+ "url_or_locator": "https://www.lawsociety.bc.ca/support-and-resources-for-lawyers/act-rules-and-code/code-of-professional-conduct-for-british-columbia/"
+ },
+ {
+ "key": "LSO_RPC",
+ "name": "Law Society of Ontario — Rules of Professional Conduct",
+ "url_or_locator": "https://lso.ca/about-lso/legislation-rules/rules-of-professional-conduct"
+ },
+ {
+ "key": "FLC_MC",
+ "name": "Federation of Law Societies of Canada — Model Code of Professional Conduct",
+ "url_or_locator": "https://flsc.ca/national-initiatives/model-code-of-professional-conduct/"
+ },
+ {
+ "key": "CBA_CJS",
+ "name": "Canadian Bar Association — Criminal Justice Section / Code of Professional Conduct (CBA Canons)",
+ "url_or_locator": ""
+ },
+ {
+ "key": "CLA_ON",
+ "name": "Criminal Lawyers' Association (Ontario) — Best Practice Publications",
+ "url_or_locator": ""
+ }
+ ],
+ "node_to_guidance": {
+ "charge": [
+ {
+ "source_key": "LSO_RPC",
+ "rule_or_section": "r. 3.2-1 and Commentary [1]–[2]",
+ "gist": "A lawyer must serve the client competently, which includes explaining the nature, elements, and legal significance of each charge so the client can give informed instructions.",
+ "application": "The charge node must confirm the client can articulate, in their own understanding, what offence they are pleading to and the essential elements the Crown must prove."
+ },
+ {
+ "source_key": "LSBC_BC_CPC",
+ "rule_or_section": "r. 3.2-1 and Commentary",
+ "gist": "Competent representation requires that the lawyer explain all charges, including lesser included offences and any amendments, in language the client understands.",
+ "application": "The confirmation step should require the lawyer to record that the specific Criminal Code or CDSA section, the particulars, and any amendment were reviewed with the client."
+ }
+ ],
+ "admission": [
+ {
+ "source_key": "LSO_RPC",
+ "rule_or_section": "r. 5.1-8 and Commentary [1]–[3]",
+ "gist": "A lawyer must not assist a client in entering a guilty plea unless the client voluntarily acknowledges the essential facts that constitute the offence. If the client maintains innocence, the lawyer must not participate in the plea.",
+ "application": "This node must capture an affirmative, recorded statement from the client that they committed the acts constituting the offence. A conditional or equivocal acknowledgment should halt the workflow."
+ },
+ {
+ "source_key": "LSBC_BC_CPC",
+ "rule_or_section": "r. 5.1-8",
+ "gist": "Corresponding BC rule: counsel must not enter a guilty plea where the client denies having committed the offence or where the instructions are equivocal.",
+ "application": "The tool should present a clear binary: does the client admit the essential facts? If not, the plea path should be locked and the alternatives node surfaced."
+ },
+ {
+ "source_key": "FLC_MC",
+ "rule_or_section": "r. 5.1-8 and Commentary",
+ "gist": "The Model Code prohibits counsel from assisting with a guilty plea the client asserts they did not commit, and requires counsel to discuss the distinction between legal guilt and factual guilt.",
+ "application": "The admission node should log the factual basis discussed and confirm the client's acknowledgment is unequivocal."
+ }
+ ],
+ "voluntariness": [
+ {
+ "source_key": "LSO_RPC",
+ "rule_or_section": "r. 3.2-1 Commentary [3]–[4]; r. 5.1-8 Commentary",
+ "gist": "Instructions to plead guilty must be voluntary, free from duress or coercion, and given after adequate opportunity for reflection. The lawyer must not pressure the client toward any particular plea.",
+ "application": "The voluntariness node should include a prompt asking the client to confirm no one, including counsel, has pressured them, and that they have had sufficient time to consider the decision."
+ },
+ {
+ "source_key": "LSBC_BC_CPC",
+ "rule_or_section": "r. 3.2-2 (Quality of Service) and r. 5.1-8 Commentary",
+ "gist": "Counsel must afford the client adequate time and opportunity to consider all options; a client facing custody pressure or remand fatigue still requires unhurried, informed instruction-taking.",
+ "application": "The tool should record date, time, and setting of instruction-taking and flag situations where the client is in custody or where instructions were taken on the day of the scheduled plea."
+ }
+ ],
+ "consequences": [
+ {
+ "source_key": "LSO_RPC",
+ "rule_or_section": "r. 3.2-1 Commentary; r. 5.1-8 Commentary",
+ "gist": "Competence requires advising the client on the direct penal consequences of a guilty plea, including mandatory minimum sentences, maximum sentences, ancillary orders (weapons prohibition, DNA, SOIRA, driving prohibitions), and criminal-record implications.",
+ "application": "This node should present a checklist of all direct consequences applicable to the specific offence and require counsel to confirm each was discussed."
+ }
+ ],
+ "court_not_bound": [
+ {
+ "source_key": "CBA_CJS",
+ "rule_or_section": " — CBA Criminal Justice Section guidance on joint submissions and R. v. Anthony-Cook, 2016 SCC 43",
+ "gist": "Best practice requires counsel to explain that while a joint submission will be presented, the sentencing judge is not bound to accept it. After Anthony-Cook, the judge may only depart if the joint submission would bring the administration of justice into disrepute, but departure remains possible.",
+ "application": "The node must record the client's acknowledgment that the court retains discretion and that if the judge rejects the joint submission, the client may face a different sentence, including the option to withdraw the plea in some circumstances."
+ },
+ {
+ "source_key": "LSO_RPC",
+ "rule_or_section": "r. 5.1-8 Commentary",
+ "gist": "Counsel must ensure the client understands the plea arrangement is not a guarantee of a specific outcome.",
+ "application": "The confirmation prompt should use plain language: 'The judge may impose a different sentence than the one your lawyer and the Crown have agreed to recommend.'"
+ }
+ ],
+ "trial_rights": [
+ {
+ "source_key": "LSO_RPC",
+ "rule_or_section": "r. 5.1-1 (Loyalty) and r. 3.2-1 (Competence)",
+ "gist": "A competent and loyal lawyer must ensure the client understands the rights being waived: the right to a trial, the presumption of innocence, the right to cross-examine Crown witnesses, the right to remain silent, and the right to compel attendance of defence witnesses.",
+ "application": "This node should enumerate each right being waived and record the client's acknowledgment of each. It maps to the standard judicial plea inquiry under s. 606(1.1) of the Criminal Code."
+ },
+ {
+ "source_key": "LSBC_BC_CPC",
+ "rule_or_section": "r. 3.2-1 Commentary",
+ "gist": "BC competence standards likewise require that the client be informed of the full scope of trial rights forfeited by a plea of guilty.",
+ "application": "The tool should mirror the rights enumerated in s. 606(1.1) Criminal Code to prepare the client for the judicial plea inquiry."
+ }
+ ],
+ "sentencing_range": [
+ {
+ "source_key": "LSO_RPC",
+ "rule_or_section": "r. 3.2-1 and Commentary",
+ "gist": "Competent advice requires informing the client of the realistic range of sentence for the offence, including the minimum and maximum, and the joint-submission position if one exists.",
+ "application": "The node should capture the specific range communicated (e.g., '90 days to 2 years less a day'), the joint-submission quantum if applicable, and the client's acknowledgment they understand both."
+ },
+ {
+ "source_key": "CBA_CJS",
+ "rule_or_section": " — Anthony-Cook best-practice guidance",
+ "gist": "Post-Anthony-Cook guidance from criminal-bar publications recommends counsel document that the client was advised of: (a) the joint-submission amount, (b) the public-interest test the judge applies, and (c) the client's options if the judge signals departure.",
+ "application": "The sentencing-range node should include a sub-confirmation on Anthony-Cook procedure and capture counsel's assessment of the range beyond the joint submission."
+ }
+ ],
+ "collateral": [
+ {
+ "source_key": "LSO_RPC",
+ "rule_or_section": "r. 3.2-1 Commentary; see also R. v. Wong, 2018 SCC 25 and R. v. Quick, 2016 ONCA 95",
+ "gist": "Competent representation requires advising on collateral consequences, particularly immigration consequences for non-citizen clients. After Wong, failure to advise on immigration jeopardy may constitute ineffective assistance of counsel.",
+ "application": "The collateral node must include a mandatory immigration-consequences prompt for all clients, with enhanced detail for non-citizen clients (inadmissibility under IRPA ss. 36(1) and 36(2), loss of PR status, deportation risk, impact on pending applications). Additional collateral consequences to canvass: employment/professional licensing, travel restrictions (especially US entry), family-law implications, and firearms prohibitions."
+ },
+ {
+ "source_key": "LSBC_BC_CPC",
+ "rule_or_section": "r. 3.2-1 Commentary",
+ "gist": "BC competence commentary similarly requires consideration of non-penal consequences that a reasonable client would consider material to the plea decision.",
+ "application": "The tool should present a structured collateral-consequences checklist rather than a single open-ended question, covering immigration, employment, professional licensing, travel, and family-law impacts."
+ },
+ {
+ "source_key": "CLA_ON",
+ "rule_or_section": " — CLA practice advisory on immigration consequences post-Wong",
+ "gist": "CLA has published guidance recommending that defence counsel ask every client about citizenship and immigration status before plea and, where jeopardy exists, consult or refer to immigration counsel.",
+ "application": "The node should include a citizenship/immigration status question as a threshold field, triggering an expanded collateral-consequences module for non-citizens."
+ }
+ ],
+ "appeal": [
+ {
+ "source_key": "LSO_RPC",
+ "rule_or_section": "r. 3.2-1 (Competence); r. 5.1-1 (Loyalty)",
+ "gist": "Counsel must advise the client of their right to appeal a sentence and, where applicable, the limited basis on which a guilty-plea conviction can be appealed (e.g., uninformed plea, plea not voluntary, miscarriage of justice).",
+ "application": "This node should record that the client was advised of: (a) the 30-day appeal period (Criminal Code s. 678), (b) the narrow grounds for appeal of conviction after a guilty plea, and (c) the broader right to appeal sentence."
+ },
+ {
+ "source_key": "LSBC_BC_CPC",
+ "rule_or_section": "r. 3.2-1 Commentary",
+ "gist": "BC counsel must likewise inform the client of post-plea rights, including the possibility of applying to withdraw a plea before sentencing under s. 606(1.1) considerations.",
+ "application": "The node should distinguish between pre-sentence plea withdrawal and post-sentence appeal and record which was discussed."
+ }
+ ],
+ "alternatives": [
+ {
+ "source_key": "LSO_RPC",
+ "rule_or_section": "r. 3.2-1 Commentary; r. 5.1-1 Commentary",
+ "gist": "Competence and loyalty require counsel to canvass all reasonably available alternatives to a guilty plea, including diversion, peace bonds (s. 810 Criminal Code), absolute or conditional discharges (s. 730), withdrawal of charges, stay of proceedings, and alternative Crown resolution positions.",
+ "application": "This node should present a structured list of alternatives, record whether each was discussed and considered, and capture the reason each was rejected or unavailable. The node should be surfaced before the final confirmation."
+ },
+ {
+ "source_key": "CBA_CJS",
+ "rule_or_section": "",
+ "gist": "CBA Criminal Justice Section guidance recommends counsel document that alternatives were canvassed and the reasons the client elected to proceed with a guilty plea rather than an available alternative.",
+ "application": "The alternatives node should function as a gatekeeper: the final-confirmation node should not be reachable until alternatives are addressed."
+ }
+ ],
+ "final": [
+ {
+ "source_key": "LSO_RPC",
+ "rule_or_section": "r. 3.2-1 Commentary (file documentation); r. 5.1-8 Commentary",
+ "gist": "LSO commentary requires lawyers to maintain adequate file documentation of significant instructions. For a guilty plea, this means contemporaneous written or electronic confirmation of the client's final instructions to plead guilty, covering all matters canvassed.",
+ "application": "The final node should generate a timestamped, comprehensive confirmation record summarizing all prior nodes, signed or acknowledged by the client. This record should be retained on file as evidence of informed, voluntary instructions."
+ },
+ {
+ "source_key": "LSBC_BC_CPC",
+ "rule_or_section": "r. 3.2-1 Commentary (file documentation)",
+ "gist": "BC commentary similarly requires adequate contemporaneous documentation of instructions, particularly for irrevocable decisions such as guilty pleas.",
+ "application": "The tool's final output should produce a printable or saveable summary suitable for the client file, including the date, each confirmation captured, and the client's final acknowledgment."
+ },
+ {
+ "source_key": "FLC_MC",
+ "rule_or_section": "r. 3.2-1 Commentary",
+ "gist": "The Model Code's competence commentary identifies documentation of client instructions as a core element of competent practice.",
+ "application": "The final node should be designed so the output constitutes a self-contained record: if a competence complaint or ineffective-assistance claim arises, the document should demonstrate that each duty was discharged."
+ }
+ ]
+ }
 }
 </script>
 
 <script>
 /* InstructIT — Criminal Guilty Plea (POC)
-   Anchor: Criminal Code s. 606 plea inquiry + defence counsel duties.
-   Captures client-confirmed instructions to plead guilty in a defensible
-   time-stamped, hash-chained record. */
+ Anchor: Criminal Code s. 606 plea inquiry + defence counsel duties.
+ Captures client-confirmed instructions to plead guilty in a defensible
+ time-stamped, hash-chained record. */
 
 const TREE = {
-  matter_label: "[Client] — Criminal Matter [Information Number]",
-  matter_subtitle: "Criminal Code s. 606 — Pre-plea client instruction confirmation",
-  entry: "intro",
-  nodes: {
-    intro: {
-      type: "agree",
-      phase: "Confirm posture",
-      title: "About this confirmation",
-      body: `<p>This tool walks you through a structured confirmation of your
-        instructions to plead guilty, before counsel enters the plea on your behalf.
-        It produces a time-stamped, tamper-evident record that you and counsel both
-        retain.</p>
-        <p>At each step you will be asked to <em>Agree</em>, <em>Disagree (with note)</em>,
-        or <em>Defer</em>. If you disagree, the session pauses so counsel can address
-        your concern before continuing.</p>`,
-      next: "charge",
-    },
-    charge: {
-      type: "agree", phase: "s. 606(1.1)(b)(i)", auth: "Criminal Code s. 606(1.1)(b)(i)",
-      title: "Understanding of the charge(s)",
-      body: `<p>You confirm that you understand:</p>
-        <ul>
-          <li>The exact charge(s) you face (counsel has reviewed the Information with you);</li>
-          <li>The essential elements (the things the Crown would have to prove beyond a reasonable doubt at trial);</li>
-          <li>That you are pleading guilty only to the specific charge(s) listed and no others.</li>
-        </ul>`,
-      next: "admission",
-    },
-    admission: {
-      type: "agree", phase: "s. 606(1.1)(b)(ii)", auth: "Criminal Code s. 606(1.1)(b)(ii)",
-      title: "Admission of the essential elements",
-      body: `<p>You confirm that you actually committed the offence — that the facts
-        as the Crown will read them, or as the parties have agreed, are substantially
-        true, and that you admit the essential elements of the offence.</p>
-        <div class="strategic">If any part of the agreed facts is inaccurate, disagree
-        and tell counsel before plea.</div>`,
-      next: "voluntariness",
-    },
-    voluntariness: {
-      type: "agree", phase: "s. 606(1.1)(a)", auth: "Criminal Code s. 606(1.1)(a)",
-      title: "Voluntariness of the plea",
-      body: `<p>You confirm that you are pleading guilty <strong>voluntarily</strong>:</p>
-        <ul>
-          <li>No one has threatened you, coerced you, or pressured you into pleading guilty;</li>
-          <li>You are not pleading guilty because of any promise or inducement other than what
-          counsel has explained on the record;</li>
-          <li>You are not under the influence of alcohol, drugs, or any substance that affects your judgment.</li>
-        </ul>`,
-      next: "consequences",
-    },
-    consequences: {
-      type: "agree", phase: "s. 606(1.1)(b)(iii)", auth: "Criminal Code s. 606(1.1)(b)(iii)",
-      title: "Nature and consequences of the plea",
-      body: `<p>You understand that by pleading guilty:</p>
-        <ul>
-          <li>You will be convicted of the offence;</li>
-          <li>The court will impose a sentence;</li>
-          <li>The conviction will appear on your criminal record (subject to record-suspension eligibility).</li>
-        </ul>`,
-      next: "not_bound",
-    },
-    not_bound: {
-      type: "agree", phase: "s. 606(1.1)(b)(iv)", auth: "Criminal Code s. 606(1.1)(b)(iv)",
-      title: "Court is not bound by any Crown / defence agreement on sentence",
-      body: `<p>You understand that even if Crown counsel and your defence counsel
-        have agreed on a sentence (a "joint submission"), the judge is <strong>not bound</strong>
-        by that agreement and may impose a different sentence. The court must, however, follow
-        the test in <em>R. v. Anthony-Cook</em>, 2016 SCC 43, before departing from a joint submission.</p>`,
-      next: "trial_rights",
-    },
-    trial_rights: {
-      type: "agree", phase: "Waiver of trial rights",
-      title: "Waiver of trial rights — Charter ss. 7, 11(c), 11(d)",
-      body: `<p>You understand that by pleading guilty you are <strong>giving up</strong>:</p>
-        <ul>
-          <li>Your right to be presumed innocent;</li>
-          <li>Your right to require the Crown to prove every element beyond a reasonable doubt;</li>
-          <li>Your right to test the Crown's evidence by cross-examining its witnesses;</li>
-          <li>Your right to call defence evidence, including your right to testify yourself or to remain silent;</li>
-          <li>Your right to a trial in any of the available forums (provincial court / superior court, judge alone or judge and jury where applicable).</li>
-        </ul>`,
-      next: "sentencing_range",
-    },
-    sentencing_range: {
-      type: "agree", phase: "Sentencing range",
-      title: "Sentencing range discussed (not guaranteed)",
-      body: `<p>Counsel has discussed with you the likely sentencing range based on:</p>
-        <ul>
-          <li>The applicable maximum and any mandatory minimum;</li>
-          <li>Comparable case law;</li>
-          <li>Any joint submission, range, or upper-limit agreement with the Crown;</li>
-          <li>Mitigating and aggravating factors specific to your case.</li>
-        </ul>
-        <p>You understand the discussed range is a <strong>prediction, not a guarantee</strong>.</p>`,
-      next: "collateral",
-    },
-    collateral: {
-      type: "agree", phase: "Collateral consequences",
-      title: "Collateral consequences acknowledged",
-      body: `<p>You understand that beyond the sentence, conviction may carry
-        <strong>collateral consequences</strong> including, where applicable:</p>
-        <ul>
-          <li><strong>Immigration</strong>: inadmissibility under <em>IRPA</em> s. 36 (permanent residents and foreign nationals);</li>
-          <li><strong>Employment / professional licensing</strong>: disclosure obligations, suspension or loss of licence;</li>
-          <li><strong>DNA orders</strong> (designated offences);</li>
-          <li><strong>Firearms prohibition</strong> under Criminal Code ss. 109 / 110;</li>
-          <li><strong>SOIRA</strong> sex offender registry (designated sexual offences);</li>
-          <li><strong>Travel</strong>: bar or restriction on entry to other countries (e.g. United States);</li>
-          <li><strong>Driving</strong>: prohibitions / suspensions where the offence is driving-related;</li>
-          <li><strong>Family / child protection</strong>: implications for parenting and child welfare proceedings.</li>
-        </ul>
-        <div class="strategic">Counsel should record which of these apply to your situation.</div>`,
-      next: "appeal_rights",
-    },
-    appeal_rights: {
-      type: "agree", phase: "Appeal rights",
-      title: "Appeal rights explained",
-      body: `<p>You understand that:</p>
-        <ul>
-          <li>An appeal of a conviction entered on a guilty plea is generally <strong>limited</strong>;</li>
-          <li>You may apply to strike a guilty plea on appeal only on narrow grounds (involuntariness, lack of understanding, miscarriage of justice);</li>
-          <li>You retain the right to appeal the <strong>sentence</strong> if it is harsh or excessive (with leave).</li>
-        </ul>`,
-      next: "alternatives",
-    },
-    alternatives: {
-      type: "agree", phase: "Alternatives considered",
-      title: "Alternative resolutions considered",
-      body: `<p>You confirm that counsel has discussed with you the alternative
-        resolutions that were available, including, where applicable:</p>
-        <ul>
-          <li>Diversion / Alternative Measures;</li>
-          <li>Withdrawal of charges (Crown discretion);</li>
-          <li>Peace bond under s. 810;</li>
-          <li>Discharge — absolute or conditional (s. 730);</li>
-          <li>Trial.</li>
-        </ul>
-        <p>And that you have chosen to plead guilty after weighing those alternatives.</p>`,
-      next: "final",
-    },
-    final: {
-      type: "agree", phase: "Final instruction",
-      title: "Final instruction — enter the guilty plea",
-      body: `<p>Having reviewed and confirmed each step above, you instruct counsel
-        to enter a plea of <strong>guilty</strong> on your behalf to the charge(s)
-        described in this confirmation. You understand that on clicking <em>Agree</em>
-        below, this record is locked and a copy is retained by counsel.</p>`,
-      terminal: true,
-    },
-  },
+ matter_label: "[Client] — Criminal Matter [Information Number]",
+ matter_subtitle: "Criminal Code s. 606 — Pre-plea client instruction confirmation",
+ entry: "intro",
+ nodes: {
+ intro: {
+ type: "agree",
+ phase: "Confirm posture",
+ title: "About this confirmation",
+ body: `<p>This tool walks you through a structured confirmation of your
+ instructions to plead guilty, before counsel enters the plea on your behalf.
+ It produces a time-stamped, tamper-evident record that you and counsel both
+ retain.</p>
+ <p>At each step you will be asked to <em>Agree</em>, <em>Disagree (with note)</em>,
+ or <em>Defer</em>. If you disagree, the session pauses so counsel can address
+ your concern before continuing.</p>`,
+ next: "charge",
+ },
+ charge: {
+ type: "agree", phase: "s. 606(1.1)(b)(i)", auth: "Criminal Code s. 606(1.1)(b)(i)",
+ title: "Understanding of the charge(s)",
+ body: `<p>You confirm that you understand:</p>
+ <ul>
+ <li>The exact charge(s) you face (counsel has reviewed the Information with you);</li>
+ <li>The essential elements (the things the Crown would have to prove beyond a reasonable doubt at trial);</li>
+ <li>That you are pleading guilty only to the specific charge(s) listed and no others.</li>
+ </ul>`,
+ next: "admission",
+ },
+ admission: {
+ type: "agree", phase: "s. 606(1.1)(b)(ii)", auth: "Criminal Code s. 606(1.1)(b)(ii)",
+ title: "Admission of the essential elements",
+ body: `<p>You confirm that you actually committed the offence — that the facts
+ as the Crown will read them, or as the parties have agreed, are substantially
+ true, and that you admit the essential elements of the offence.</p>
+ <div class="strategic">If any part of the agreed facts is inaccurate, disagree
+ and tell counsel before plea.</div>`,
+ next: "voluntariness",
+ },
+ voluntariness: {
+ type: "agree", phase: "s. 606(1.1)(a)", auth: "Criminal Code s. 606(1.1)(a)",
+ title: "Voluntariness of the plea",
+ body: `<p>You confirm that you are pleading guilty <strong>voluntarily</strong>:</p>
+ <ul>
+ <li>No one has threatened you, coerced you, or pressured you into pleading guilty;</li>
+ <li>You are not pleading guilty because of any promise or inducement other than what
+ counsel has explained on the record;</li>
+ <li>You are not under the influence of alcohol, drugs, or any substance that affects your judgment.</li>
+ </ul>`,
+ next: "consequences",
+ },
+ consequences: {
+ type: "agree", phase: "s. 606(1.1)(b)(iii)", auth: "Criminal Code s. 606(1.1)(b)(iii)",
+ title: "Nature and consequences of the plea",
+ body: `<p>You understand that by pleading guilty:</p>
+ <ul>
+ <li>You will be convicted of the offence;</li>
+ <li>The court will impose a sentence;</li>
+ <li>The conviction will appear on your criminal record (subject to record-suspension eligibility).</li>
+ </ul>`,
+ next: "not_bound",
+ },
+ not_bound: {
+ type: "agree", phase: "s. 606(1.1)(b)(iv)", auth: "Criminal Code s. 606(1.1)(b)(iv)",
+ title: "Court is not bound by any Crown / defence agreement on sentence",
+ body: `<p>You understand that even if Crown counsel and your defence counsel
+ have agreed on a sentence (a "joint submission"), the judge is <strong>not bound</strong>
+ by that agreement and may impose a different sentence. The court must, however, follow
+ the test in <em>R. v. Anthony-Cook</em>, 2016 SCC 43, before departing from a joint submission.</p>`,
+ next: "trial_rights",
+ },
+ trial_rights: {
+ type: "agree", phase: "Waiver of trial rights",
+ title: "Waiver of trial rights — Charter ss. 7, 11(c), 11(d)",
+ body: `<p>You understand that by pleading guilty you are <strong>giving up</strong>:</p>
+ <ul>
+ <li>Your right to be presumed innocent;</li>
+ <li>Your right to require the Crown to prove every element beyond a reasonable doubt;</li>
+ <li>Your right to test the Crown's evidence by cross-examining its witnesses;</li>
+ <li>Your right to call defence evidence, including your right to testify yourself or to remain silent;</li>
+ <li>Your right to a trial in any of the available forums (provincial court / superior court, judge alone or judge and jury where applicable).</li>
+ </ul>`,
+ next: "sentencing_range",
+ },
+ sentencing_range: {
+ type: "agree", phase: "Sentencing range",
+ title: "Sentencing range discussed (not guaranteed)",
+ body: `<p>Counsel has discussed with you the likely sentencing range based on:</p>
+ <ul>
+ <li>The applicable maximum and any mandatory minimum;</li>
+ <li>Comparable case law;</li>
+ <li>Any joint submission, range, or upper-limit agreement with the Crown;</li>
+ <li>Mitigating and aggravating factors specific to your case.</li>
+ </ul>
+ <p>You understand the discussed range is a <strong>prediction, not a guarantee</strong>.</p>`,
+ next: "collateral",
+ },
+ collateral: {
+ type: "agree", phase: "Collateral consequences",
+ title: "Collateral consequences acknowledged",
+ body: `<p>You understand that beyond the sentence, conviction may carry
+ <strong>collateral consequences</strong> including, where applicable:</p>
+ <ul>
+ <li><strong>Immigration</strong>: inadmissibility under <em>IRPA</em> s. 36 (permanent residents and foreign nationals);</li>
+ <li><strong>Employment / professional licensing</strong>: disclosure obligations, suspension or loss of licence;</li>
+ <li><strong>DNA orders</strong> (designated offences);</li>
+ <li><strong>Firearms prohibition</strong> under Criminal Code ss. 109 / 110;</li>
+ <li><strong>SOIRA</strong> sex offender registry (designated sexual offences);</li>
+ <li><strong>Travel</strong>: bar or restriction on entry to other countries (e.g. United States);</li>
+ <li><strong>Driving</strong>: prohibitions / suspensions where the offence is driving-related;</li>
+ <li><strong>Family / child protection</strong>: implications for parenting and child welfare proceedings.</li>
+ </ul>
+ <div class="strategic">Counsel should record which of these apply to your situation.</div>`,
+ next: "appeal_rights",
+ },
+ appeal_rights: {
+ type: "agree", phase: "Appeal rights",
+ title: "Appeal rights explained",
+ body: `<p>You understand that:</p>
+ <ul>
+ <li>An appeal of a conviction entered on a guilty plea is generally <strong>limited</strong>;</li>
+ <li>You may apply to strike a guilty plea on appeal only on narrow grounds (involuntariness, lack of understanding, miscarriage of justice);</li>
+ <li>You retain the right to appeal the <strong>sentence</strong> if it is harsh or excessive (with leave).</li>
+ </ul>`,
+ next: "alternatives",
+ },
+ alternatives: {
+ type: "agree", phase: "Alternatives considered",
+ title: "Alternative resolutions considered",
+ body: `<p>You confirm that counsel has discussed with you the alternative
+ resolutions that were available, including, where applicable:</p>
+ <ul>
+ <li>Diversion / Alternative Measures;</li>
+ <li>Withdrawal of charges (Crown discretion);</li>
+ <li>Peace bond under s. 810;</li>
+ <li>Discharge — absolute or conditional (s. 730);</li>
+ <li>Trial.</li>
+ </ul>
+ <p>And that you have chosen to plead guilty after weighing those alternatives.</p>`,
+ next: "final",
+ },
+ final: {
+ type: "agree", phase: "Final instruction",
+ title: "Final instruction — enter the guilty plea",
+ body: `<p>Having reviewed and confirmed each step above, you instruct counsel
+ to enter a plea of <strong>guilty</strong> on your behalf to the charge(s)
+ described in this confirmation. You understand that on clicking <em>Agree</em>
+ below, this record is locked and a copy is retained by counsel.</p>`,
+ terminal: true,
+ },
+ },
 };
 
 const STORAGE_KEY = "instructit_criminal_guilty_plea_v1";
 
 function loadState() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return { current: TREE.entry, log: [], started_at: new Date().toISOString() };
-  try { return JSON.parse(raw); } catch { return { current: TREE.entry, log: [], started_at: new Date().toISOString() }; }
+ const raw = localStorage.getItem(STORAGE_KEY);
+ if (!raw) return { current: TREE.entry, log: [], started_at: new Date().toISOString() };
+ try { return JSON.parse(raw); } catch { return { current: TREE.entry, log: [], started_at: new Date().toISOString() }; }
 }
 function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
 function resetState() {
-  if (!confirm("Reset session? Record will be cleared.")) return;
-  localStorage.removeItem(STORAGE_KEY); state = loadState(); render();
+ if (!confirm("Reset session? Record will be cleared.")) return;
+ localStorage.removeItem(STORAGE_KEY); state = loadState(); render();
 }
 
 async function sha256(text) {
-  const buf = new TextEncoder().encode(text);
-  const hash = await crypto.subtle.digest("SHA-256", buf);
-  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
+ const buf = new TextEncoder().encode(text);
+ const hash = await crypto.subtle.digest("SHA-256", buf);
+ return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
 }
 async function appendLog(entry) {
-  const prev = state.log.length ? state.log[state.log.length-1].hash : "GENESIS";
-  const stamped = { ...entry, ts: new Date().toISOString(), prev_hash: prev };
-  stamped.hash = await sha256(JSON.stringify(stamped));
-  state.log.push(stamped); saveState(state);
+ const prev = state.log.length ? state.log[state.log.length-1].hash : "GENESIS";
+ const stamped = { ...entry, ts: new Date().toISOString(), prev_hash: prev };
+ stamped.hash = await sha256(JSON.stringify(stamped));
+ state.log.push(stamped); saveState(state);
 }
 
 let state = loadState();
@@ -635,163 +636,163 @@ const app = document.getElementById("app");
 // our tree uses "not_bound" / "trial_rights" / "appeal_rights" / "alternatives" /
 // "final". Map by alias.
 const AUTH_NODE_ALIAS = {
-  charge: "charge",
-  admission: "admission",
-  voluntariness: "voluntariness",
-  consequences: "consequences",
-  not_bound: "court_not_bound",
-  trial_rights: "trial_rights",
-  sentencing_range: "sentencing_range",
-  collateral: "collateral",
-  appeal_rights: "appeal",
-  alternatives: "alternatives",
-  final: "final",
+ charge: "charge",
+ admission: "admission",
+ voluntariness: "voluntariness",
+ consequences: "consequences",
+ not_bound: "court_not_bound",
+ trial_rights: "trial_rights",
+ sentencing_range: "sentencing_range",
+ collateral: "collateral",
+ appeal_rights: "appeal",
+ alternatives: "alternatives",
+ final: "final",
 };
 let JURISPRUDENCE = {};
 let BAR_GUIDANCE = {};
 function loadFromInline(id) {
-  const el = document.getElementById(id);
-  if (!el) return null;
-  try { return JSON.parse(el.textContent); } catch { return null; }
+ const el = document.getElementById(id);
+ if (!el) return null;
+ try { return JSON.parse(el.textContent); } catch { return null; }
 }
 async function loadAuthorities() {
-  // Prefer inline (works on file://); fall back to fetch (works on HTTP).
-  const inlineJur = loadFromInline("data-jurisprudence");
-  const inlineBar = loadFromInline("data-bar-guidance");
-  if (inlineJur?.node_to_authorities) JURISPRUDENCE = inlineJur.node_to_authorities;
-  if (inlineBar?.node_to_guidance) BAR_GUIDANCE = inlineBar.node_to_guidance;
-  if (Object.keys(JURISPRUDENCE).length && Object.keys(BAR_GUIDANCE).length) return;
-  try {
-    const [jur, bar] = await Promise.all([
-      fetch("data/jurisprudence.json").then(r => r.ok ? r.json() : null),
-      fetch("data/bar-guidance.json").then(r => r.ok ? r.json() : null),
-    ]);
-    if (jur && jur.node_to_authorities) JURISPRUDENCE = jur.node_to_authorities;
-    if (bar && bar.node_to_guidance) BAR_GUIDANCE = bar.node_to_guidance;
-  } catch (e) {
-    console.info("Authorities not loaded; node-level citations will be omitted.", e);
-  }
+ // Prefer inline (works on file://); fall back to fetch (works on HTTP).
+ const inlineJur = loadFromInline("data-jurisprudence");
+ const inlineBar = loadFromInline("data-bar-guidance");
+ if (inlineJur?.node_to_authorities) JURISPRUDENCE = inlineJur.node_to_authorities;
+ if (inlineBar?.node_to_guidance) BAR_GUIDANCE = inlineBar.node_to_guidance;
+ if (Object.keys(JURISPRUDENCE).length && Object.keys(BAR_GUIDANCE).length) return;
+ try {
+ const [jur, bar] = await Promise.all([
+ fetch("data/jurisprudence.json").then(r => r.ok ? r.json() : null),
+ fetch("data/bar-guidance.json").then(r => r.ok ? r.json() : null),
+ ]);
+ if (jur && jur.node_to_authorities) JURISPRUDENCE = jur.node_to_authorities;
+ if (bar && bar.node_to_guidance) BAR_GUIDANCE = bar.node_to_guidance;
+ } catch (e) {
+ console.info("Authorities not loaded; node-level citations will be omitted.", e);
+ }
 }
 function renderAuthoritiesFor(nodeKey) {
-  const alias = AUTH_NODE_ALIAS[nodeKey] || nodeKey;
-  const cases = JURISPRUDENCE[alias] || [];
-  const guides = BAR_GUIDANCE[alias] || [];
-  if (!cases.length && !guides.length) return "";
-  const escAuth = (s) => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const caseHtml = cases.map(c => `<li><strong>${escAuth(c.style_of_cause)}</strong> (${escAuth(c.court)}) — ${escAuth(c.holding)}</li>`).join("");
-  const guideHtml = guides.map(g => `<li><strong>${escAuth(g.source_key)} ${escAuth(g.rule_or_section || "")}</strong> — ${escAuth(g.gist)}</li>`).join("");
-  return `
-    <details style="margin-top:18px;font-size:13px;color:#5a5a5a;font-family:ui-sans-serif,system-ui,sans-serif;">
-      <summary style="cursor:pointer;">Supporting authorities (${cases.length} case${cases.length===1?"":"s"}, ${guides.length} bar-guidance entr${guides.length===1?"y":"ies"})</summary>
-      ${caseHtml ? `<div style="margin-top:8px;"><strong>Jurisprudence</strong><ul style="margin:4px 0 8px 20px;">${caseHtml}</ul></div>` : ""}
-      ${guideHtml ? `<div><strong>Law-society / criminal-bar guidance</strong><ul style="margin:4px 0 8px 20px;">${guideHtml}</ul></div>` : ""}
-    </details>
-  `;
+ const alias = AUTH_NODE_ALIAS[nodeKey] || nodeKey;
+ const cases = JURISPRUDENCE[alias] || [];
+ const guides = BAR_GUIDANCE[alias] || [];
+ if (!cases.length && !guides.length) return "";
+ const escAuth = (s) => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ const caseHtml = cases.map(c => `<li><strong>${escAuth(c.style_of_cause)}</strong> (${escAuth(c.court)}) — ${escAuth(c.holding)}</li>`).join("");
+ const guideHtml = guides.map(g => `<li><strong>${escAuth(g.source_key)} ${escAuth(g.rule_or_section || "")}</strong> — ${escAuth(g.gist)}</li>`).join("");
+ return `
+ <details style="margin-top:18px;font-size:13px;color:#5a5a5a;font-family:ui-sans-serif,system-ui,sans-serif;">
+ <summary style="cursor:pointer;">Supporting authorities (${cases.length} case${cases.length===1?"":"s"}, ${guides.length} bar-guidance entr${guides.length===1?"y":"ies"})</summary>
+ ${caseHtml ? `<div style="margin-top:8px;"><strong>Jurisprudence</strong><ul style="margin:4px 0 8px 20px;">${caseHtml}</ul></div>` : ""}
+ ${guideHtml ? `<div><strong>Law-society / criminal-bar guidance</strong><ul style="margin:4px 0 8px 20px;">${guideHtml}</ul></div>` : ""}
+ </details>
+ `;
 }
 
 function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 
 function renderHeader() {
-  const bars = Object.keys(TREE.nodes).map(id => {
-    if (state.log.find(e => e.node === id)) return '<span class="done"></span>';
-    if (id === state.current) return '<span class="current"></span>';
-    return '<span></span>';
-  }).join("");
-  return `<header>
-    <h1>InstructIT — Criminal Guilty Plea</h1>
-    <div class="sub">Pre-plea client confirmation, recorded as time-stamped append-only evidence.</div>
-    <div class="matter"><strong>Matter:</strong> ${TREE.matter_label}<br>
-      <strong>Configuration:</strong> ${TREE.matter_subtitle}</div>
-    <div class="progress">${bars}</div>
-  </header>`;
+ const bars = Object.keys(TREE.nodes).map(id => {
+ if (state.log.find(e => e.node === id)) return '<span class="done"></span>';
+ if (id === state.current) return '<span class="current"></span>';
+ return '<span></span>';
+ }).join("");
+ return `<header>
+ <h1>InstructIT — Criminal Guilty Plea</h1>
+ <div class="sub">Pre-plea client confirmation, recorded as time-stamped append-only evidence.</div>
+ <div class="matter"><strong>Matter:</strong> ${TREE.matter_label}<br>
+ <strong>Configuration:</strong> ${TREE.matter_subtitle}</div>
+ <div class="progress">${bars}</div>
+ </header>`;
 }
 
 function renderNode() {
-  const node = TREE.nodes[state.current];
-  if (!node) return `<div class="card"><h2>End</h2></div>`;
-  const auth = node.auth ? `<div class="auth">${node.auth}</div>` : "";
-  let actions = `<div class="actions">
-    <button class="agree" onclick="decide('agree')">I agree — proceed</button>
-    <button class="disagree" onclick="decide('disagree')">I disagree (note required)</button>
-    <button onclick="decide('defer')">Defer</button>
-  </div>`;
-  if (node.terminal) actions = `<div class="actions">
-    <button class="agree" onclick="decide('acknowledged')">Confirm and lock record</button>
-  </div>`;
-  return `<div class="card">
-    <div class="phase">${node.phase}</div>
-    <h2>${node.title}</h2>${auth}
-    <div class="body">${node.body}</div>
-    ${renderAuthoritiesFor(state.current)}
-    <div class="note" id="noteBox" style="display:none;">
-      <label for="note">Note to counsel (required if disagreeing)</label>
-      <textarea id="note" placeholder="Explain your reasoning..."></textarea>
-    </div>
-    ${actions}
-  </div>`;
+ const node = TREE.nodes[state.current];
+ if (!node) return `<div class="card"><h2>End</h2></div>`;
+ const auth = node.auth ? `<div class="auth">${node.auth}</div>` : "";
+ let actions = `<div class="actions">
+ <button class="agree" onclick="decide('agree')">I agree — proceed</button>
+ <button class="disagree" onclick="decide('disagree')">I disagree (note required)</button>
+ <button onclick="decide('defer')">Defer</button>
+ </div>`;
+ if (node.terminal) actions = `<div class="actions">
+ <button class="agree" onclick="decide('acknowledged')">Confirm and lock record</button>
+ </div>`;
+ return `<div class="card">
+ <div class="phase">${node.phase}</div>
+ <h2>${node.title}</h2>${auth}
+ <div class="body">${node.body}</div>
+ ${renderAuthoritiesFor(state.current)}
+ <div class="note" id="noteBox" style="display:none;">
+ <label for="note">Note to counsel (required if disagreeing)</label>
+ <textarea id="note" placeholder="Explain your reasoning..."></textarea>
+ </div>
+ ${actions}
+ </div>`;
 }
 
 function renderRecord() {
-  const entries = state.log.map(e => {
-    const cls = e.decision === "agree" || e.decision === "acknowledged" ? "agree"
-              : e.decision === "disagree" ? "disagree" : "agree";
-    const note = e.note ? `<div class="note-display">"${escapeHtml(e.note)}"</div>` : "";
-    return `<div class="entry">
-      <div class="stamp">${new Date(e.ts).toLocaleString()}</div>
-      <div class="heading">${escapeHtml(e.title)}</div>
-      <span class="decision ${cls}">${e.decision_label || e.decision}</span>
-      ${note}
-      <div class="stamp" style="margin-top:6px;">hash: <span class="hash">${e.hash.slice(0,16)}…</span></div>
-    </div>`;
-  }).join("");
-  return `<div class="record">
-    <h2>Confirmed Instructions Record</h2>
-    <div class="recmeta">Matter: ${TREE.matter_label}<br>
-      Configuration: ${TREE.matter_subtitle}<br>
-      Session started: ${new Date(state.started_at).toLocaleString()}<br>
-      Entries: ${state.log.length}</div>
-    ${entries || '<div class="entry"><em>No entries yet.</em></div>'}
-    <div class="footer">Records linked by SHA-256 hash chain (append-only). Genesis hash: GENESIS.</div>
-  </div>`;
+ const entries = state.log.map(e => {
+ const cls = e.decision === "agree" || e.decision === "acknowledged" ? "agree"
+ : e.decision === "disagree" ? "disagree" : "agree";
+ const note = e.note ? `<div class="note-display">"${escapeHtml(e.note)}"</div>` : "";
+ return `<div class="entry">
+ <div class="stamp">${new Date(e.ts).toLocaleString()}</div>
+ <div class="heading">${escapeHtml(e.title)}</div>
+ <span class="decision ${cls}">${e.decision_label || e.decision}</span>
+ ${note}
+ <div class="stamp" style="margin-top:6px;">hash: <span class="hash">${e.hash.slice(0,16)}…</span></div>
+ </div>`;
+ }).join("");
+ return `<div class="record">
+ <h2>Confirmed Instructions Record</h2>
+ <div class="recmeta">Matter: ${TREE.matter_label}<br>
+ Configuration: ${TREE.matter_subtitle}<br>
+ Session started: ${new Date(state.started_at).toLocaleString()}<br>
+ Entries: ${state.log.length}</div>
+ ${entries || '<div class="entry"><em>No entries yet.</em></div>'}
+ <div class="footer">Records linked by SHA-256 hash chain (append-only). Genesis hash: GENESIS.</div>
+ </div>`;
 }
 
 function render() {
-  const node = TREE.nodes[state.current];
-  const showRecord = node?.terminal && state.log.find(e => e.node === state.current);
-  app.innerHTML = `${renderHeader()}
-    <div class="topbar">
-      <button class="reset" onclick="resetState()">Reset session</button>
-      <button onclick="window.print()">Print / Save PDF</button>
-    </div>
-    ${showRecord ? renderRecord() : renderNode()}
-    ${!showRecord && state.log.length ? `<div style="margin-top:24px;"><details><summary style="cursor:pointer;font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px;color:#5a5a5a;">View record so far (${state.log.length} entries)</summary><div style="margin-top:12px;">${renderRecord()}</div></details></div>` : ""}`;
-  const note = document.getElementById("noteBox");
-  if (note) document.querySelector("button.disagree")?.addEventListener("click", () => {
-    note.style.display = "block"; document.getElementById("note").focus();
-  });
+ const node = TREE.nodes[state.current];
+ const showRecord = node?.terminal && state.log.find(e => e.node === state.current);
+ app.innerHTML = `${renderHeader()}
+ <div class="topbar">
+ <button class="reset" onclick="resetState()">Reset session</button>
+ <button onclick="window.print()">Print / Save PDF</button>
+ </div>
+ ${showRecord ? renderRecord() : renderNode()}
+ ${!showRecord && state.log.length ? `<div style="margin-top:24px;"><details><summary style="cursor:pointer;font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px;color:#5a5a5a;">View record so far (${state.log.length} entries)</summary><div style="margin-top:12px;">${renderRecord()}</div></details></div>` : ""}`;
+ const note = document.getElementById("noteBox");
+ if (note) document.querySelector("button.disagree")?.addEventListener("click", () => {
+ note.style.display = "block"; document.getElementById("note").focus();
+ });
 }
 
 async function decide(decision) {
-  const node = TREE.nodes[state.current];
-  let note = "";
-  if (decision === "disagree") {
-    note = document.getElementById("note")?.value?.trim() || "";
-    if (!note) { alert("Add a note explaining your disagreement."); return; }
-  }
-  await appendLog({
-    node: state.current, title: node.title,
-    decision,
-    decision_label: decision.charAt(0).toUpperCase() + decision.slice(1),
-    note,
-  });
-  if (decision === "disagree") {
-    alert("Disagreement recorded. Counsel will address before continuing."); render(); return;
-  }
-  if (node.terminal) { render(); return; }
-  if (decision === "defer") { render(); return; }
-  state.current = node.next; saveState(state); render();
+ const node = TREE.nodes[state.current];
+ let note = "";
+ if (decision === "disagree") {
+ note = document.getElementById("note")?.value?.trim() || "";
+ if (!note) { alert("Add a note explaining your disagreement."); return; }
+ }
+ await appendLog({
+ node: state.current, title: node.title,
+ decision,
+ decision_label: decision.charAt(0).toUpperCase() + decision.slice(1),
+ note,
+ });
+ if (decision === "disagree") {
+ alert("Disagreement recorded. Counsel will address before continuing."); render(); return;
+ }
+ if (node.terminal) { render(); return; }
+ if (decision === "defer") { render(); return; }
+ state.current = node.next; saveState(state); render();
 }
 
 window.decide = decide; window.resetState = resetState;

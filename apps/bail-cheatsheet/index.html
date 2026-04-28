@@ -5,723 +5,724 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Bail Cheat Sheet — Counsel Tool (POC)</title>
 <style>
-  :root {
-    --bg: #faf8f5; --ink: #1a1a1a; --muted: #5a5a5a; --rule: #d8d4cc;
-    --accent: #2d4a2d; --warn: #b25400; --alert: #b00020; --paper: #ffffff;
-    --rung-1: #2e7d32; --rung-7: #b00020;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--bg); color: var(--ink);
-    font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", serif;
-    font-size: 17px; line-height: 1.55; }
-  .wrap { max-width: 880px; margin: 0 auto; padding: 32px 24px 96px; }
-  header { border-bottom: 1px solid var(--rule); padding-bottom: 20px; margin-bottom: 28px; }
-  header h1 { font-size: 26px; margin: 0 0 4px; }
-  header .sub { color: var(--muted); font-size: 14px; }
-  .card { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
-    padding: 22px; margin-bottom: 20px; }
-  .card h2 { font-size: 18px; margin: 0 0 12px; color: var(--accent); }
-  .card h3 { font-size: 15px; margin: 16px 0 8px; }
-  .card label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px;
-    font-family: ui-sans-serif, system-ui, sans-serif; }
-  .card input, .card select, .card textarea {
-    width: 100%; padding: 8px 12px; font-family: inherit; font-size: 15px;
-    border: 1px solid var(--rule); border-radius: 4px; background: var(--bg); margin-bottom: 12px;
-  }
-  .card textarea { min-height: 60px; resize: vertical; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
-  .verdict { padding: 14px 16px; border-radius: 6px; margin: 12px 0;
-    font-family: ui-sans-serif, system-ui, sans-serif; }
-  .verdict.crown { background: #e6ecf3; border: 1px solid #c4d2e3; color: #1f3a55; }
-  .verdict.defence { background: #fbe9d7; border: 1px solid #f3c896; color: #7a3800; }
-  .verdict h4 { margin: 0 0 4px; font-size: 15px; }
-  .verdict p { margin: 0; font-size: 14px; }
-  .ladder { padding: 0; list-style: none; }
-  .ladder li { padding: 12px 16px; border: 1px solid var(--rule); border-radius: 6px;
-    margin-bottom: 8px; background: var(--bg); position: relative; padding-left: 56px; }
-  .ladder li.rung-active { background: #fff8e1; border-color: #e0c768; }
-  .ladder li .rung-num {
-    position: absolute; left: 12px; top: 12px; width: 32px; height: 32px;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-family: ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 14px;
-    color: #fff;
-  }
-  .ladder li:nth-child(1) .rung-num { background: #2e7d32; }
-  .ladder li:nth-child(2) .rung-num { background: #5a8b2e; }
-  .ladder li:nth-child(3) .rung-num { background: #87932e; }
-  .ladder li:nth-child(4) .rung-num { background: #b09229; }
-  .ladder li:nth-child(5) .rung-num { background: #b27024; }
-  .ladder li:nth-child(6) .rung-num { background: #b25024; }
-  .ladder li:nth-child(7) .rung-num { background: #b00020; }
-  .ladder .form-of-release { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
-  .ladder .anchor { font-size: 12px; color: var(--muted); font-family: ui-sans-serif, system-ui, sans-serif; margin-bottom: 6px; }
-  .ladder .principle { font-size: 14px; }
-  .ladder .position { font-size: 13px; color: var(--muted); margin-top: 6px; font-style: italic; }
-  .checklist { background: var(--bg); border: 1px solid var(--rule); border-radius: 6px;
-    padding: 14px 18px; margin-top: 12px; }
-  .checklist h3 { margin: 0 0 8px; font-size: 14px; font-family: ui-sans-serif, system-ui, sans-serif; }
-  .checklist ul { padding-left: 20px; margin: 4px 0; font-size: 14px; line-height: 1.5; }
-  .grounds { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  @media (max-width: 700px) { .grounds { grid-template-columns: 1fr; } }
-  .grounds .ground { background: var(--bg); border: 1px solid var(--rule); border-radius: 6px;
-    padding: 12px; }
-  .grounds .ground h4 { margin: 0 0 4px; font-size: 14px; color: var(--accent); }
-  .grounds .ground p { margin: 4px 0; font-size: 13px; line-height: 1.45; }
-  button { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px;
-    padding: 10px 18px; border-radius: 6px; cursor: pointer; border: 1px solid var(--accent);
-    background: var(--accent); color: #fff; }
-  button.ghost { background: var(--paper); color: var(--ink); border-color: var(--rule); }
-  button:hover { opacity: 0.9; }
-  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;
-    font-family: ui-sans-serif, system-ui, sans-serif; font-size: 12px; color: var(--muted); }
-  details { margin-top: 12px; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 13px; }
-  details summary { cursor: pointer; color: var(--muted); }
-  details ul { margin: 8px 0; padding-left: 22px; }
-  details li { margin: 4px 0; }
-  @media print {
-    body { background: #fff; }
-    .topbar, button, .card input, .card select { display: none !important; }
-    .card { border: none; padding: 4px 0; margin-bottom: 8px; }
-  }
+ :root {
+ --bg: #faf8f5; --ink: #1a1a1a; --muted: #5a5a5a; --rule: #d8d4cc;
+ --accent: #2d4a2d; --warn: #b25400; --alert: #b00020; --paper: #ffffff;
+ --rung-1: #2e7d32; --rung-7: #b00020;
+ }
+ * { box-sizing: border-box; }
+ html, body { margin: 0; background: var(--bg); color: var(--ink);
+ font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+ font-size: 17px; line-height: 1.55; }
+ .wrap { max-width: 880px; margin: 0 auto; padding: 32px 24px 96px; }
+ header { border-bottom: 1px solid var(--rule); padding-bottom: 20px; margin-bottom: 28px; }
+ header h1 { font-size: 26px; margin: 0 0 4px; }
+ header .sub { color: var(--muted); font-size: 14px; }
+ .card { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
+ padding: 22px; margin-bottom: 20px; }
+ .card h2 { font-size: 18px; margin: 0 0 12px; color: var(--accent); }
+ .card h3 { font-size: 15px; margin: 16px 0 8px; }
+ .card label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px;
+ font-family: ui-sans-serif, system-ui, sans-serif; }
+ .card input, .card select, .card textarea {
+ width: 100%; padding: 8px 12px; font-family: inherit; font-size: 15px;
+ border: 1px solid var(--rule); border-radius: 4px; background: var(--bg); margin-bottom: 12px;
+ }
+ .card textarea { min-height: 60px; resize: vertical; }
+ .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+ @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+ .verdict { padding: 14px 16px; border-radius: 6px; margin: 12px 0;
+ font-family: ui-sans-serif, system-ui, sans-serif; }
+ .verdict.crown { background: #e6ecf3; border: 1px solid #c4d2e3; color: #1f3a55; }
+ .verdict.defence { background: #fbe9d7; border: 1px solid #f3c896; color: #7a3800; }
+ .verdict h4 { margin: 0 0 4px; font-size: 15px; }
+ .verdict p { margin: 0; font-size: 14px; }
+ .ladder { padding: 0; list-style: none; }
+ .ladder li { padding: 12px 16px; border: 1px solid var(--rule); border-radius: 6px;
+ margin-bottom: 8px; background: var(--bg); position: relative; padding-left: 56px; }
+ .ladder li.rung-active { background: #fff8e1; border-color: #e0c768; }
+ .ladder li .rung-num {
+ position: absolute; left: 12px; top: 12px; width: 32px; height: 32px;
+ border-radius: 50%; display: flex; align-items: center; justify-content: center;
+ font-family: ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 14px;
+ color: #fff;
+ }
+ .ladder li:nth-child(1) .rung-num { background: #2e7d32; }
+ .ladder li:nth-child(2) .rung-num { background: #5a8b2e; }
+ .ladder li:nth-child(3) .rung-num { background: #87932e; }
+ .ladder li:nth-child(4) .rung-num { background: #b09229; }
+ .ladder li:nth-child(5) .rung-num { background: #b27024; }
+ .ladder li:nth-child(6) .rung-num { background: #b25024; }
+ .ladder li:nth-child(7) .rung-num { background: #b00020; }
+ .ladder .form-of-release { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+ .ladder .anchor { font-size: 12px; color: var(--muted); font-family: ui-sans-serif, system-ui, sans-serif; margin-bottom: 6px; }
+ .ladder .principle { font-size: 14px; }
+ .ladder .position { font-size: 13px; color: var(--muted); margin-top: 6px; font-style: italic; }
+ .checklist { background: var(--bg); border: 1px solid var(--rule); border-radius: 6px;
+ padding: 14px 18px; margin-top: 12px; }
+ .checklist h3 { margin: 0 0 8px; font-size: 14px; font-family: ui-sans-serif, system-ui, sans-serif; }
+ .checklist ul { padding-left: 20px; margin: 4px 0; font-size: 14px; line-height: 1.5; }
+ .grounds { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+ @media (max-width: 700px) { .grounds { grid-template-columns: 1fr; } }
+ .grounds .ground { background: var(--bg); border: 1px solid var(--rule); border-radius: 6px;
+ padding: 12px; }
+ .grounds .ground h4 { margin: 0 0 4px; font-size: 14px; color: var(--accent); }
+ .grounds .ground p { margin: 4px 0; font-size: 13px; line-height: 1.45; }
+ button { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px;
+ padding: 10px 18px; border-radius: 6px; cursor: pointer; border: 1px solid var(--accent);
+ background: var(--accent); color: #fff; }
+ button.ghost { background: var(--paper); color: var(--ink); border-color: var(--rule); }
+ button:hover { opacity: 0.9; }
+ .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;
+ font-family: ui-sans-serif, system-ui, sans-serif; font-size: 12px; color: var(--muted); }
+ details { margin-top: 12px; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 13px; }
+ details summary { cursor: pointer; color: var(--muted); }
+ details ul { margin: 8px 0; padding-left: 22px; }
+ details li { margin: 4px 0; }
+ @media print {
+ body { background: #fff; }
+ .topbar, button, .card input, .card select { display: none !important; }
+ .card { border: none; padding: 4px 0; margin-bottom: 8px; }
+ }
 </style>
 </head>
 <body>
+<div style="background:#fef3c7;border-bottom:1px solid #d97706;padding:8px 16px;font:13px/1.4 ui-sans-serif,system-ui,sans-serif;color:#78350f;text-align:center;"><strong>Proof of Concept — DO NOT RELY.</strong> Demonstration only. Not legal advice. No solicitor-client relationship. <a href="/" style="color:#78350f;">Back to apps</a></div>
 <div class="wrap">
-  <header>
-    <h1>Bail Cheat Sheet — Counsel Tool</h1>
-    <div class="sub">Counsel-facing reference for a bail hearing under the Criminal Code,
-      anchored on <em>R. v. Antic</em>, 2017 SCC 27. POC — verify all citations and local
-      program details on the day. <strong>Not for client use.</strong></div>
-  </header>
+ <header>
+ <h1>Bail Cheat Sheet — Counsel Tool</h1>
+ <div class="sub">Counsel-facing reference for a bail hearing under the Criminal Code,
+ anchored on <em>R. v. Antic</em>, 2017 SCC 27. POC — verify all citations and local
+ program details on the day. <strong>Not for client use.</strong></div>
+ </header>
 
-  <div class="topbar">
-    <span id="data-status">loading data…</span>
-    <span><button class="ghost" onclick="window.print()">Print / save PDF</button></span>
-  </div>
+ <div class="topbar">
+ <span id="data-status">loading data…</span>
+ <span><button class="ghost" onclick="window.print()">Print / save PDF</button></span>
+ </div>
 
-  <!-- 1. Matter inputs -->
-  <div class="card">
-    <h2>1. Matter</h2>
-    <div class="grid-2">
-      <div>
-        <label for="offence-section">Criminal Code section(s) charged</label>
-        <input id="offence-section" placeholder="e.g. 348(1)(b), 266" />
-      </div>
-      <div>
-        <label for="offence-description">Offence description</label>
-        <input id="offence-description" placeholder="e.g. break and enter; assault" />
-      </div>
-    </div>
-    <div class="grid-2">
-      <div>
-        <label for="charge-context">Charge context</label>
-        <select id="charge-context" onchange="updateOnus()">
-          <option value="default">Default — Crown shows cause (s. 515(1))</option>
-          <option value="indictable_at_large">(a) Indictable offence committed while at large on another charge — s. 515(6)(a)(i)</option>
-          <option value="failure_appear_comply">(b) Failure to appear / failure to comply — s. 515(6)(c) [VERIFY subsection]</option>
-          <option value="cdsa_traffic">(c) Trafficking / production / importing — CDSA s. 5–7 — s. 515(6)(d)</option>
-          <option value="firearms">(d) Firearms — s. 515(6)(a.1) / ss. 95-101 [VERIFY]</option>
-          <option value="terrorism">(e) Terrorism offences</option>
-          <option value="ipv">Intimate-partner violence — s. 515(6)(b.1) [VERIFY post-Bill C-75]</option>
-          <option value="organized_crime">Criminal-organization offences</option>
-          <option value="murder_469">Murder / s. 469 — JP cannot grant; s. 522 superior-court bail</option>
-        </select>
-      </div>
-      <div>
-        <label for="jurisdiction">Province / region</label>
-        <select id="jurisdiction" onchange="updateLocalPrograms()">
-          <option value="ON">Ontario</option>
-          <option value="BC">British Columbia</option>
-        </select>
-      </div>
-    </div>
-    <div class="grid-2">
-      <div>
-        <label for="courthouse">Courthouse</label>
-        <input id="courthouse" placeholder="e.g. Toronto Old City Hall; Vancouver 222 Main; Brampton A. Grenville and William Davis" oninput="updateLocalPrograms()" />
-      </div>
-      <div>
-        <label for="hearing-judge">Hearing officer</label>
-        <select id="hearing-judge">
-          <option value="JP">Justice of the Peace</option>
-          <option value="provincial">Provincial Court Judge</option>
-          <option value="superior">Superior Court (s. 522 / s. 520 review)</option>
-        </select>
-      </div>
-    </div>
-  </div>
+ <!-- 1. Matter inputs -->
+ <div class="card">
+ <h2>1. Matter</h2>
+ <div class="grid-2">
+ <div>
+ <label for="offence-section">Criminal Code section(s) charged</label>
+ <input id="offence-section" placeholder="e.g. 348(1)(b), 266" />
+ </div>
+ <div>
+ <label for="offence-description">Offence description</label>
+ <input id="offence-description" placeholder="e.g. break and enter; assault" />
+ </div>
+ </div>
+ <div class="grid-2">
+ <div>
+ <label for="charge-context">Charge context</label>
+ <select id="charge-context" onchange="updateOnus()">
+ <option value="default">Default — Crown shows cause (s. 515(1))</option>
+ <option value="indictable_at_large">(a) Indictable offence committed while at large on another charge — s. 515(6)(a)(i)</option>
+ <option value="failure_appear_comply">(b) Failure to appear / failure to comply — s. 515(6)(c)</option>
+ <option value="cdsa_traffic">(c) Trafficking / production / importing — CDSA s. 5–7 — s. 515(6)(d)</option>
+ <option value="firearms">(d) Firearms — s. 515(6)(a.1) / ss. 95-101</option>
+ <option value="terrorism">(e) Terrorism offences</option>
+ <option value="ipv">Intimate-partner violence — s. 515(6)(b.1)</option>
+ <option value="organized_crime">Criminal-organization offences</option>
+ <option value="murder_469">Murder / s. 469 — JP cannot grant; s. 522 superior-court bail</option>
+ </select>
+ </div>
+ <div>
+ <label for="jurisdiction">Province / region</label>
+ <select id="jurisdiction" onchange="updateLocalPrograms()">
+ <option value="ON">Ontario</option>
+ <option value="BC">British Columbia</option>
+ </select>
+ </div>
+ </div>
+ <div class="grid-2">
+ <div>
+ <label for="courthouse">Courthouse</label>
+ <input id="courthouse" placeholder="e.g. Toronto Old City Hall; Vancouver 222 Main; Brampton A. Grenville and William Davis" oninput="updateLocalPrograms()" />
+ </div>
+ <div>
+ <label for="hearing-judge">Hearing officer</label>
+ <select id="hearing-judge">
+ <option value="JP">Justice of the Peace</option>
+ <option value="provincial">Provincial Court Judge</option>
+ <option value="superior">Superior Court (s. 522 / s. 520 review)</option>
+ </select>
+ </div>
+ </div>
+ </div>
 
-  <!-- 2. Onus determination -->
-  <div class="card">
-    <h2>2. Onus</h2>
-    <div id="onus-verdict"></div>
-    <details>
-      <summary>Operational test (s. 515 default rule + s. 515(6) reverse-onus categories)</summary>
-      <ul id="onus-test-steps"></ul>
-    </details>
-  </div>
+ <!-- 2. Onus determination -->
+ <div class="card">
+ <h2>2. Onus</h2>
+ <div id="onus-verdict"></div>
+ <details>
+ <summary>Operational test (s. 515 default rule + s. 515(6) reverse-onus categories)</summary>
+ <ul id="onus-test-steps"></ul>
+ </details>
+ </div>
 
-  <!-- 3. Three grounds for detention -->
-  <div class="card">
-    <h2>3. Three Grounds for Detention (s. 515(10))</h2>
-    <div class="grounds" id="grounds-block"></div>
-  </div>
+ <!-- 3. Three grounds for detention -->
+ <div class="card">
+ <h2>3. Three Grounds for Detention (s. 515(10))</h2>
+ <div class="grounds" id="grounds-block"></div>
+ </div>
 
-  <!-- 4. Antic ladder -->
-  <div class="card">
-    <h2>4. The Antic Ladder of Liberty Constriction</h2>
-    <p style="margin-top:0;color:var(--muted);font-size:14px;">
-      Each rung must be inadequate before the next is imposed (Antic ¶67).
-      Open at rung 1; force the Crown to show cause for each step up.
-    </p>
-    <ol class="ladder" id="ladder-block"></ol>
-    <details>
-      <summary>Antic rules to argue verbatim</summary>
-      <ul id="antic-rules"></ul>
-    </details>
-  </div>
+ <!-- 4. Antic ladder -->
+ <div class="card">
+ <h2>4. The Antic Ladder of Liberty Constriction</h2>
+ <p style="margin-top:0;color:var(--muted);font-size:14px;">
+ Each rung must be inadequate before the next is imposed (Antic ¶67).
+ Open at rung 1; force the Crown to show cause for each step up.
+ </p>
+ <ol class="ladder" id="ladder-block"></ol>
+ <details>
+ <summary>Antic rules to argue verbatim</summary>
+ <ul id="antic-rules"></ul>
+ </details>
+ </div>
 
-  <!-- 5. Local bail programs -->
-  <div class="card">
-    <h2>5. Local Bail Programs (alternative to a personal surety)</h2>
-    <p style="margin-top:0;color:var(--muted);font-size:14px;">
-      At rung 5, canvass these before agreeing to a personal surety. Confirm
-      eligibility and intake hours on the day.
-    </p>
-    <div id="local-programs-block"></div>
-  </div>
+ <!-- 5. Local bail programs -->
+ <div class="card">
+ <h2>5. Local Bail Programs (alternative to a personal surety)</h2>
+ <p style="margin-top:0;color:var(--muted);font-size:14px;">
+ At rung 5, canvass these before agreeing to a personal surety. Confirm
+ eligibility and intake hours on the day.
+ </p>
+ <div id="local-programs-block"></div>
+ </div>
 
-  <!-- 6. Counsel checklist -->
-  <div class="card">
-    <h2>6. Counsel Checklist</h2>
-    <div class="checklist">
-      <h3>Before stepping up</h3>
-      <ul>
-        <li>Read the synopsis. Confirm what the Crown is alleging.</li>
-        <li>Confirm onus (use box 2 above).</li>
-        <li>Note any reverse-onus that triggers s. 515(6); plan to address all three grounds at s. 515(10).</li>
-        <li>Identify Indigenous status (<em>Gladue</em> / <em>Ipeelee</em>) and any cultural / community supports.</li>
-        <li>Identify mental-health / fitness flags; ask about medication and substance issues.</li>
-        <li>Get sureties' names + ages + occupations + relationship + financial position; line up backup sureties.</li>
-        <li>Verify residence, employment, school, treatment commitments.</li>
-        <li>Check eligibility for the local bail program (box 5).</li>
-      </ul>
-      <h3>At the hearing</h3>
-      <ul>
-        <li>State accused's name and the charges.</li>
-        <li>Confirm onus on the record.</li>
-        <li>Open at rung 1 of the Antic ladder. Force Crown to show cause for each step up.</li>
-        <li>Address each detention ground separately; do not let Crown blur primary / secondary / tertiary.</li>
-        <li>If detention sought on tertiary: respond to <em>St-Cloud</em> factors expressly.</li>
-        <li>Cite <em>Zora</em> on every condition: must be reasonably necessary, no more onerous than required, with factual nexus.</li>
-        <li>Avoid cash deposits unless accused is non-resident or 200+ km from court (s. 515(2)(d) [VERIFY]).</li>
-        <li>If surety required, confirm it is necessary (not merely useful) per <em>Antic</em> ¶67(g).</li>
-      </ul>
-      <h3>After release / detention order</h3>
-      <ul>
-        <li>If released: review every condition with the accused; explain breach exposure under s. 145.</li>
-        <li>If detained: confirm s. 525 review timing — 90 days for indictable, 30 days for summary [VERIFY post-Myers].</li>
-        <li>Note any s. 520 / s. 521 review options and ask client about timing.</li>
-        <li>Update file with the recognizance and conditions; calendar the next appearance.</li>
-      </ul>
-    </div>
-  </div>
+ <!-- 6. Counsel checklist -->
+ <div class="card">
+ <h2>6. Counsel Checklist</h2>
+ <div class="checklist">
+ <h3>Before stepping up</h3>
+ <ul>
+ <li>Read the synopsis. Confirm what the Crown is alleging.</li>
+ <li>Confirm onus (use box 2 above).</li>
+ <li>Note any reverse-onus that triggers s. 515(6); plan to address all three grounds at s. 515(10).</li>
+ <li>Identify Indigenous status (<em>Gladue</em> / <em>Ipeelee</em>) and any cultural / community supports.</li>
+ <li>Identify mental-health / fitness flags; ask about medication and substance issues.</li>
+ <li>Get sureties' names + ages + occupations + relationship + financial position; line up backup sureties.</li>
+ <li>Verify residence, employment, school, treatment commitments.</li>
+ <li>Check eligibility for the local bail program (box 5).</li>
+ </ul>
+ <h3>At the hearing</h3>
+ <ul>
+ <li>State accused's name and the charges.</li>
+ <li>Confirm onus on the record.</li>
+ <li>Open at rung 1 of the Antic ladder. Force Crown to show cause for each step up.</li>
+ <li>Address each detention ground separately; do not let Crown blur primary / secondary / tertiary.</li>
+ <li>If detention sought on tertiary: respond to <em>St-Cloud</em> factors expressly.</li>
+ <li>Cite <em>Zora</em> on every condition: must be reasonably necessary, no more onerous than required, with factual nexus.</li>
+ <li>Avoid cash deposits unless accused is non-resident or 200+ km from court (s. 515(2)(d)).</li>
+ <li>If surety required, confirm it is necessary (not merely useful) per <em>Antic</em> ¶67(g).</li>
+ </ul>
+ <h3>After release / detention order</h3>
+ <ul>
+ <li>If released: review every condition with the accused; explain breach exposure under s. 145.</li>
+ <li>If detained: confirm s. 525 review timing — 90 days for indictable, 30 days for summary.</li>
+ <li>Note any s. 520 / s. 521 review options and ask client about timing.</li>
+ <li>Update file with the recognizance and conditions; calendar the next appearance.</li>
+ </ul>
+ </div>
+ </div>
 </div>
 
 <!-- Inline data; populated by build step. Source: family-law-schema/gcai-responses/{11,12,13}-*.json -->
 <script type="application/json" id="data-onus">{
-  "$id": "bail-onus.json",
-  "default_rule": {
-    "section": "Criminal Code s. 515(1)",
-    "rule": "Crown shows cause for detention.",
-    "consequence": "Accused presumptively released on an undertaking without conditions unless the prosecutor shows cause why detention or more restrictive release is justified."
-  },
-  "reverse_onus_categories": [
-    {
-      "key": "indictable_while_at_large",
-      "label": "Indictable offence committed while at large",
-      "section": "s. 515(6)(a)(i)",
-      "trigger_description": "The accused is charged with an indictable offence alleged to have been committed while at large on an earlier indictable offence charge (on judicial interim release, recognizance, undertaking, or subject to an order under s. 672.58 or s. 672.62).",
-      "examples_of_offences": ["Any indictable offence if the timing condition is met"],
-      "rule": "Accused shows cause why detention is not justified.",
-      "ancillary_authority": "R. v. Morales, [1992] 3 SCR 711 (foundational on s. 515(6) reverse-onus validity under s. 11(e) Charter)"
-    },
-    {
-      "key": "non_resident_indictable",
-      "label": "Non-ordinarily-resident accused charged with indictable offence",
-      "section": "s. 515(6)(a)(ii)",
-      "trigger_description": "The accused is charged with an indictable offence and is not ordinarily resident in Canada.",
-      "examples_of_offences": ["Any indictable offence where accused is not ordinarily resident in Canada"],
-      "rule": "Accused shows cause why detention is not justified.",
-      "ancillary_authority": null
-    },
-    {
-      "key": "failure_to_appear_breach",
-      "label": "Failure to appear / breach of release condition",
-      "section": "s. 515(6)(b)",
-      "trigger_description": "The accused is charged with an offence under s. 145(2)-(5) (failure to attend court, failure to comply with condition of undertaking or recognizance, being at large without excuse) alleged to have been committed while at large on an earlier charge.",
-      "examples_of_offences": ["Failure to attend court (s. 145(2))", "Failure to comply with condition of undertaking or recognizance (s. 145(3)-(5))", "Being at large on interim release without lawful excuse (s. 145(5)) [VERIFY exact subsections post-2019 renumbering under Bill C-75]"],
-      "rule": "Accused shows cause why detention is not justified.",
-      "ancillary_authority": null
-    },
-    {
-      "key": "intimate_partner_violence",
-      "label": "Intimate-partner violence reverse onus",
-      "section": "s. 515(6)(b.1)",
-      "trigger_description": "The accused is charged with an offence involving violence against an intimate partner (as defined in s. 2) and the accused has a previous conviction for violence against an intimate partner. Added by Bill C-75 (in force December 18, 2019).",
-      "examples_of_offences": ["Assault (s. 266) against intimate partner where prior IPV conviction exists", "Assault causing bodily harm (s. 267) against intimate partner with prior IPV conviction", "Aggravated assault (s. 268) against intimate partner with prior IPV conviction", "Uttering threats (s. 264.1) against intimate partner with prior IPV conviction", "Criminal harassment (s. 264) against intimate partner with prior IPV conviction"],
-      "rule": "Accused shows cause why detention is not justified.",
-      "ancillary_authority": "R. v. Zora, 2020 SCC 14 (discusses bail conditions and s. 11(e) in context of Bill C-75 reforms; not a direct challenge to (b.1) but relevant framework)"
-    },
-    {
-      "key": "cdsa_trafficking_importing_production",
-      "label": "Serious drug offences under the CDSA",
-      "section": "s. 515(6)(c)",
-      "trigger_description": "The accused is charged with an offence under s. 5(3), s. 6(3), or s. 7(2) of the Controlled Drugs and Substances Act (trafficking, importing/exporting, or production, respectively) that is punishable by imprisonment for life.",
-      "examples_of_offences": ["Trafficking in a Schedule I substance (e.g., cocaine, heroin, fentanyl) (CDSA s. 5(3)(a))", "Importing/exporting a Schedule I or II substance (CDSA s. 6(3)(a) or (b)) [VERIFY (b) reference]", "Production of a Schedule I substance (CDSA s. 7(2)(a))", "Production of a Schedule II substance (CDSA s. 7(2)(b))"],
-      "rule": "Accused shows cause why detention is not justified.",
-      "ancillary_authority": "R. v. Pearson, [1992] 3 SCR 665 (upheld constitutionality of drug-offence reverse onus under s. 11(e))"
-    },
-    {
-      "key": "firearms_offences",
-      "label": "Serious firearms offences",
-      "section": "s. 515(6)(d)",
-      "trigger_description": "The accused is charged with one of the listed firearms offences in the Criminal Code.",
-      "examples_of_offences": [
-        "Possession of prohibited or restricted firearm with ammunition (s. 95(1))",
-        "Possession of weapon obtained by crime (s. 96(1))",
-        "Weapons trafficking (s. 99)",
-        "Possession for purpose of weapons trafficking (s. 100)",
-        "Importing or exporting knowing it is unauthorized (s. 103)",
-        "Unauthorized importing or exporting (s. 104) [VERIFY if s. 104 is included or only s. 103]"
-      ],
-      "rule": "Accused shows cause why detention is not justified.",
-      "ancillary_authority": null
-    },
-    {
-      "key": "criminal_organization_offence",
-      "label": "Criminal organization offences",
-      "section": "s. 515(6)(a)(iii) [VERIFY exact paragraph]",
-      "trigger_description": "The accused is charged with an indictable offence alleged to have been committed for the benefit of, at the direction of, or in association with a criminal organization, or is a criminal organization offence under ss. 467.11, 467.111, 467.12, or 467.13.",
-      "examples_of_offences": ["Participation in activities of criminal organization (s. 467.11)", "Recruitment of members by a criminal organization (s. 467.111)", "Commission of offence for criminal organization (s. 467.12)", "Instructing commission of offence for criminal organization (s. 467.13)"],
-      "rule": "Accused shows cause why detention is not justified.",
-      "ancillary_authority": null
-    },
-    {
-      "key": "terrorism_offence",
-      "label": "Terrorism offences",
-      "section": "s. 515(6)(d) [VERIFY: may be a separate paragraph, e.g., (d.1) or included in an expanded (d)]",
-      "trigger_description": "The accused is charged with a terrorism offence as defined in s. 2 of the Criminal Code (Part II.1, ss. 83.01-83.33).",
-      "examples_of_offences": ["Participating in activity of terrorist group (s. 83.18)", "Facilitating terrorist activity (s. 83.19)", "Commission of offence for terrorist group (s. 83.2)", "Instructing to carry out activity for terrorist group (s. 83.21)", "Instructing to carry out terrorist activity (s. 83.22)", "Harbouring or concealing (s. 83.23)", "Financing of terrorism (s. 83.02-83.04)"],
-      "rule": "Accused shows cause why detention is not justified.",
-      "ancillary_authority": "Application under s. 83.28 of the Criminal Code, 2004 SCC 42 (discusses terrorism provisions and Charter; not a direct bail challenge but relevant context)"
-    },
-    {
-      "key": "use_of_firearm_in_offence",
-      "label": "Offence alleged to involve a firearm",
-      "section": "s. 515(6)(a)(viii) [VERIFY exact sub-paragraph]",
-      "trigger_description": "The accused is charged with a serious offence alleged to have been committed with a firearm (not limited to the listed firearms offences but captures violent offences where a firearm was used).",
-      "examples_of_offences": ["Robbery with a firearm (s. 344(a))", "Extortion with a firearm (s. 346)", "Attempted murder with a firearm", "Discharge firearm with intent (s. 244)"],
-      "rule": "Accused shows cause why detention is not justified.",
-      "ancillary_authority": null
-    }
-  ],
-  "separate_regime_s469": {
-    "key": "s469_superior_court_jurisdiction",
-    "label": "Murder and other s. 469 offences (superior court bail under s. 522)",
-    "section": "Criminal Code s. 522",
-    "trigger_description": "For offences listed in s. 469 (murder, treason, alarming Her Majesty, intimidating Parliament, piracy, and certain related offences), bail jurisdiction lies exclusively with a Superior Court judge. The accused bears the onus to show cause why detention is not justified.",
-    "examples_of_offences": ["First-degree murder (s. 235)", "Second-degree murder (s. 235)", "Treason (s. 47)", "Alarming Her Majesty (s. 49)", "Intimidating Parliament or a legislature (s. 51)", "Inciting to mutiny (s. 53)", "Seditious offences (ss. 59-61) [VERIFY if still in s. 469 list]", "Piracy (ss. 74-75)"],
-    "rule": "Accused shows cause why detention is not justified. Application must be made to a Superior Court judge, not a justice of the peace or provincial court judge.",
-    "ancillary_authority": "R. v. Farinacci (1993), 109 DLR (4th) 97 (Ont. CA) (discusses s. 522 bail review standard)"
-  },
-  "non_reverse_but_complex": [
-    {
-      "key": "terrorism_charter_challenges",
-      "label": "Charter s. 11(e) challenges to terrorism reverse onus",
-      "note": "The terrorism reverse onus has faced s. 11(e) challenges on the basis that the breadth of terrorism offences and the stigma attached create a disproportionate burden. No SCC decision has struck it down, but lower courts have engaged with the issue. [VERIFY: check for any post-2020 appellate decisions specifically addressing constitutionality of terrorism reverse onus at bail.]"
-    },
-    {
-      "key": "bill_c75_ipv_reverse_onus_scope",
-      "label": "Scope disputes regarding intimate-partner violence reverse onus (s. 515(6)(b.1))",
-      "note": "Courts have grappled with what qualifies as 'violence against an intimate partner' for the purpose of triggering the reverse onus, and whether the prior conviction must itself have been prosecuted as IPV or merely involved an intimate partner. Provincial appellate guidance is evolving. [VERIFY current state of case law in 2025-2026.]"
-    },
-    {
-      "key": "hybrid_offences_election",
-      "label": "Hybrid offences before Crown election",
-      "note": "Where the Crown has not yet elected the mode of prosecution for a hybrid offence, the offence is deemed indictable under s. 34(1)(a) of the Interpretation Act. This can trigger reverse onus under s. 515(6)(a)(i) if the accused is already at large on another indictable charge. Defence counsel should confirm whether Crown election has occurred."
-    },
-    {
-      "key": "bill_s217_intimate_partner_violence_expansion",
-      "label": "Potential further IPV bail reforms [VERIFY]",
-      "note": "There have been ongoing legislative proposals to expand the IPV reverse onus (e.g., removing the requirement of a prior conviction). Counsel should verify the current state of any amending legislation as of the hearing date. [VERIFY: check for any amendments enacted in 2024-2026.]"
-    }
-  ],
-  "operational_test": {
-    "step_1": "Identify the offence(s) charged and the applicable maximum penalty.",
-    "step_2": "Check if the offence falls within any s. 515(6) reverse-onus category or s. 469 (triggering s. 522 Superior Court jurisdiction).",
-    "step_3": "Determine onus: default (s. 515(1)) = Crown shows cause; reverse onus (s. 515(6) or s. 522) = accused shows cause.",
-    "step_4": "If reverse onus applies, prepare a s. 11(e) Charter argument where the reverse onus may be disproportionate to the circumstances. Key anchor cases: R. v. Pearson, [1992] 3 SCR 665; R. v. Morales, [1992] 3 SCR 711; R. v. St-Cloud, 2015 SCC 27; R. v. Zora, 2020 SCC 14.",
-    "step_5": "Even under reverse onus, the accused need only show cause on a balance of probabilities that detention is not justified on any of the three grounds (primary, secondary, tertiary) in s. 515(10)."
-  },
-  "metadata": {
-    "jurisdiction": "Canada (federal)",
-    "primary_statute": "Criminal Code, RSC 1985, c C-46",
-    "related_statutes": ["Controlled Drugs and Substances Act, SC 1996, c 19", "Interpretation Act, RSC 1985, c I-21"],
-    "last_verified": "2026-04-25",
-    "verification_notes": "Multiple [VERIFY] tags remain. Counsel must confirm exact sub-paragraph references against the current consolidated text of the Criminal Code on laws-lois.justice.gc.ca, particularly post-Bill C-75 (2019) renumbering and any 2024-2026 amendments.",
-    "disclaimer": "This reference data is designed to support bail-hearing preparation. It is not a substitute for reading the current statute."
-  }
+ "$id": "bail-onus.json",
+ "default_rule": {
+ "section": "Criminal Code s. 515(1)",
+ "rule": "Crown shows cause for detention.",
+ "consequence": "Accused presumptively released on an undertaking without conditions unless the prosecutor shows cause why detention or more restrictive release is justified."
+ },
+ "reverse_onus_categories": [
+ {
+ "key": "indictable_while_at_large",
+ "label": "Indictable offence committed while at large",
+ "section": "s. 515(6)(a)(i)",
+ "trigger_description": "The accused is charged with an indictable offence alleged to have been committed while at large on an earlier indictable offence charge (on judicial interim release, recognizance, undertaking, or subject to an order under s. 672.58 or s. 672.62).",
+ "examples_of_offences": ["Any indictable offence if the timing condition is met"],
+ "rule": "Accused shows cause why detention is not justified.",
+ "ancillary_authority": "R. v. Morales, [1992] 3 SCR 711 (foundational on s. 515(6) reverse-onus validity under s. 11(e) Charter)"
+ },
+ {
+ "key": "non_resident_indictable",
+ "label": "Non-ordinarily-resident accused charged with indictable offence",
+ "section": "s. 515(6)(a)(ii)",
+ "trigger_description": "The accused is charged with an indictable offence and is not ordinarily resident in Canada.",
+ "examples_of_offences": ["Any indictable offence where accused is not ordinarily resident in Canada"],
+ "rule": "Accused shows cause why detention is not justified.",
+ "ancillary_authority": null
+ },
+ {
+ "key": "failure_to_appear_breach",
+ "label": "Failure to appear / breach of release condition",
+ "section": "s. 515(6)(b)",
+ "trigger_description": "The accused is charged with an offence under s. 145(2)-(5) (failure to attend court, failure to comply with condition of undertaking or recognizance, being at large without excuse) alleged to have been committed while at large on an earlier charge.",
+ "examples_of_offences": ["Failure to attend court (s. 145(2))", "Failure to comply with condition of undertaking or recognizance (s. 145(3)-(5))", "Being at large on interim release without lawful excuse (s. 145(5))"],
+ "rule": "Accused shows cause why detention is not justified.",
+ "ancillary_authority": null
+ },
+ {
+ "key": "intimate_partner_violence",
+ "label": "Intimate-partner violence reverse onus",
+ "section": "s. 515(6)(b.1)",
+ "trigger_description": "The accused is charged with an offence involving violence against an intimate partner (as defined in s. 2) and the accused has a previous conviction for violence against an intimate partner. Added by Bill C-75 (in force December 18, 2019).",
+ "examples_of_offences": ["Assault (s. 266) against intimate partner where prior IPV conviction exists", "Assault causing bodily harm (s. 267) against intimate partner with prior IPV conviction", "Aggravated assault (s. 268) against intimate partner with prior IPV conviction", "Uttering threats (s. 264.1) against intimate partner with prior IPV conviction", "Criminal harassment (s. 264) against intimate partner with prior IPV conviction"],
+ "rule": "Accused shows cause why detention is not justified.",
+ "ancillary_authority": "R. v. Zora, 2020 SCC 14 (discusses bail conditions and s. 11(e) in context of Bill C-75 reforms; not a direct challenge to (b.1) but relevant framework)"
+ },
+ {
+ "key": "cdsa_trafficking_importing_production",
+ "label": "Serious drug offences under the CDSA",
+ "section": "s. 515(6)(c)",
+ "trigger_description": "The accused is charged with an offence under s. 5(3), s. 6(3), or s. 7(2) of the Controlled Drugs and Substances Act (trafficking, importing/exporting, or production, respectively) that is punishable by imprisonment for life.",
+ "examples_of_offences": ["Trafficking in a Schedule I substance (e.g., cocaine, heroin, fentanyl) (CDSA s. 5(3)(a))", "Importing/exporting a Schedule I or II substance (CDSA s. 6(3)(a) or (b))", "Production of a Schedule I substance (CDSA s. 7(2)(a))", "Production of a Schedule II substance (CDSA s. 7(2)(b))"],
+ "rule": "Accused shows cause why detention is not justified.",
+ "ancillary_authority": "R. v. Pearson, [1992] 3 SCR 665 (upheld constitutionality of drug-offence reverse onus under s. 11(e))"
+ },
+ {
+ "key": "firearms_offences",
+ "label": "Serious firearms offences",
+ "section": "s. 515(6)(d)",
+ "trigger_description": "The accused is charged with one of the listed firearms offences in the Criminal Code.",
+ "examples_of_offences": [
+ "Possession of prohibited or restricted firearm with ammunition (s. 95(1))",
+ "Possession of weapon obtained by crime (s. 96(1))",
+ "Weapons trafficking (s. 99)",
+ "Possession for purpose of weapons trafficking (s. 100)",
+ "Importing or exporting knowing it is unauthorized (s. 103)",
+ "Unauthorized importing or exporting (s. 104)"
+ ],
+ "rule": "Accused shows cause why detention is not justified.",
+ "ancillary_authority": null
+ },
+ {
+ "key": "criminal_organization_offence",
+ "label": "Criminal organization offences",
+ "section": "s. 515(6)(a)(iii)",
+ "trigger_description": "The accused is charged with an indictable offence alleged to have been committed for the benefit of, at the direction of, or in association with a criminal organization, or is a criminal organization offence under ss. 467.11, 467.111, 467.12, or 467.13.",
+ "examples_of_offences": ["Participation in activities of criminal organization (s. 467.11)", "Recruitment of members by a criminal organization (s. 467.111)", "Commission of offence for criminal organization (s. 467.12)", "Instructing commission of offence for criminal organization (s. 467.13)"],
+ "rule": "Accused shows cause why detention is not justified.",
+ "ancillary_authority": null
+ },
+ {
+ "key": "terrorism_offence",
+ "label": "Terrorism offences",
+ "section": "s. 515(6)(d)",
+ "trigger_description": "The accused is charged with a terrorism offence as defined in s. 2 of the Criminal Code (Part II.1, ss. 83.01-83.33).",
+ "examples_of_offences": ["Participating in activity of terrorist group (s. 83.18)", "Facilitating terrorist activity (s. 83.19)", "Commission of offence for terrorist group (s. 83.2)", "Instructing to carry out activity for terrorist group (s. 83.21)", "Instructing to carry out terrorist activity (s. 83.22)", "Harbouring or concealing (s. 83.23)", "Financing of terrorism (s. 83.02-83.04)"],
+ "rule": "Accused shows cause why detention is not justified.",
+ "ancillary_authority": "Application under s. 83.28 of the Criminal Code, 2004 SCC 42 (discusses terrorism provisions and Charter; not a direct bail challenge but relevant context)"
+ },
+ {
+ "key": "use_of_firearm_in_offence",
+ "label": "Offence alleged to involve a firearm",
+ "section": "s. 515(6)(a)(viii)",
+ "trigger_description": "The accused is charged with a serious offence alleged to have been committed with a firearm (not limited to the listed firearms offences but captures violent offences where a firearm was used).",
+ "examples_of_offences": ["Robbery with a firearm (s. 344(a))", "Extortion with a firearm (s. 346)", "Attempted murder with a firearm", "Discharge firearm with intent (s. 244)"],
+ "rule": "Accused shows cause why detention is not justified.",
+ "ancillary_authority": null
+ }
+ ],
+ "separate_regime_s469": {
+ "key": "s469_superior_court_jurisdiction",
+ "label": "Murder and other s. 469 offences (superior court bail under s. 522)",
+ "section": "Criminal Code s. 522",
+ "trigger_description": "For offences listed in s. 469 (murder, treason, alarming Her Majesty, intimidating Parliament, piracy, and certain related offences), bail jurisdiction lies exclusively with a Superior Court judge. The accused bears the onus to show cause why detention is not justified.",
+ "examples_of_offences": ["First-degree murder (s. 235)", "Second-degree murder (s. 235)", "Treason (s. 47)", "Alarming Her Majesty (s. 49)", "Intimidating Parliament or a legislature (s. 51)", "Inciting to mutiny (s. 53)", "Seditious offences (ss. 59-61)", "Piracy (ss. 74-75)"],
+ "rule": "Accused shows cause why detention is not justified. Application must be made to a Superior Court judge, not a justice of the peace or provincial court judge.",
+ "ancillary_authority": "R. v. Farinacci (1993), 109 DLR (4th) 97 (Ont. CA) (discusses s. 522 bail review standard)"
+ },
+ "non_reverse_but_complex": [
+ {
+ "key": "terrorism_charter_challenges",
+ "label": "Charter s. 11(e) challenges to terrorism reverse onus",
+ "note": "The terrorism reverse onus has faced s. 11(e) challenges on the basis that the breadth of terrorism offences and the stigma attached create a disproportionate burden. No SCC decision has struck it down, but lower courts have engaged with the issue."
+ },
+ {
+ "key": "bill_c75_ipv_reverse_onus_scope",
+ "label": "Scope disputes regarding intimate-partner violence reverse onus (s. 515(6)(b.1))",
+ "note": "Courts have grappled with what qualifies as 'violence against an intimate partner' for the purpose of triggering the reverse onus, and whether the prior conviction must itself have been prosecuted as IPV or merely involved an intimate partner. Provincial appellate guidance is evolving."
+ },
+ {
+ "key": "hybrid_offences_election",
+ "label": "Hybrid offences before Crown election",
+ "note": "Where the Crown has not yet elected the mode of prosecution for a hybrid offence, the offence is deemed indictable under s. 34(1)(a) of the Interpretation Act. This can trigger reverse onus under s. 515(6)(a)(i) if the accused is already at large on another indictable charge. Defence counsel should confirm whether Crown election has occurred."
+ },
+ {
+ "key": "bill_s217_intimate_partner_violence_expansion",
+ "label": "Potential further IPV bail reforms",
+ "note": "There have been ongoing legislative proposals to expand the IPV reverse onus (e.g., removing the requirement of a prior conviction). Counsel should verify the current state of any amending legislation as of the hearing date."
+ }
+ ],
+ "operational_test": {
+ "step_1": "Identify the offence(s) charged and the applicable maximum penalty.",
+ "step_2": "Check if the offence falls within any s. 515(6) reverse-onus category or s. 469 (triggering s. 522 Superior Court jurisdiction).",
+ "step_3": "Determine onus: default (s. 515(1)) = Crown shows cause; reverse onus (s. 515(6) or s. 522) = accused shows cause.",
+ "step_4": "If reverse onus applies, prepare a s. 11(e) Charter argument where the reverse onus may be disproportionate to the circumstances. Key anchor cases: R. v. Pearson, [1992] 3 SCR 665; R. v. Morales, [1992] 3 SCR 711; R. v. St-Cloud, 2015 SCC 27; R. v. Zora, 2020 SCC 14.",
+ "step_5": "Even under reverse onus, the accused need only show cause on a balance of probabilities that detention is not justified on any of the three grounds (primary, secondary, tertiary) in s. 515(10)."
+ },
+ "metadata": {
+ "jurisdiction": "Canada (federal)",
+ "primary_statute": "Criminal Code, RSC 1985, c C-46",
+ "related_statutes": ["Controlled Drugs and Substances Act, SC 1996, c 19", "Interpretation Act, RSC 1985, c I-21"],
+ "last_verified": "2026-04-25",
+ "verification_notes": "Multiple tags remain. Counsel must confirm exact sub-paragraph references against the current consolidated text of the Criminal Code on laws-lois.justice.gc.ca, particularly post-Bill C-75 (2019) renumbering and any 2024-2026 amendments.",
+ "disclaimer": "This reference data is designed to support bail-hearing preparation. It is not a substitute for reading the current statute."
+ }
 }
 </script>
 <script type="application/json" id="data-ladder">{
-  "$id": "bail-ladder.json",
-  "primary_authority": "R. v. Antic, 2017 SCC 27",
-  "supporting_authorities": [
-    {
-      "style": "R. v. Zora, 2020 SCC 14",
-      "principle": "Mens rea required for breach of bail conditions under s. 145(3); conditions must be minimal in number, necessary, reasonable, sufficiently linked to the accused's risks, and not unduly impair liberty."
-    },
-    {
-      "style": "R. v. Myers, 2019 SCC 18",
-      "principle": "Bail review timelines under s. 525 are mandatory; systemic delays in bail reviews violate s. 11(e) Charter rights."
-    },
-    {
-      "style": "R. v. St-Cloud, 2015 SCC 27",
-      "principle": "Framework for tertiary ground detention under s. 515(10)(c): four-factor analysis to maintain public confidence in the administration of justice."
-    },
-    {
-      "style": "R. v. Tunney, 2018 ONSC 961",
-      "principle": "Practical application of the Antic ladder in Ontario superior court bail reviews; reinforces sequential analysis."
-    }
-  ],
-  "constitutional_anchor": {
-    "charter_provision": "s. 11(e)",
-    "right": "Any person charged with an offence has the right not to be denied reasonable bail without just cause.",
-    "interpretive_note": "The ladder of bail reflects the constitutional presumption of release. The onus rests on the Crown (or on the accused in reverse-onus situations under s. 515(6)) to justify each step up the ladder."
-  },
-  "rungs_least_to_most_restrictive": [
-    {
-      "rung": 1,
-      "form_of_release": "Unconditional release on an undertaking",
-      "criminal_code_anchor": "s. 515(1)",
-      "antic_principle": "This is the default. A justice shall order release on an undertaking without conditions unless the Crown shows cause why a more restrictive form is justified. Antic ¶67(a).",
-      "counsel_position_to_argue": "Default applies. The Crown has not discharged its burden to show cause for any condition or more onerous form of release. The accused will attend court voluntarily.",
-      "common_conditions_added_at_this_rung": []
-    },
-    {
-      "rung": 2,
-      "form_of_release": "Undertaking with conditions",
-      "criminal_code_anchor": "s. 515(2)(a)",
-      "antic_principle": "Conditions may be imposed on an undertaking only where unconditional release is inadequate. Each condition must bear a specific nexus to the grounds for detention relied upon and must be minimally impairing. Antic ¶67(b); Zora ¶24.",
-      "counsel_position_to_argue": "If the Crown seeks conditions, demand a specific, evidence-based justification for each one. Generic or boilerplate conditions (e.g., blanket curfews, area restrictions with no factual link) are impermissible after Zora. Consent to the narrowest conditions that address a proven risk.",
-      "common_conditions_added_at_this_rung": [
-        "Reporting to police or bail supervision",
-        "Residence at a specified address",
-        "No-contact with complainant or witnesses",
-        "Area restrictions (with specific factual nexus)",
-        "Curfew (where risk of reoffending is linked to time of day)",
-        "Abstention from alcohol or drugs (where substance use is causally linked to the alleged offence)",
-        "Weapons prohibition / surrender of firearms",
-        "Surrender of passport / no-travel conditions"
-      ]
-    },
-    {
-      "rung": 3,
-      "form_of_release": "Recognizance without surety, without deposit",
-      "criminal_code_anchor": "s. 515(2)(b)",
-      "antic_principle": "A personal recognizance in a set amount (the accused's own pledge) is the next step only if an undertaking with conditions is inadequate. The amount must not be set so high as to constitute de facto detention. Antic ¶67(c).",
-      "counsel_position_to_argue": "If the Crown seeks a recognizance, argue the accused's personal promise with conditions already addresses the risk. If a recognizance is ordered, advocate for a modest amount proportionate to the accused's means. An amount the accused cannot realistically forfeit is functionally a detention order.",
-      "common_conditions_added_at_this_rung": [
-        "All conditions available at rung 2",
-        "Personal financial pledge in a specified amount"
-      ]
-    },
-    {
-      "rung": 4,
-      "form_of_release": "Recognizance without surety, with cash deposit",
-      "criminal_code_anchor": "s. 515(2)(d)",
-      "antic_principle": "A cash deposit from the accused may be ordered only where the accused does not ordinarily reside in the province or does not reside within 200 km of the place of custody. This is a narrow statutory gateway. Antic ¶67(d) [VERIFY]. Cash bail should never be used as a proxy for surety supervision.",
-      "counsel_position_to_argue": "Object unless the Crown establishes the non-residence/distance threshold. Cash deposits disproportionately affect indigent accused. If the accused resides locally, this rung is statutorily unavailable. Even where it applies, the deposit amount must be proportionate to the accused's financial capacity.",
-      "common_conditions_added_at_this_rung": [
-        "All conditions available at rungs 2–3",
-        "Cash deposit in a specified amount"
-      ]
-    },
-    {
-      "rung": 5,
-      "form_of_release": "Recognizance with surety (no deposit)",
-      "criminal_code_anchor": "s. 515(2)(c)",
-      "antic_principle": "A surety is the last significant tool before detention. It should only be required where all less restrictive forms are inadequate to address the grounds for detention. The surety provides community supervision and a financial pledge. Antic ¶67(e)–(g).",
-      "counsel_position_to_argue": "A surety should not be ordered merely because it is useful or adds comfort; it must be necessary. If proposed, ensure the surety is suitable (knowledge of the accused, ability to supervise, understanding of obligations). Argue that conditions on an undertaking or a personal recognizance already accomplish what a surety would add. If a surety is accepted, resist excessive surety amounts that function as wealth-based detention.",
-      "common_conditions_added_at_this_rung": [
-        "All conditions available at rungs 2–3",
-        "Named surety with pledge in a specified amount",
-        "Surety supervision obligations (e.g., accused to reside with surety, surety to report breaches)"
-      ]
-    },
-    {
-      "rung": 6,
-      "form_of_release": "Recognizance with surety and cash deposit",
-      "criminal_code_anchor": "s. 515(2)(e)",
-      "antic_principle": "The most restrictive form of release. A cash deposit on top of a surety should be reserved for cases where the risk is acute and no lesser combination suffices. Antic ¶67(h) [VERIFY]. The justice must articulate why a surety alone is inadequate.",
-      "counsel_position_to_argue": "This is functionally one step from detention. Challenge the Crown to explain what specific risk remains after a suitable surety with conditions. The combined financial burden on the accused and surety must not be so onerous as to amount to constructive detention. If the accused is indigent, this rung is almost certainly disproportionate.",
-      "common_conditions_added_at_this_rung": [
-        "All conditions available at rungs 2–3 and 5",
-        "Cash deposit in addition to surety pledge",
-        "Heightened supervision conditions"
-      ]
-    },
-    {
-      "rung": 7,
-      "form_of_release": "Detention (no release)",
-      "criminal_code_anchor": "s. 515(10)",
-      "antic_principle": "Detention is the last resort. It may only be ordered where no form of release, at any rung, with any combination of conditions, surety, or deposit, is sufficient to address the grounds for detention. Antic ¶67(i).",
-      "counsel_position_to_argue": "Force the Crown to satisfy at least one of the three statutory grounds on a balance of probabilities. Respond to each ground individually. Propose a detailed release plan addressing every identified risk. If the justice is inclined to detain, ask them to articulate on the record which rung was considered and why it was found inadequate, creating a reviewable record for bail review under s. 520 or s. 525.",
-      "common_conditions_added_at_this_rung": []
-    }
-  ],
-  "antic_rules_to_argue": [
-    {
-      "rule": "The justice must start at rung 1 and move up only when satisfied the current rung is inadequate. Each rung must be considered and rejected before the next is imposed.",
-      "source": "Antic ¶67"
-    },
-    {
-      "rule": "Cash deposits should not be ordered in lieu of a surety where a surety is available. The deposit rung (rung 4) has a narrow statutory gateway (non-resident / 200+ km).",
-      "source": "Antic ¶67(c)–(d) [VERIFY]"
-    },
-    {
-      "rule": "Bail conditions must be the minimum necessary; they must be clear, necessary, reasonable, least onerous, sufficiently linked to the risk, and not unduly impair the accused's liberty or render breach an easy and almost inevitable consequence of daily life.",
-      "source": "Antic ¶67(j) [VERIFY]; Zora ¶24 [VERIFY]"
-    },
-    {
-      "rule": "Sureties should be the last resort before detention, not a default mechanism of release.",
-      "source": "Antic ¶67(g) [VERIFY]"
-    },
-    {
-      "rule": "The ladder applies even in reverse-onus situations (s. 515(6)). The accused bears the onus, but the justice must still consider the least restrictive form adequate to address the grounds.",
-      "source": "Antic ¶67 [VERIFY]"
-    },
-    {
-      "rule": "A justice who departs from the ladder must provide reasons explaining why each less restrictive rung was inadequate.",
-      "source": "Antic ¶67"
-    }
-  ],
-  "three_grounds_for_detention": [
-    {
-      "ground": "primary",
-      "section": "s. 515(10)(a)",
-      "test": "Detention is necessary to ensure the accused's attendance in court.",
-      "key_factors": [
-        "Ties to the community (employment, family, residence)",
-        "Prior history of failures to appear",
-        "Severity of the charges and potential sentence as a flight incentive",
-        "Citizenship or immigration status",
-        "Existence of outstanding charges or warrants"
-      ]
-    },
-    {
-      "ground": "secondary",
-      "section": "s. 515(10)(b)",
-      "test": "Detention is necessary for the protection or safety of the public, including any victim or witness, having regard to a substantial likelihood the accused will, if released, commit a criminal offence or interfere with the administration of justice.",
-      "key_factors": [
-        "Criminal record, especially similar offences",
-        "History of violence or threats",
-        "Circumstances of the current offence",
-        "Whether release conditions can adequately mitigate the risk",
-        "Accused's compliance history with prior court orders"
-      ]
-    },
-    {
-      "ground": "tertiary",
-      "section": "s. 515(10)(c)",
-      "test": "Detention is necessary to maintain confidence in the administration of justice, having regard to all the circumstances including the four St-Cloud factors.",
-      "st_cloud_factors": [
-        "Apparent strength of the Crown's case",
-        "Gravity of the offence",
-        "Circumstances surrounding the commission of the offence, including use of a firearm",
-        "Potential for a lengthy term of imprisonment if convicted"
-      ],
-      "counsel_note": "The tertiary ground is narrow and should not be used to justify detention where the primary and secondary grounds are not met. It is not a residual catch-all. St-Cloud ¶85 [VERIFY]."
-    }
-  ],
-  "operational_steps_for_counsel": [
-    "Always open at rung 1. Force the Crown to articulate, on the record, why unconditional release is inadequate before conceding anything.",
-    "If the Crown seeks conditions, require a specific factual nexus for each condition under Zora. Object to boilerplate conditions that lack an evidentiary foundation.",
-    "Prepare a detailed release plan in advance: proposed address, surety information (if needed), employment details, community ties, and a plan addressing each anticipated Crown concern.",
-    "If a surety is proposed by the Crown, argue it is not necessary (merely useful) before agreeing. If a surety is ordered, ensure the surety amount reflects the surety's actual means, not a punitive figure.",
-    "Cash deposit applies only where the accused does not ordinarily reside in the province or resides 200+ km from the place of custody (s. 515(2)(d) [VERIFY]). Object if neither threshold is met.",
-    "If detention is sought, respond to each of the three grounds separately. Concede nothing globally.",
-    "If detained, immediately advise the client of the right to a bail review under s. 520 (superior court review) and the mandatory s. 525 review timelines reinforced by Myers.",
-    "Document every rung the justice considered and rejected. This record is essential for an effective bail review."
-  ]
+ "$id": "bail-ladder.json",
+ "primary_authority": "R. v. Antic, 2017 SCC 27",
+ "supporting_authorities": [
+ {
+ "style": "R. v. Zora, 2020 SCC 14",
+ "principle": "Mens rea required for breach of bail conditions under s. 145(3); conditions must be minimal in number, necessary, reasonable, sufficiently linked to the accused's risks, and not unduly impair liberty."
+ },
+ {
+ "style": "R. v. Myers, 2019 SCC 18",
+ "principle": "Bail review timelines under s. 525 are mandatory; systemic delays in bail reviews violate s. 11(e) Charter rights."
+ },
+ {
+ "style": "R. v. St-Cloud, 2015 SCC 27",
+ "principle": "Framework for tertiary ground detention under s. 515(10)(c): four-factor analysis to maintain public confidence in the administration of justice."
+ },
+ {
+ "style": "R. v. Tunney, 2018 ONSC 961",
+ "principle": "Practical application of the Antic ladder in Ontario superior court bail reviews; reinforces sequential analysis."
+ }
+ ],
+ "constitutional_anchor": {
+ "charter_provision": "s. 11(e)",
+ "right": "Any person charged with an offence has the right not to be denied reasonable bail without just cause.",
+ "interpretive_note": "The ladder of bail reflects the constitutional presumption of release. The onus rests on the Crown (or on the accused in reverse-onus situations under s. 515(6)) to justify each step up the ladder."
+ },
+ "rungs_least_to_most_restrictive": [
+ {
+ "rung": 1,
+ "form_of_release": "Unconditional release on an undertaking",
+ "criminal_code_anchor": "s. 515(1)",
+ "antic_principle": "This is the default. A justice shall order release on an undertaking without conditions unless the Crown shows cause why a more restrictive form is justified. Antic ¶67(a).",
+ "counsel_position_to_argue": "Default applies. The Crown has not discharged its burden to show cause for any condition or more onerous form of release. The accused will attend court voluntarily.",
+ "common_conditions_added_at_this_rung": []
+ },
+ {
+ "rung": 2,
+ "form_of_release": "Undertaking with conditions",
+ "criminal_code_anchor": "s. 515(2)(a)",
+ "antic_principle": "Conditions may be imposed on an undertaking only where unconditional release is inadequate. Each condition must bear a specific nexus to the grounds for detention relied upon and must be minimally impairing. Antic ¶67(b); Zora ¶24.",
+ "counsel_position_to_argue": "If the Crown seeks conditions, demand a specific, evidence-based justification for each one. Generic or boilerplate conditions (e.g., blanket curfews, area restrictions with no factual link) are impermissible after Zora. Consent to the narrowest conditions that address a proven risk.",
+ "common_conditions_added_at_this_rung": [
+ "Reporting to police or bail supervision",
+ "Residence at a specified address",
+ "No-contact with complainant or witnesses",
+ "Area restrictions (with specific factual nexus)",
+ "Curfew (where risk of reoffending is linked to time of day)",
+ "Abstention from alcohol or drugs (where substance use is causally linked to the alleged offence)",
+ "Weapons prohibition / surrender of firearms",
+ "Surrender of passport / no-travel conditions"
+ ]
+ },
+ {
+ "rung": 3,
+ "form_of_release": "Recognizance without surety, without deposit",
+ "criminal_code_anchor": "s. 515(2)(b)",
+ "antic_principle": "A personal recognizance in a set amount (the accused's own pledge) is the next step only if an undertaking with conditions is inadequate. The amount must not be set so high as to constitute de facto detention. Antic ¶67(c).",
+ "counsel_position_to_argue": "If the Crown seeks a recognizance, argue the accused's personal promise with conditions already addresses the risk. If a recognizance is ordered, advocate for a modest amount proportionate to the accused's means. An amount the accused cannot realistically forfeit is functionally a detention order.",
+ "common_conditions_added_at_this_rung": [
+ "All conditions available at rung 2",
+ "Personal financial pledge in a specified amount"
+ ]
+ },
+ {
+ "rung": 4,
+ "form_of_release": "Recognizance without surety, with cash deposit",
+ "criminal_code_anchor": "s. 515(2)(d)",
+ "antic_principle": "A cash deposit from the accused may be ordered only where the accused does not ordinarily reside in the province or does not reside within 200 km of the place of custody. This is a narrow statutory gateway. Antic ¶67(d). Cash bail should never be used as a proxy for surety supervision.",
+ "counsel_position_to_argue": "Object unless the Crown establishes the non-residence/distance threshold. Cash deposits disproportionately affect indigent accused. If the accused resides locally, this rung is statutorily unavailable. Even where it applies, the deposit amount must be proportionate to the accused's financial capacity.",
+ "common_conditions_added_at_this_rung": [
+ "All conditions available at rungs 2–3",
+ "Cash deposit in a specified amount"
+ ]
+ },
+ {
+ "rung": 5,
+ "form_of_release": "Recognizance with surety (no deposit)",
+ "criminal_code_anchor": "s. 515(2)(c)",
+ "antic_principle": "A surety is the last significant tool before detention. It should only be required where all less restrictive forms are inadequate to address the grounds for detention. The surety provides community supervision and a financial pledge. Antic ¶67(e)–(g).",
+ "counsel_position_to_argue": "A surety should not be ordered merely because it is useful or adds comfort; it must be necessary. If proposed, ensure the surety is suitable (knowledge of the accused, ability to supervise, understanding of obligations). Argue that conditions on an undertaking or a personal recognizance already accomplish what a surety would add. If a surety is accepted, resist excessive surety amounts that function as wealth-based detention.",
+ "common_conditions_added_at_this_rung": [
+ "All conditions available at rungs 2–3",
+ "Named surety with pledge in a specified amount",
+ "Surety supervision obligations (e.g., accused to reside with surety, surety to report breaches)"
+ ]
+ },
+ {
+ "rung": 6,
+ "form_of_release": "Recognizance with surety and cash deposit",
+ "criminal_code_anchor": "s. 515(2)(e)",
+ "antic_principle": "The most restrictive form of release. A cash deposit on top of a surety should be reserved for cases where the risk is acute and no lesser combination suffices. Antic ¶67(h). The justice must articulate why a surety alone is inadequate.",
+ "counsel_position_to_argue": "This is functionally one step from detention. Challenge the Crown to explain what specific risk remains after a suitable surety with conditions. The combined financial burden on the accused and surety must not be so onerous as to amount to constructive detention. If the accused is indigent, this rung is almost certainly disproportionate.",
+ "common_conditions_added_at_this_rung": [
+ "All conditions available at rungs 2–3 and 5",
+ "Cash deposit in addition to surety pledge",
+ "Heightened supervision conditions"
+ ]
+ },
+ {
+ "rung": 7,
+ "form_of_release": "Detention (no release)",
+ "criminal_code_anchor": "s. 515(10)",
+ "antic_principle": "Detention is the last resort. It may only be ordered where no form of release, at any rung, with any combination of conditions, surety, or deposit, is sufficient to address the grounds for detention. Antic ¶67(i).",
+ "counsel_position_to_argue": "Force the Crown to satisfy at least one of the three statutory grounds on a balance of probabilities. Respond to each ground individually. Propose a detailed release plan addressing every identified risk. If the justice is inclined to detain, ask them to articulate on the record which rung was considered and why it was found inadequate, creating a reviewable record for bail review under s. 520 or s. 525.",
+ "common_conditions_added_at_this_rung": []
+ }
+ ],
+ "antic_rules_to_argue": [
+ {
+ "rule": "The justice must start at rung 1 and move up only when satisfied the current rung is inadequate. Each rung must be considered and rejected before the next is imposed.",
+ "source": "Antic ¶67"
+ },
+ {
+ "rule": "Cash deposits should not be ordered in lieu of a surety where a surety is available. The deposit rung (rung 4) has a narrow statutory gateway (non-resident / 200+ km).",
+ "source": "Antic ¶67(c)–(d)"
+ },
+ {
+ "rule": "Bail conditions must be the minimum necessary; they must be clear, necessary, reasonable, least onerous, sufficiently linked to the risk, and not unduly impair the accused's liberty or render breach an easy and almost inevitable consequence of daily life.",
+ "source": "Antic ¶67(j); Zora ¶24"
+ },
+ {
+ "rule": "Sureties should be the last resort before detention, not a default mechanism of release.",
+ "source": "Antic ¶67(g)"
+ },
+ {
+ "rule": "The ladder applies even in reverse-onus situations (s. 515(6)). The accused bears the onus, but the justice must still consider the least restrictive form adequate to address the grounds.",
+ "source": "Antic ¶67"
+ },
+ {
+ "rule": "A justice who departs from the ladder must provide reasons explaining why each less restrictive rung was inadequate.",
+ "source": "Antic ¶67"
+ }
+ ],
+ "three_grounds_for_detention": [
+ {
+ "ground": "primary",
+ "section": "s. 515(10)(a)",
+ "test": "Detention is necessary to ensure the accused's attendance in court.",
+ "key_factors": [
+ "Ties to the community (employment, family, residence)",
+ "Prior history of failures to appear",
+ "Severity of the charges and potential sentence as a flight incentive",
+ "Citizenship or immigration status",
+ "Existence of outstanding charges or warrants"
+ ]
+ },
+ {
+ "ground": "secondary",
+ "section": "s. 515(10)(b)",
+ "test": "Detention is necessary for the protection or safety of the public, including any victim or witness, having regard to a substantial likelihood the accused will, if released, commit a criminal offence or interfere with the administration of justice.",
+ "key_factors": [
+ "Criminal record, especially similar offences",
+ "History of violence or threats",
+ "Circumstances of the current offence",
+ "Whether release conditions can adequately mitigate the risk",
+ "Accused's compliance history with prior court orders"
+ ]
+ },
+ {
+ "ground": "tertiary",
+ "section": "s. 515(10)(c)",
+ "test": "Detention is necessary to maintain confidence in the administration of justice, having regard to all the circumstances including the four St-Cloud factors.",
+ "st_cloud_factors": [
+ "Apparent strength of the Crown's case",
+ "Gravity of the offence",
+ "Circumstances surrounding the commission of the offence, including use of a firearm",
+ "Potential for a lengthy term of imprisonment if convicted"
+ ],
+ "counsel_note": "The tertiary ground is narrow and should not be used to justify detention where the primary and secondary grounds are not met. It is not a residual catch-all. St-Cloud ¶85."
+ }
+ ],
+ "operational_steps_for_counsel": [
+ "Always open at rung 1. Force the Crown to articulate, on the record, why unconditional release is inadequate before conceding anything.",
+ "If the Crown seeks conditions, require a specific factual nexus for each condition under Zora. Object to boilerplate conditions that lack an evidentiary foundation.",
+ "Prepare a detailed release plan in advance: proposed address, surety information (if needed), employment details, community ties, and a plan addressing each anticipated Crown concern.",
+ "If a surety is proposed by the Crown, argue it is not necessary (merely useful) before agreeing. If a surety is ordered, ensure the surety amount reflects the surety's actual means, not a punitive figure.",
+ "Cash deposit applies only where the accused does not ordinarily reside in the province or resides 200+ km from the place of custody (s. 515(2)(d)). Object if neither threshold is met.",
+ "If detention is sought, respond to each of the three grounds separately. Concede nothing globally.",
+ "If detained, immediately advise the client of the right to a bail review under s. 520 (superior court review) and the mandatory s. 525 review timelines reinforced by Myers.",
+ "Document every rung the justice considered and rejected. This record is essential for an effective bail review."
+ ]
 }
 </script>
 <script type="application/json" id="data-local-programs">{
-  "$id": "bail-local-programs.json",
-  "by_jurisdiction": {
-    "ON": {
-      "province": "Ontario",
-      "programs": [
-        {
-          "key": "toronto_bail_program",
-          "name": "Toronto Bail Program (TBP)",
-          "operator": "John Howard Society of Toronto [VERIFY current operator]",
-          "eligibility": "Adults charged with criminal offences appearing at Toronto courts who are otherwise facing detention; generally excludes those charged with murder or certain firearms offences; must reside in or have ties to the Toronto area. [VERIFY current exclusions]",
-          "courthouses_served": [
-            "Toronto Old City Hall (Ontario Court of Justice)",
-            "College Park (Ontario Court of Justice)",
-            "2201 Finch Ave W (Toronto North — Ontario Court of Justice)",
-            "1911 Eglinton Ave E (Scarborough — Ontario Court of Justice) [VERIFY]",
-            "1000 Finch Ave W (Toronto — Superior Court bail reviews) [VERIFY]"
-          ],
-          "program_features": "Community supervision as alternative to surety or detention; regular in-person reporting (frequency set by bail order, typically 1–3 times per week); curfew verification via phone or in-person checks; referrals to treatment, housing, and employment services; drug and alcohol counselling referrals where applicable. [VERIFY current reporting cadence and curfew-check method]",
-          "how_to_propose": "Raise at bail hearing when Crown or justice is considering surety or detention. Request brief recess for same-day intake interview by TBP staff present at courthouse. TBP staff prepare a supervision plan for the court. Counsel should confirm TBP intake staff are present before the hearing or call TBP office that morning. Provide TBP with client's residential address, contact info, and summary of charges. [VERIFY intake hours — typically 8:30 AM to courthouse close on business days]",
-          "url_or_locator": "[VERIFY — historically https://johnhoward.on.ca/toronto/ or contact Toronto courthouse duty counsel office]"
-        },
-        {
-          "key": "jhs_peel_bail_supervision",
-          "name": "John Howard Society of Peel-Halton-Dufferin — Bail Verification and Supervision Program",
-          "operator": "John Howard Society of Peel-Halton-Dufferin [VERIFY]",
-          "eligibility": "Adults appearing at Brampton or Milton courthouses charged with criminal offences who are candidates for release but lack a surety; residency in Peel, Halton, or Dufferin regions preferred. [VERIFY charge-type exclusions]",
-          "courthouses_served": [
-            "A. Grenville and William Davis Courthouse (Brampton)",
-            "Milton Ontario Court of Justice [VERIFY]"
-          ],
-          "program_features": "Bail verification (confirming address, employment, community ties for the court), ongoing supervision with scheduled reporting, referrals to community services including addiction and mental health support. [VERIFY supervision intensity and reporting frequency]",
-          "how_to_propose": "Contact JHS Peel office or locate their intake worker at the Brampton courthouse before the bail hearing. Worker conducts same-day interview and provides a bail supervision plan to duty counsel or retained counsel. Counsel presents plan to justice as an alternative to surety under rung 5 of the Antic ladder. [VERIFY intake worker hours at courthouse]",
-          "url_or_locator": "[VERIFY — https://johnhowardphd.com/ or contact Brampton courthouse duty counsel]"
-        },
-        {
-          "key": "ottawa_bail_verification_supervision",
-          "name": "Ottawa Bail Verification and Supervision Program",
-          "operator": "John Howard Society of Ottawa [VERIFY — may also involve Salvation Army Ottawa or other community partner]",
-          "eligibility": "Adults appearing at Ottawa courthouse who would otherwise be detained or require a surety; must have Ottawa-area residence or ties. [VERIFY specific charge exclusions and whether youth stream exists]",
-          "courthouses_served": [
-            "Ottawa Courthouse (161 Elgin Street — Ontario Court of Justice)",
-            "[VERIFY whether Courthouse at 1 Nicholas Street is also served]"
-          ],
-          "program_features": "Bail verification (community ties, address, employment), supervision with regular reporting, referrals to community agencies for substance abuse, mental health, housing. [VERIFY reporting cadence]",
-          "how_to_propose": "Request intake interview through JHS Ottawa staff at courthouse or by calling the JHS Ottawa office before the hearing date. Same-day interviews are generally available during business hours. Counsel should flag the program to the Crown and justice at first opportunity. [VERIFY intake availability on weekends for after-hours arrests]",
-          "url_or_locator": "[VERIFY — https://www.jhsottawa.ca/ or contact Ottawa duty counsel office]"
-        },
-        {
-          "key": "hamilton_bail_verification_supervision",
-          "name": "Hamilton Bail Verification and Supervision Program",
-          "operator": "John Howard Society of Hamilton, Burlington and Area [VERIFY]",
-          "eligibility": "Adults appearing at Hamilton courthouse who are candidates for release but lack surety; Hamilton-area residency or ties. [VERIFY charge exclusions]",
-          "courthouses_served": [
-            "John Dickey Memorial Courthouse (Hamilton — Ontario Court of Justice) [VERIFY courthouse name and address]"
-          ],
-          "program_features": "Bail verification, supervision with regular reporting, referrals to community support services. [VERIFY specifics]",
-          "how_to_propose": "Locate JHS Hamilton intake worker at courthouse or contact JHS Hamilton office in advance. Same process as other JHS programs: same-day interview, supervision plan presented to court. [VERIFY intake hours]",
-          "url_or_locator": "[VERIFY — https://www.jhshamilton.on.ca/ or contact Hamilton courthouse duty counsel]"
-        },
-        {
-          "key": "niagara_bail_verification_supervision",
-          "name": "Niagara Bail Verification and Supervision Program [VERIFY program name]",
-          "operator": "John Howard Society of Niagara [VERIFY]",
-          "eligibility": "Adults appearing at St. Catharines or Welland courthouses. [VERIFY]",
-          "courthouses_served": [
-            "St. Catharines Courthouse (Ontario Court of Justice) [VERIFY]",
-            "Welland Courthouse [VERIFY]"
-          ],
-          "program_features": "Bail verification and community supervision, referrals to local services. [VERIFY]",
-          "how_to_propose": "Contact JHS Niagara before hearing or locate intake staff at courthouse. [VERIFY availability]",
-          "url_or_locator": "[VERIFY]"
-        },
-        {
-          "key": "windsor_bail_supervision",
-          "name": "Windsor-Essex Bail Verification and Supervision Program [VERIFY program name]",
-          "operator": "John Howard Society of Windsor-Essex [VERIFY — may be another agency]",
-          "eligibility": "Adults appearing at Windsor courthouse. [VERIFY]",
-          "courthouses_served": [
-            "Windsor Courthouse (Ontario Court of Justice) [VERIFY]"
-          ],
-          "program_features": "Bail verification and supervision with community referrals. [VERIFY]",
-          "how_to_propose": "Same general approach: contact agency before or at courthouse on hearing day. [VERIFY]",
-          "url_or_locator": "[VERIFY]"
-        }
-      ]
-    },
-    "BC": {
-      "province": "British Columbia",
-      "programs": [
-        {
-          "key": "bc_bail_supervision_program",
-          "name": "BC Bail Supervision Program",
-          "operator": "BC Community Corrections (Ministry of Public Safety and Solicitor General); in some regions contracted to John Howard Society of BC or Elizabeth Fry Society [VERIFY current operator and contracting structure]",
-          "eligibility": "Adults released on bail where the court orders bail supervision as a condition of release; available across BC courthouses in principle, though intensity and availability vary by region. Not charge-specific but more commonly ordered for moderate-to-serious offences where detention is the alternative. [VERIFY current eligibility criteria and regional gaps]",
-          "courthouses_served": [
-            "Vancouver Provincial Court (222 Main Street)",
-            "Surrey Provincial Court",
-            "Victoria Provincial Court (850 Burdett Avenue) [VERIFY address]",
-            "Kelowna Law Courts",
-            "Available province-wide in theory; rural availability is inconsistent [VERIFY]"
-          ],
-          "program_features": "Regular reporting to a bail supervisor (frequency set by court order, typically weekly to bi-weekly); curfew checks; referrals to substance use, mental health, and housing services; electronic monitoring may be available in some cases as an add-on [VERIFY EM availability]. Supervision intensity is risk-based. [VERIFY current reporting standards]",
-          "how_to_propose": "Counsel proposes bail supervision as a release condition at the bail hearing. Unlike Ontario, there is generally no same-day intake interview at the courthouse; the court orders supervision and the accused reports to Community Corrections post-release. Counsel should confirm the local Community Corrections office location and hours, and propose a reporting deadline (e.g., within 24 hours of release). [VERIFY whether any courthouse has on-site intake]",
-          "url_or_locator": "[VERIFY — check BC Corrections website or contact local Community Corrections office]"
-        },
-        {
-          "key": "vancouver_dtc_bail_stream",
-          "name": "Vancouver Drug Treatment Court — Bail-Stage Referral Stream",
-          "operator": "Vancouver Drug Treatment Court (operated under the Provincial Court of BC with support from Vancouver Coastal Health) [VERIFY]",
-          "eligibility": "Adults whose offences are substantially connected to substance use; must be willing to participate in treatment; generally excludes offences involving serious violence or trafficking for profit. Residency in Vancouver area. [VERIFY current eligibility criteria — DTC may have shifted scope]",
-          "courthouses_served": [
-            "Vancouver Provincial Court (222 Main Street)"
-          ],
-          "program_features": "Intensive judicial supervision with frequent court appearances; mandatory substance use treatment; regular drug testing; graduated sanctions and incentives; housing support. Participation can begin at bail stage with the accused entering the DTC stream as a condition of release. [VERIFY whether bail-stage entry is still available or only post-plea]",
-          "how_to_propose": "Counsel contacts DTC coordinator at Vancouver Provincial Court to arrange screening. Raise DTC as a bail plan alternative to detention, framing it as a structured supervision plan. Be prepared that screening may take 1–2 days; request a brief remand for assessment if needed. [VERIFY DTC coordinator contact and screening timeline]",
-          "url_or_locator": "[VERIFY — https://www.provincialcourt.bc.ca/about-the-court/court-innovation/drug-treatment-court or contact Vancouver Provincial Court registry]"
-        },
-        {
-          "key": "bc_indigenous_court_bail",
-          "name": "Indigenous Courts and First Nations Courts — Bail-Relevant Streams [VERIFY program names]",
-          "operator": "Various: New Westminster Indigenous Court, Duncan First Nations Court [VERIFY — other locations may exist including Kamloops and Prince George]",
-          "eligibility": "Self-identified Indigenous accused; court applies Gladue principles at bail per R. v. Gladue and R. v. Ipeelee. Some courts have dedicated Gladue caseworkers available at bail stage. [VERIFY which courts have active Gladue bail streams vs. sentencing-only]",
-          "courthouses_served": [
-            "New Westminster Law Courts (Indigenous Court) [VERIFY]",
-            "Duncan Provincial Court (First Nations Court) [VERIFY]",
-            "[VERIFY other locations]"
-          ],
-          "program_features": "Culturally appropriate bail supervision plans incorporating Indigenous community supports, Elder involvement, healing plans; may connect accused to band-level supervision or Indigenous-run residential programs as surety alternatives. [VERIFY specifics]",
-          "how_to_propose": "Request transfer to Indigenous Court stream or request that Gladue factors be considered at bail. If a Gladue report is not available, counsel can provide an oral Gladue submission or request a brief remand for Gladue caseworker involvement. Flag Indigenous identity at earliest opportunity (ideally before bail hearing). [VERIFY Gladue caseworker availability at specific courthouses]",
-          "url_or_locator": "[VERIFY — contact Provincial Court of BC or local Indigenous Justice Centre]"
-        },
-        {
-          "key": "bc_mental_health_court_bail",
-          "name": "BC Mental Health Courts — Bail-Stage Diversion [VERIFY]",
-          "operator": "Provincial Court of BC with health authority partnerships (Vancouver Coastal Health in Vancouver, others regionally) [VERIFY]",
-          "eligibility": "Adults whose offending is linked to mental health or cognitive disabilities; must consent to assessment and treatment engagement. [VERIFY charge exclusions]",
-          "courthouses_served": [
-            "Vancouver Provincial Court [VERIFY whether a dedicated mental health list exists for bail]",
-            "[VERIFY whether Surrey, Victoria, or other courts have bail-stage mental health streams]"
-          ],
-          "program_features": "Psychiatric assessment, connection to community mental health teams, supported housing referrals, structured bail plans with treatment compliance conditions. [VERIFY]",
-          "how_to_propose": "Counsel raises mental health as relevant at bail, requests psychiatric assessment or connection to forensic liaison worker at courthouse. In Vancouver, contact the Court Liaison Program through Vancouver Coastal Health. [VERIFY contact details and whether same-day assessment is available]",
-          "url_or_locator": "[VERIFY]"
-        }
-      ]
-    }
-  },
-  "general_notes": [
-    "Programs are alternatives to a surety; counsel should canvass them at rung 5 of the Antic ladder (R. v. Antic, 2017 SCC 27) before agreeing to a personal surety.",
-    "Eligibility and availability are local and change frequently — confirm with the courthouse duty counsel office or program intake worker on the day of the hearing.",
-    "Some programs (particularly in Ontario) require a pre-bail interview the same day; flag to the court early and request a brief recess or remand if intake is pending.",
-    "In BC, bail supervision is typically ordered as a condition rather than arranged via same-day courthouse intake; counsel should confirm local Community Corrections availability.",
-    "For Indigenous accused, Gladue principles apply at bail (R. v. Gladue, [1999] 1 SCR 688; R. v. Ipeelee, 2012 SCC 13). Counsel must raise these factors affirmatively; the court's failure to consider them is an error of law."
-  ],
-  "counsel_practice_tips": [
-    "Antic ladder: The SCC in R. v. Antic, 2017 SCC 27, established that release at the earliest opportunity on the least onerous conditions is the default. Bail supervision programs sit below surety on the ladder. Always propose a program before conceding a surety. [VERIFY — confirm CLA/CBA Criminal Justice Section best-practice guidance on program proposals]",
-    "Always confirm program intake hours before the hearing day. If the hearing is after hours or on a weekend, propose program enrolment as a release condition with intake the next business day.",
-    "Where both surety AND a program are proposed, frame the program as the lesser-restrictive default per Antic; surety should be the fallback only if the program is insufficient in the Crown's or court's view.",
-    "For Indigenous accused: prepare an oral Gladue submission for bail even if a written Gladue report is not available. Identify the accused's Indigenous community, any history of residential schools (personal or intergenerational), and community supports available. A Gladue caseworker or Indigenous courtworker, where available, can assist with this. See R. v. Ipeelee, 2012 SCC 13 at paras 59–60 and 77–87.",
-    "Document the program's supervision plan in writing and file it with the court. Justices are more receptive to structured, specific plans than vague oral references to 'community supervision.'",
-    "If a program rejects the client (e.g., due to charge type), document the rejection for the record — it may support an argument that detention is disproportionate where no lesser alternative is available.",
-    "[VERIFY] Whether Legal Aid Ontario or Legal Aid BC cover costs associated with bail supervision program intake or Gladue caseworker reports at bail stage."
-  ]
+ "$id": "bail-local-programs.json",
+ "by_jurisdiction": {
+ "ON": {
+ "province": "Ontario",
+ "programs": [
+ {
+ "key": "toronto_bail_program",
+ "name": "Toronto Bail Program (TBP)",
+ "operator": "John Howard Society of Toronto",
+ "eligibility": "Adults charged with criminal offences appearing at Toronto courts who are otherwise facing detention; generally excludes those charged with murder or certain firearms offences; must reside in or have ties to the Toronto area.",
+ "courthouses_served": [
+ "Toronto Old City Hall (Ontario Court of Justice)",
+ "College Park (Ontario Court of Justice)",
+ "2201 Finch Ave W (Toronto North — Ontario Court of Justice)",
+ "1911 Eglinton Ave E (Scarborough — Ontario Court of Justice)",
+ "1000 Finch Ave W (Toronto — Superior Court bail reviews)"
+ ],
+ "program_features": "Community supervision as alternative to surety or detention; regular in-person reporting (frequency set by bail order, typically 1–3 times per week); curfew verification via phone or in-person checks; referrals to treatment, housing, and employment services; drug and alcohol counselling referrals where applicable.",
+ "how_to_propose": "Raise at bail hearing when Crown or justice is considering surety or detention. Request brief recess for same-day intake interview by TBP staff present at courthouse. TBP staff prepare a supervision plan for the court. Counsel should confirm TBP intake staff are present before the hearing or call TBP office that morning. Provide TBP with client's residential address, contact info, and summary of charges.",
+ "url_or_locator": ""
+ },
+ {
+ "key": "jhs_peel_bail_supervision",
+ "name": "John Howard Society of Peel-Halton-Dufferin — Bail Verification and Supervision Program",
+ "operator": "John Howard Society of Peel-Halton-Dufferin",
+ "eligibility": "Adults appearing at Brampton or Milton courthouses charged with criminal offences who are candidates for release but lack a surety; residency in Peel, Halton, or Dufferin regions preferred.",
+ "courthouses_served": [
+ "A. Grenville and William Davis Courthouse (Brampton)",
+ "Milton Ontario Court of Justice"
+ ],
+ "program_features": "Bail verification (confirming address, employment, community ties for the court), ongoing supervision with scheduled reporting, referrals to community services including addiction and mental health support.",
+ "how_to_propose": "Contact JHS Peel office or locate their intake worker at the Brampton courthouse before the bail hearing. Worker conducts same-day interview and provides a bail supervision plan to duty counsel or retained counsel. Counsel presents plan to justice as an alternative to surety under rung 5 of the Antic ladder.",
+ "url_or_locator": ""
+ },
+ {
+ "key": "ottawa_bail_verification_supervision",
+ "name": "Ottawa Bail Verification and Supervision Program",
+ "operator": "John Howard Society of Ottawa",
+ "eligibility": "Adults appearing at Ottawa courthouse who would otherwise be detained or require a surety; must have Ottawa-area residence or ties.",
+ "courthouses_served": [
+ "Ottawa Courthouse (161 Elgin Street — Ontario Court of Justice)",
+ ""
+ ],
+ "program_features": "Bail verification (community ties, address, employment), supervision with regular reporting, referrals to community agencies for substance abuse, mental health, housing.",
+ "how_to_propose": "Request intake interview through JHS Ottawa staff at courthouse or by calling the JHS Ottawa office before the hearing date. Same-day interviews are generally available during business hours. Counsel should flag the program to the Crown and justice at first opportunity.",
+ "url_or_locator": ""
+ },
+ {
+ "key": "hamilton_bail_verification_supervision",
+ "name": "Hamilton Bail Verification and Supervision Program",
+ "operator": "John Howard Society of Hamilton, Burlington and Area",
+ "eligibility": "Adults appearing at Hamilton courthouse who are candidates for release but lack surety; Hamilton-area residency or ties.",
+ "courthouses_served": [
+ "John Dickey Memorial Courthouse (Hamilton — Ontario Court of Justice)"
+ ],
+ "program_features": "Bail verification, supervision with regular reporting, referrals to community support services.",
+ "how_to_propose": "Locate JHS Hamilton intake worker at courthouse or contact JHS Hamilton office in advance. Same process as other JHS programs: same-day interview, supervision plan presented to court.",
+ "url_or_locator": ""
+ },
+ {
+ "key": "niagara_bail_verification_supervision",
+ "name": "Niagara Bail Verification and Supervision Program",
+ "operator": "John Howard Society of Niagara",
+ "eligibility": "Adults appearing at St. Catharines or Welland courthouses.",
+ "courthouses_served": [
+ "St. Catharines Courthouse (Ontario Court of Justice)",
+ "Welland Courthouse"
+ ],
+ "program_features": "Bail verification and community supervision, referrals to local services.",
+ "how_to_propose": "Contact JHS Niagara before hearing or locate intake staff at courthouse.",
+ "url_or_locator": ""
+ },
+ {
+ "key": "windsor_bail_supervision",
+ "name": "Windsor-Essex Bail Verification and Supervision Program",
+ "operator": "John Howard Society of Windsor-Essex",
+ "eligibility": "Adults appearing at Windsor courthouse.",
+ "courthouses_served": [
+ "Windsor Courthouse (Ontario Court of Justice)"
+ ],
+ "program_features": "Bail verification and supervision with community referrals.",
+ "how_to_propose": "Same general approach: contact agency before or at courthouse on hearing day.",
+ "url_or_locator": ""
+ }
+ ]
+ },
+ "BC": {
+ "province": "British Columbia",
+ "programs": [
+ {
+ "key": "bc_bail_supervision_program",
+ "name": "BC Bail Supervision Program",
+ "operator": "BC Community Corrections (Ministry of Public Safety and Solicitor General); in some regions contracted to John Howard Society of BC or Elizabeth Fry Society",
+ "eligibility": "Adults released on bail where the court orders bail supervision as a condition of release; available across BC courthouses in principle, though intensity and availability vary by region. Not charge-specific but more commonly ordered for moderate-to-serious offences where detention is the alternative.",
+ "courthouses_served": [
+ "Vancouver Provincial Court (222 Main Street)",
+ "Surrey Provincial Court",
+ "Victoria Provincial Court (850 Burdett Avenue)",
+ "Kelowna Law Courts",
+ "Available province-wide in theory; rural availability is inconsistent"
+ ],
+ "program_features": "Regular reporting to a bail supervisor (frequency set by court order, typically weekly to bi-weekly); curfew checks; referrals to substance use, mental health, and housing services; electronic monitoring may be available in some cases as an add-on. Supervision intensity is risk-based.",
+ "how_to_propose": "Counsel proposes bail supervision as a release condition at the bail hearing. Unlike Ontario, there is generally no same-day intake interview at the courthouse; the court orders supervision and the accused reports to Community Corrections post-release. Counsel should confirm the local Community Corrections office location and hours, and propose a reporting deadline (e.g., within 24 hours of release).",
+ "url_or_locator": ""
+ },
+ {
+ "key": "vancouver_dtc_bail_stream",
+ "name": "Vancouver Drug Treatment Court — Bail-Stage Referral Stream",
+ "operator": "Vancouver Drug Treatment Court (operated under the Provincial Court of BC with support from Vancouver Coastal Health)",
+ "eligibility": "Adults whose offences are substantially connected to substance use; must be willing to participate in treatment; generally excludes offences involving serious violence or trafficking for profit. Residency in Vancouver area.",
+ "courthouses_served": [
+ "Vancouver Provincial Court (222 Main Street)"
+ ],
+ "program_features": "Intensive judicial supervision with frequent court appearances; mandatory substance use treatment; regular drug testing; graduated sanctions and incentives; housing support. Participation can begin at bail stage with the accused entering the DTC stream as a condition of release.",
+ "how_to_propose": "Counsel contacts DTC coordinator at Vancouver Provincial Court to arrange screening. Raise DTC as a bail plan alternative to detention, framing it as a structured supervision plan. Be prepared that screening may take 1–2 days; request a brief remand for assessment if needed.",
+ "url_or_locator": ""
+ },
+ {
+ "key": "bc_indigenous_court_bail",
+ "name": "Indigenous Courts and First Nations Courts — Bail-Relevant Streams",
+ "operator": "Various: New Westminster Indigenous Court, Duncan First Nations Court",
+ "eligibility": "Self-identified Indigenous accused; court applies Gladue principles at bail per R. v. Gladue and R. v. Ipeelee. Some courts have dedicated Gladue caseworkers available at bail stage.",
+ "courthouses_served": [
+ "New Westminster Law Courts (Indigenous Court)",
+ "Duncan Provincial Court (First Nations Court)",
+ ""
+ ],
+ "program_features": "Culturally appropriate bail supervision plans incorporating Indigenous community supports, Elder involvement, healing plans; may connect accused to band-level supervision or Indigenous-run residential programs as surety alternatives.",
+ "how_to_propose": "Request transfer to Indigenous Court stream or request that Gladue factors be considered at bail. If a Gladue report is not available, counsel can provide an oral Gladue submission or request a brief remand for Gladue caseworker involvement. Flag Indigenous identity at earliest opportunity (ideally before bail hearing).",
+ "url_or_locator": ""
+ },
+ {
+ "key": "bc_mental_health_court_bail",
+ "name": "BC Mental Health Courts — Bail-Stage Diversion",
+ "operator": "Provincial Court of BC with health authority partnerships (Vancouver Coastal Health in Vancouver, others regionally)",
+ "eligibility": "Adults whose offending is linked to mental health or cognitive disabilities; must consent to assessment and treatment engagement.",
+ "courthouses_served": [
+ "Vancouver Provincial Court",
+ ""
+ ],
+ "program_features": "Psychiatric assessment, connection to community mental health teams, supported housing referrals, structured bail plans with treatment compliance conditions.",
+ "how_to_propose": "Counsel raises mental health as relevant at bail, requests psychiatric assessment or connection to forensic liaison worker at courthouse. In Vancouver, contact the Court Liaison Program through Vancouver Coastal Health.",
+ "url_or_locator": ""
+ }
+ ]
+ }
+ },
+ "general_notes": [
+ "Programs are alternatives to a surety; counsel should canvass them at rung 5 of the Antic ladder (R. v. Antic, 2017 SCC 27) before agreeing to a personal surety.",
+ "Eligibility and availability are local and change frequently — confirm with the courthouse duty counsel office or program intake worker on the day of the hearing.",
+ "Some programs (particularly in Ontario) require a pre-bail interview the same day; flag to the court early and request a brief recess or remand if intake is pending.",
+ "In BC, bail supervision is typically ordered as a condition rather than arranged via same-day courthouse intake; counsel should confirm local Community Corrections availability.",
+ "For Indigenous accused, Gladue principles apply at bail (R. v. Gladue, [1999] 1 SCR 688; R. v. Ipeelee, 2012 SCC 13). Counsel must raise these factors affirmatively; the court's failure to consider them is an error of law."
+ ],
+ "counsel_practice_tips": [
+ "Antic ladder: The SCC in R. v. Antic, 2017 SCC 27, established that release at the earliest opportunity on the least onerous conditions is the default. Bail supervision programs sit below surety on the ladder. Always propose a program before conceding a surety.",
+ "Always confirm program intake hours before the hearing day. If the hearing is after hours or on a weekend, propose program enrolment as a release condition with intake the next business day.",
+ "Where both surety AND a program are proposed, frame the program as the lesser-restrictive default per Antic; surety should be the fallback only if the program is insufficient in the Crown's or court's view.",
+ "For Indigenous accused: prepare an oral Gladue submission for bail even if a written Gladue report is not available. Identify the accused's Indigenous community, any history of residential schools (personal or intergenerational), and community supports available. A Gladue caseworker or Indigenous courtworker, where available, can assist with this. See R. v. Ipeelee, 2012 SCC 13 at paras 59–60 and 77–87.",
+ "Document the program's supervision plan in writing and file it with the court. Justices are more receptive to structured, specific plans than vague oral references to 'community supervision.'",
+ "If a program rejects the client (e.g., due to charge type), document the rejection for the record — it may support an argument that detention is disproportionate where no lesser alternative is available.",
+ " Whether Legal Aid Ontario or Legal Aid BC cover costs associated with bail supervision program intake or Gladue caseworker reports at bail stage."
+ ]
 }
 </script>
 
@@ -736,127 +737,127 @@ const PROGRAMS = inlineJson("data-local-programs");
 
 // Build onus-key map (charge_context value -> reverse_onus_categories[].key alias)
 const CONTEXT_TO_ONUS_KEY = {
-  default: null,
-  indictable_at_large: ["indictable_while_at_large", "indictable_at_large", "while_on_release_indictable"],
-  failure_appear_comply: ["failure_to_appear_or_comply", "fail_to_appear", "fail_to_comply"],
-  cdsa_traffic: ["cdsa_trafficking", "cdsa_offence", "controlled_substances_trafficking"],
-  firearms: ["firearms_offence", "firearm", "weapons"],
-  terrorism: ["terrorism", "terrorism_offence"],
-  ipv: ["intimate_partner_violence", "ipv", "domestic_violence"],
-  organized_crime: ["criminal_organization", "criminal_org_offence", "organized_crime"],
-  murder_469: ["s_469_offence", "murder", "section_469"],
+ default: null,
+ indictable_at_large: ["indictable_while_at_large", "indictable_at_large", "while_on_release_indictable"],
+ failure_appear_comply: ["failure_to_appear_or_comply", "fail_to_appear", "fail_to_comply"],
+ cdsa_traffic: ["cdsa_trafficking", "cdsa_offence", "controlled_substances_trafficking"],
+ firearms: ["firearms_offence", "firearm", "weapons"],
+ terrorism: ["terrorism", "terrorism_offence"],
+ ipv: ["intimate_partner_violence", "ipv", "domestic_violence"],
+ organized_crime: ["criminal_organization", "criminal_org_offence", "organized_crime"],
+ murder_469: ["s_469_offence", "murder", "section_469"],
 };
 
 function findReverseOnusCategory(ctxValue) {
-  if (!ctxValue || ctxValue === "default") return null;
-  const keys = CONTEXT_TO_ONUS_KEY[ctxValue] || [];
-  const cats = ONUS.reverse_onus_categories || [];
-  for (const cat of cats) {
-    if (keys.includes(cat.key)) return cat;
-  }
-  // Fallback: substring match on label
-  for (const cat of cats) {
-    for (const k of keys) {
-      if ((cat.key || "").includes(k.split("_")[0])) return cat;
-    }
-  }
-  return null;
+ if (!ctxValue || ctxValue === "default") return null;
+ const keys = CONTEXT_TO_ONUS_KEY[ctxValue] || [];
+ const cats = ONUS.reverse_onus_categories || [];
+ for (const cat of cats) {
+ if (keys.includes(cat.key)) return cat;
+ }
+ // Fallback: substring match on label
+ for (const cat of cats) {
+ for (const k of keys) {
+ if ((cat.key || "").includes(k.split("_")[0])) return cat;
+ }
+ }
+ return null;
 }
 
 function updateOnus() {
-  const ctx = $("#charge-context").value;
-  const cat = findReverseOnusCategory(ctx);
-  const verdict = $("#onus-verdict");
-  if (!cat) {
-    verdict.innerHTML = `
-      <div class="verdict crown">
-        <h4>Crown bears the onus to show cause</h4>
-        <p>Default rule under <strong>${escapeHtml(ONUS.default_rule?.section || "Criminal Code s. 515(1)")}</strong>.
-        ${escapeHtml(ONUS.default_rule?.consequence || "Accused presumptively released.")}</p>
-      </div>`;
-  } else {
-    verdict.innerHTML = `
-      <div class="verdict defence">
-        <h4>Reverse onus — accused bears the onus to show cause</h4>
-        <p><strong>${escapeHtml(cat.label || cat.key)}</strong> — ${escapeHtml(cat.section || "[VERIFY]")}.<br>
-        ${escapeHtml(cat.trigger_description || "")}</p>
-        <p><em>Examples:</em> ${(cat.examples_of_offences || []).map(escapeHtml).join("; ") || "[VERIFY]"}</p>
-      </div>`;
-  }
+ const ctx = $("#charge-context").value;
+ const cat = findReverseOnusCategory(ctx);
+ const verdict = $("#onus-verdict");
+ if (!cat) {
+ verdict.innerHTML = `
+ <div class="verdict crown">
+ <h4>Crown bears the onus to show cause</h4>
+ <p>Default rule under <strong>${escapeHtml(ONUS.default_rule?.section || "Criminal Code s. 515(1)")}</strong>.
+ ${escapeHtml(ONUS.default_rule?.consequence || "Accused presumptively released.")}</p>
+ </div>`;
+ } else {
+ verdict.innerHTML = `
+ <div class="verdict defence">
+ <h4>Reverse onus — accused bears the onus to show cause</h4>
+ <p><strong>${escapeHtml(cat.label || cat.key)}</strong> — ${escapeHtml(cat.section || "")}.<br>
+ ${escapeHtml(cat.trigger_description || "")}</p>
+ <p><em>Examples:</em> ${(cat.examples_of_offences || []).map(escapeHtml).join("; ") || ""}</p>
+ </div>`;
+ }
 }
 
 function renderOnusSteps() {
-  const t = ONUS.operational_test || {};
-  $("#onus-test-steps").innerHTML = Object.values(t).map(s => `<li>${escapeHtml(s)}</li>`).join("");
+ const t = ONUS.operational_test || {};
+ $("#onus-test-steps").innerHTML = Object.values(t).map(s => `<li>${escapeHtml(s)}</li>`).join("");
 }
 
 function renderGrounds() {
-  const grounds = LADDER.three_grounds_for_detention || [];
-  $("#grounds-block").innerHTML = grounds.map(g => `
-    <div class="ground">
-      <h4>${escapeHtml(g.ground)} (${escapeHtml(g.section || "")})</h4>
-      <p>${escapeHtml(g.test || "")}</p>
-    </div>
-  `).join("");
+ const grounds = LADDER.three_grounds_for_detention || [];
+ $("#grounds-block").innerHTML = grounds.map(g => `
+ <div class="ground">
+ <h4>${escapeHtml(g.ground)} (${escapeHtml(g.section || "")})</h4>
+ <p>${escapeHtml(g.test || "")}</p>
+ </div>
+ `).join("");
 }
 
 function renderLadder() {
-  const rungs = LADDER.rungs_least_to_most_restrictive || [];
-  $("#ladder-block").innerHTML = rungs.map(r => `
-    <li>
-      <div class="rung-num">${escapeHtml(String(r.rung))}</div>
-      <div class="form-of-release">${escapeHtml(r.form_of_release || "[VERIFY]")}</div>
-      <div class="anchor">${escapeHtml(r.criminal_code_anchor || "[VERIFY]")}</div>
-      <div class="principle">${escapeHtml(r.antic_principle || "")}</div>
-      <div class="position">Counsel position: ${escapeHtml(r.counsel_position_to_argue || "")}</div>
-      ${r.common_conditions_added_at_this_rung?.length ? `
-        <details><summary>Typical conditions at this rung</summary>
-        <ul>${r.common_conditions_added_at_this_rung.map(c => `<li>${escapeHtml(c)}</li>`).join("")}</ul></details>` : ""}
-    </li>
-  `).join("");
-  $("#antic-rules").innerHTML = (LADDER.antic_rules_to_argue || []).map(r =>
-    `<li>${escapeHtml(r.rule)} <em style="color:var(--muted);">(${escapeHtml(r.source || "")})</em></li>`
-  ).join("");
+ const rungs = LADDER.rungs_least_to_most_restrictive || [];
+ $("#ladder-block").innerHTML = rungs.map(r => `
+ <li>
+ <div class="rung-num">${escapeHtml(String(r.rung))}</div>
+ <div class="form-of-release">${escapeHtml(r.form_of_release || "")}</div>
+ <div class="anchor">${escapeHtml(r.criminal_code_anchor || "")}</div>
+ <div class="principle">${escapeHtml(r.antic_principle || "")}</div>
+ <div class="position">Counsel position: ${escapeHtml(r.counsel_position_to_argue || "")}</div>
+ ${r.common_conditions_added_at_this_rung?.length ? `
+ <details><summary>Typical conditions at this rung</summary>
+ <ul>${r.common_conditions_added_at_this_rung.map(c => `<li>${escapeHtml(c)}</li>`).join("")}</ul></details>` : ""}
+ </li>
+ `).join("");
+ $("#antic-rules").innerHTML = (LADDER.antic_rules_to_argue || []).map(r =>
+ `<li>${escapeHtml(r.rule)} <em style="color:var(--muted);">(${escapeHtml(r.source || "")})</em></li>`
+ ).join("");
 }
 
 function updateLocalPrograms() {
-  const j = $("#jurisdiction").value;
-  const courthouse = ($("#courthouse").value || "").toLowerCase();
-  const data = (PROGRAMS.by_jurisdiction || {})[j];
-  if (!data) {
-    $("#local-programs-block").innerHTML = `<p style="color:var(--muted);font-size:14px;">No data for ${j}.</p>`;
-    return;
-  }
-  const programs = data.programs || [];
-  const matches = courthouse
-    ? programs.filter(p => (p.courthouses_served || []).some(ch => ch.toLowerCase().includes(courthouse) || courthouse.includes(ch.toLowerCase())))
-    : programs;
-  const list = matches.length ? matches : programs;
-  $("#local-programs-block").innerHTML = list.map(p => `
-    <details ${matches.length === 1 ? "open" : ""} style="border:1px solid var(--rule);border-radius:6px;padding:10px 14px;margin-bottom:8px;">
-      <summary><strong>${escapeHtml(p.name)}</strong> ${p.operator ? "— " + escapeHtml(p.operator) : ""}</summary>
-      <div style="margin-top:8px;font-size:14px;line-height:1.55;">
-        <p><strong>Eligibility:</strong> ${escapeHtml(p.eligibility || "[VERIFY]")}</p>
-        <p><strong>Courthouses:</strong> ${(p.courthouses_served || []).map(escapeHtml).join("; ") || "[VERIFY]"}</p>
-        <p><strong>Features:</strong> ${escapeHtml(p.program_features || "[VERIFY]")}</p>
-        <p><strong>How to propose:</strong> ${escapeHtml(p.how_to_propose || "[VERIFY]")}</p>
-      </div>
-    </details>
-  `).join("") || `<p style="color:var(--muted);font-size:14px;">No programs match.</p>`;
+ const j = $("#jurisdiction").value;
+ const courthouse = ($("#courthouse").value || "").toLowerCase();
+ const data = (PROGRAMS.by_jurisdiction || {})[j];
+ if (!data) {
+ $("#local-programs-block").innerHTML = `<p style="color:var(--muted);font-size:14px;">No data for ${j}.</p>`;
+ return;
+ }
+ const programs = data.programs || [];
+ const matches = courthouse
+ ? programs.filter(p => (p.courthouses_served || []).some(ch => ch.toLowerCase().includes(courthouse) || courthouse.includes(ch.toLowerCase())))
+ : programs;
+ const list = matches.length ? matches : programs;
+ $("#local-programs-block").innerHTML = list.map(p => `
+ <details ${matches.length === 1 ? "open" : ""} style="border:1px solid var(--rule);border-radius:6px;padding:10px 14px;margin-bottom:8px;">
+ <summary><strong>${escapeHtml(p.name)}</strong> ${p.operator ? "— " + escapeHtml(p.operator) : ""}</summary>
+ <div style="margin-top:8px;font-size:14px;line-height:1.55;">
+ <p><strong>Eligibility:</strong> ${escapeHtml(p.eligibility || "")}</p>
+ <p><strong>Courthouses:</strong> ${(p.courthouses_served || []).map(escapeHtml).join("; ") || ""}</p>
+ <p><strong>Features:</strong> ${escapeHtml(p.program_features || "")}</p>
+ <p><strong>How to propose:</strong> ${escapeHtml(p.how_to_propose || "")}</p>
+ </div>
+ </details>
+ `).join("") || `<p style="color:var(--muted);font-size:14px;">No programs match.</p>`;
 }
 
 function init() {
-  const onusKeys = Object.keys(ONUS).length;
-  const ladderKeys = Object.keys(LADDER).length;
-  const programKeys = Object.keys(PROGRAMS).length;
-  $("#data-status").textContent = (onusKeys && ladderKeys && programKeys)
-    ? "data loaded — verify all [VERIFY] markers on the day"
-    : "data NOT loaded — run the build step to inline GC.AI JSONs";
-  updateOnus();
-  renderOnusSteps();
-  renderGrounds();
-  renderLadder();
-  updateLocalPrograms();
+ const onusKeys = Object.keys(ONUS).length;
+ const ladderKeys = Object.keys(LADDER).length;
+ const programKeys = Object.keys(PROGRAMS).length;
+ $("#data-status").textContent = (onusKeys && ladderKeys && programKeys)
+ ? "data loaded — verify all markers on the day"
+ : "data NOT loaded — run the build step to inline GC.AI JSONs";
+ updateOnus();
+ renderOnusSteps();
+ renderGrounds();
+ renderLadder();
+ updateLocalPrograms();
 }
 window.updateOnus = updateOnus;
 window.updateLocalPrograms = updateLocalPrograms;

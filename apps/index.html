@@ -5,177 +5,173 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>InstructIT POC — Showcase</title>
 <style>
-  :root {
-    --bg: #faf8f5; --ink: #1a1a1a; --muted: #5a5a5a; --rule: #d8d4cc;
-    --paper: #ffffff;
-    --accent-fl: #2b4a6b;
-    --accent-cr: #5a2d2d;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--bg); color: var(--ink);
-    font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", serif;
-    font-size: 17px; line-height: 1.6; }
-  .wrap { max-width: 920px; margin: 0 auto; padding: 48px 24px 96px; }
-  header { border-bottom: 1px solid var(--rule); padding-bottom: 24px; margin-bottom: 36px; }
-  header h1 { font-size: 30px; margin: 0 0 6px; letter-spacing: 0.2px; }
-  header .sub { color: var(--muted); font-size: 16px; }
-  .pocs { display: grid; grid-template-columns: 1fr; gap: 22px; }
-  @media (min-width: 720px) { .pocs { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 1080px) { .pocs { grid-template-columns: 1fr 1fr 1fr; } }
-  .poc.bl .cta:hover { background: #2d4a2d; color: #fff; }
-  .poc { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px;
-    padding: 28px; }
-  .poc h2 { margin: 0 0 6px; font-size: 22px; }
-  .poc.fl h2 { color: var(--accent-fl); }
-  .poc.cr h2 { color: var(--accent-cr); }
-  .poc .target { display: inline-block; font-size: 12px; font-family: ui-sans-serif, system-ui, sans-serif;
-    font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; padding: 3px 10px;
-    border-radius: 999px; margin-bottom: 14px; }
-  .poc.fl .target { background: #e6ecf3; color: var(--accent-fl); border: 1px solid #c4d2e3; }
-  .poc.cr .target { background: #f3e6e6; color: var(--accent-cr); border: 1px solid #e0c4c4; }
-  .poc p { margin: 0 0 12px; }
-  .poc ul { padding-left: 20px; margin: 8px 0 14px; }
-  .poc ul li { margin: 4px 0; font-size: 15px; }
-  .poc a { color: var(--ink); }
-  .poc .cta { display: inline-block; margin-top: 12px; padding: 10px 18px;
-    background: var(--paper); border: 1px solid; border-radius: 6px;
-    text-decoration: none; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px; }
-  .poc.fl .cta { color: var(--accent-fl); border-color: var(--accent-fl); }
-  .poc.fl .cta:hover { background: var(--accent-fl); color: #fff; }
-  .poc.cr .cta { color: var(--accent-cr); border-color: var(--accent-cr); }
-  .poc.cr .cta:hover { background: var(--accent-cr); color: #fff; }
-  .pipeline { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px;
-    padding: 28px; margin-top: 36px; }
-  .pipeline h2 { font-size: 20px; margin: 0 0 16px; }
-  .pipeline pre { font-family: ui-monospace, "SF Mono", Menlo, monospace;
-    font-size: 13px; background: var(--bg); padding: 18px; border-radius: 6px;
-    overflow-x: auto; line-height: 1.45; color: var(--muted); }
-  .links { margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--rule);
-    font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px; color: var(--muted); }
-  .links a { color: var(--ink); margin-right: 18px; text-decoration: none; }
-  .links a:hover { text-decoration: underline; }
-  footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--rule);
-    color: var(--muted); font-size: 13px; font-family: ui-sans-serif, system-ui, sans-serif; }
+ :root {
+ --bg: #faf8f5; --ink: #1a1a1a; --muted: #5a5a5a; --rule: #d8d4cc;
+ --paper: #ffffff;
+ --accent-fl: #2b4a6b;
+ --accent-cr: #5a2d2d;
+ }
+ * { box-sizing: border-box; }
+ html, body { margin: 0; background: var(--bg); color: var(--ink);
+ font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+ font-size: 17px; line-height: 1.6; }
+ .wrap { max-width: 920px; margin: 0 auto; padding: 48px 24px 96px; }
+ header { border-bottom: 1px solid var(--rule); padding-bottom: 24px; margin-bottom: 36px; }
+ header h1 { font-size: 30px; margin: 0 0 6px; letter-spacing: 0.2px; }
+ header .sub { color: var(--muted); font-size: 16px; }
+ .pocs { display: grid; grid-template-columns: 1fr; gap: 22px; }
+ @media (min-width: 720px) { .pocs { grid-template-columns: 1fr 1fr; } }
+ @media (min-width: 1080px) { .pocs { grid-template-columns: 1fr 1fr 1fr; } }
+ .poc.bl .cta:hover { background: #2d4a2d; color: #fff; }
+ .poc { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px;
+ padding: 28px; }
+ .poc h2 { margin: 0 0 6px; font-size: 22px; }
+ .poc.fl h2 { color: var(--accent-fl); }
+ .poc.cr h2 { color: var(--accent-cr); }
+ .poc .target { display: inline-block; font-size: 12px; font-family: ui-sans-serif, system-ui, sans-serif;
+ font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; padding: 3px 10px;
+ border-radius: 999px; margin-bottom: 14px; }
+ .poc.fl .target { background: #e6ecf3; color: var(--accent-fl); border: 1px solid #c4d2e3; }
+ .poc.cr .target { background: #f3e6e6; color: var(--accent-cr); border: 1px solid #e0c4c4; }
+ .poc p { margin: 0 0 12px; }
+ .poc ul { padding-left: 20px; margin: 8px 0 14px; }
+ .poc ul li { margin: 4px 0; font-size: 15px; }
+ .poc a { color: var(--ink); }
+ .poc .cta { display: inline-block; margin-top: 12px; padding: 10px 18px;
+ background: var(--paper); border: 1px solid; border-radius: 6px;
+ text-decoration: none; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px; }
+ .poc.fl .cta { color: var(--accent-fl); border-color: var(--accent-fl); }
+ .poc.fl .cta:hover { background: var(--accent-fl); color: #fff; }
+ .poc.cr .cta { color: var(--accent-cr); border-color: var(--accent-cr); }
+ .poc.cr .cta:hover { background: var(--accent-cr); color: #fff; }
+ .pipeline { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px;
+ padding: 28px; margin-top: 36px; }
+ .pipeline h2 { font-size: 20px; margin: 0 0 16px; }
+ .pipeline pre { font-family: ui-monospace, "SF Mono", Menlo, monospace;
+ font-size: 13px; background: var(--bg); padding: 18px; border-radius: 6px;
+ overflow-x: auto; line-height: 1.45; color: var(--muted); }
+ .links { margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--rule);
+ font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px; color: var(--muted); }
+ .links a { color: var(--ink); margin-right: 18px; text-decoration: none; }
+ .links a:hover { text-decoration: underline; }
+ footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--rule);
+ color: var(--muted); font-size: 13px; font-family: ui-sans-serif, system-ui, sans-serif; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <h1>InstructIT POC</h1>
-    <div class="sub">
-      Client-instruction confirmation tools for legal matters with binding effect —
-      hash-chained, audit-friendly, browser-local. Two proofs of concept.
-    </div>
-  </header>
+ <header>
+ <h1>InstructIT POC</h1>
+ <div class="sub">
+ Client-instruction confirmation tools for legal matters with binding effect —
+ hash-chained, audit-friendly, browser-local. Two proofs of concept.
+ </div>
+ </header>
 
-  <div class="pocs" style="grid-template-columns: 1fr 1fr 1fr;">
-    <div class="poc bl" style="--accent-fl: #2d4a2d;">
-      <span class="target" style="background:#e6f0e6;color:#2d4a2d;border:1px solid #b6cdb6;">For criminal counsel</span>
-      <h2 style="color:#2d4a2d;">Bail Cheat Sheet</h2>
-      <p>Counsel-facing reference for a bail hearing — for rusty counsel, public-defender training,
-      or duty counsel under pressure. <strong>Not</strong> a client tool.</p>
-      <p><strong>Differentiator:</strong> jurisdiction-aware. Pick the courthouse and it filters
-      to the local bail program (Toronto Bail Program, JHS Peel/Brampton, BC Bail Supervision,
-      etc.). Walks counsel through onus, three grounds for detention, and the Antic ladder.</p>
-      <ul>
-        <li>s. 515(6) reverse-onus categories with section anchors</li>
-        <li>Antic ladder (rungs 1–7) with counsel positions per rung</li>
-        <li>Local bail programs (ON + BC) by courthouse</li>
-        <li>Three grounds for detention (St-Cloud-aware)</li>
-      </ul>
-      <a class="cta" style="color:#2d4a2d;border-color:#2d4a2d;" href="bail-cheatsheet/">Open the bail tool →</a>
-    </div>
-    <div class="poc fl">
-      <span class="target">For BC family lawyers</span>
-      <h2>Family Law Settlement</h2>
-      <p>Pre-execution confirmation for BC separation agreements. 14-node decision
-      tree anchored on the Family Law Act and the Brandsema / Miglin / Hartshorne
-      framework.</p>
-      <p><strong>Differentiator:</strong> opt-in, browser-local affect monitor (face-api.js)
-      that watches for elevated stress at signing-critical nodes (FLA s. 4 voluntariness,
-      final signing). Intercepts Agree clicks and records contemporaneous behavioural
-      evidence in the audit log.</p>
-      <ul>
-        <li>14 confirmation nodes</li>
-        <li>SHA-256 hash-chained log</li>
-        <li>Optional camera affect monitor (privacy: never leaves the device)</li>
-        <li>Companion JSON Schema: 48 properties, 70 [VERIFY] markers</li>
-      </ul>
-      <a class="cta" href="family-law-settlement/">Open the family-law POC →</a>
-    </div>
+ <div class="pocs" style="grid-template-columns: 1fr 1fr 1fr;">
+ <div class="poc bl" style="--accent-fl: #2d4a2d;">
+ <span class="target" style="background:#e6f0e6;color:#2d4a2d;border:1px solid #b6cdb6;">For criminal counsel</span>
+ <h2 style="color:#2d4a2d;">Bail Cheat Sheet</h2>
+ <p>Counsel-facing reference for a bail hearing — for rusty counsel, public-defender training,
+ or duty counsel under pressure. <strong>Not</strong> a client tool.</p>
+ <p><strong>Differentiator:</strong> jurisdiction-aware. Pick the courthouse and it filters
+ to the local bail program (Toronto Bail Program, JHS Peel/Brampton, BC Bail Supervision,
+ etc.). Walks counsel through onus, three grounds for detention, and the Antic ladder.</p>
+ <ul>
+ <li>s. 515(6) reverse-onus categories with section anchors</li>
+ <li>Antic ladder (rungs 1–7) with counsel positions per rung</li>
+ <li>Local bail programs (ON + BC) by courthouse</li>
+ <li>Three grounds for detention (St-Cloud-aware)</li>
+ </ul>
+ <a class="cta" style="color:#2d4a2d;border-color:#2d4a2d;" href="bail-cheatsheet/">Open the bail tool →</a>
+ </div>
+ <div class="poc fl">
+ <span class="target">For BC family lawyers</span>
+ <h2>Family Law Settlement</h2>
+ <p>Pre-execution confirmation for BC separation agreements. 14-node decision
+ tree anchored on the Family Law Act and the Brandsema / Miglin / Hartshorne
+ framework.</p>
+ <p><strong>Differentiator:</strong> opt-in, browser-local affect monitor (face-api.js)
+ that watches for elevated stress at signing-critical nodes (FLA s. 4 voluntariness,
+ final signing). Intercepts Agree clicks and records contemporaneous behavioural
+ evidence in the audit log.</p>
+ <ul>
+ <li>14 confirmation nodes</li>
+ <li>SHA-256 hash-chained log</li>
+ <li>Optional camera affect monitor (privacy: never leaves the device)</li>
+ <li>Companion JSON Schema: 48 properties, 70 markers</li>
+ </ul>
+ <a class="cta" href="family-law-settlement/">Open the family-law POC →</a>
+ </div>
 
-    <div class="poc cr">
-      <span class="target">For Canadian criminal defence</span>
-      <h2>Criminal Guilty Plea</h2>
-      <p>Pre-plea confirmation aligned with Criminal Code s. 606 plea-inquiry
-      duties and defence counsel obligations. 11 confirmation nodes from
-      charge-understanding through final plea instruction.</p>
-      <p><strong>Differentiator:</strong> per-node citations to leading authority
-      (<em>Adgey</em>, <em>T (R.)</em>, <em>Hanemaayer</em>, <em>Anthony-Cook</em>,
-      <em>Wong</em>, <em>T (N.)</em>) and law-society / criminal-bar guidance
-      (LSBC, LSO, CBA Criminal Justice Section, CLA), surfaced inline in the
-      decision tree.</p>
-      <ul>
-        <li>11 confirmation nodes</li>
-        <li>SHA-256 hash-chained log</li>
-        <li>Authorities + bar guidance loaded from <code>data/</code> (serve over HTTP)</li>
-        <li>Companion JSON Schema: 16 required top-level fields, 39 [VERIFY] markers</li>
-      </ul>
-      <a class="cta" href="criminal-guilty-plea/">Open the criminal POC →</a>
-    </div>
-  </div>
+ <div class="poc cr">
+ <span class="target">For Canadian criminal defence</span>
+ <h2>Criminal Guilty Plea</h2>
+ <p>Pre-plea confirmation aligned with Criminal Code s. 606 plea-inquiry
+ duties and defence counsel obligations. 11 confirmation nodes from
+ charge-understanding through final plea instruction.</p>
+ <p><strong>Differentiator:</strong> per-node citations to leading authority
+ (<em>Adgey</em>, <em>T (R.)</em>, <em>Hanemaayer</em>, <em>Anthony-Cook</em>,
+ <em>Wong</em>, <em>T (N.)</em>) and law-society / criminal-bar guidance
+ (LSBC, LSO, CBA Criminal Justice Section, CLA), surfaced inline in the
+ decision tree.</p>
+ <ul>
+ <li>11 confirmation nodes</li>
+ <li>SHA-256 hash-chained log</li>
+ <li>Authorities + bar guidance loaded from <code>data/</code> (serve over HTTP)</li>
+ <li>Companion JSON Schema: 16 required top-level fields, 39 markers</li>
+ </ul>
+ <a class="cta" href="criminal-guilty-plea/">Open the criminal POC →</a>
+ </div>
+ </div>
 
-  <div class="pipeline">
-    <h2>End-to-end pipeline</h2>
-    <pre>Browser POC (apps/*)
-   ├─ Decision tree, hash chain, optional affect monitor
-   └─ localStorage export
-          │
-          ▼
-working/instructit-to-schema.mjs           (family-law: ../family-law-schema/working/)
-working/instructit-criminal-to-schema.mjs  (criminal:    ../family-law-schema/working/)
-   └─ Maps log entries → schema instructions_record.entries
-          │
-          ▼
+ <div class="pipeline">
+ <h2>End-to-end pipeline</h2>
+ <pre>Browser POC (apps/*)
+ ├─ Decision tree, hash chain, optional affect monitor
+ └─ localStorage export
+ │
+ ▼
+working/instructit-to-schema.mjs (family-law: ../family-law-schema/working/)
+working/instructit-criminal-to-schema.mjs (criminal: ../family-law-schema/working/)
+ └─ Maps log entries → schema instructions_record.entries
+ │
+ ▼
 schema/sample-filled.json (validates clean against agreement.schema.json)
 schema/criminal/sample-filled.json (validates clean against instructions.schema.json)
-          │
-          ▼
-validate.mjs (ajv 2020-12)  ✅
-          │
-          ▼
-working/render-docx.mjs              → separation-agreement-draft.docx (8 articles)
-working/render-criminal-docx.mjs     → criminal-instructions-memo.docx (87 blocks)
-          │
-          ▼
-working/round-trip-test.sh           → 13/13 checks pass</pre>
-  </div>
+ │
+ ▼
+validate.mjs (ajv 2020-12) ✅
+ │
+ ▼
+working/render-docx.mjs → separation-agreement-draft.docx (8 articles)
+working/render-criminal-docx.mjs → criminal-instructions-memo.docx (87 blocks)
+ │
+ ▼
+working/round-trip-test.sh → 13/13 checks pass</pre>
+ </div>
 
-  <div class="pipeline" style="margin-top:24px;">
-    <h2 style="font-size:18px;">Other artifacts</h2>
-    <ul style="font-family:ui-sans-serif,system-ui,sans-serif;font-size:14px;line-height:1.7;padding-left:20px;">
-      <li><a href="form-builder/">Form Builder</a> — render any of the JSON Schemas as a counsel-fillable form with live ajv validation and JSON export.</li>
-      <li><a href="../family-law-schema/case-studies/brandsema-fitness-test.md">Brandsema fitness test</a> — Rick v. Brandsema 2009 SCC 10 walked through the FLA schema; reconstruction at <code>brandsema-instance.json</code> validates clean.</li>
-      <li><a href="../mcp-server/">MCP server</a> — exposes <code>validate_*</code>, <code>bridge_*</code>, <code>verify_markers</code>, <code>list_schemas</code> as agent tools over stdio.</li>
-      <li><a href="../family-law-schema/VERIFY-CHECKLIST.md">[VERIFY] catalog</a> — 70 markers in the FLA schema grouped by section.</li>
-    </ul>
-  </div>
+ <div class="pipeline" style="margin-top:24px;">
+ <h2 style="font-size:18px;">Other artifacts</h2>
+ <ul style="font-family:ui-sans-serif,system-ui,sans-serif;font-size:14px;line-height:1.7;padding-left:20px;">
+ <li><a href="form-builder/">Form Builder</a> — render any of the JSON Schemas as a counsel-fillable form with live ajv validation and JSON export.</li>
+ <li><a href="../family-law-schema/case-studies/brandsema-fitness-test.md">Brandsema fitness test</a> — Rick v. Brandsema 2009 SCC 10 walked through the FLA schema; reconstruction at <code>brandsema-instance.json</code> validates clean.</li>
+ <li><a href="../mcp-server/">MCP server</a> — exposes <code>validate_*</code>, <code>bridge_*</code>, <code>list_schemas</code> as agent tools over stdio.</li>
+ </ul>
+ </div>
 
-  <div class="links">
-    Repo:
-    <a href="https://github.com/mjbryant66/instructit-poc">github.com/mjbryant66/instructit-poc</a>
-    ·
-    <a href="../family-law-schema/README.md">Family-law schema docs</a>
-    ·
-    <a href="../family-law-schema/VERIFY-CHECKLIST.md">[VERIFY] catalog (family-law)</a>
-    ·
-    <a href="../family-law-schema/schema/criminal/README.md">Criminal artifacts docs</a>
-  </div>
+ <div class="links">
+ Repo:
+ <a href="https://github.com/mjbryant66/instructit-poc">github.com/mjbryant66/instructit-poc</a>
+ ·
+ <a href="../family-law-schema/README.md">Family-law schema docs</a>
+ ·
+ <a href="../family-law-schema/schema/criminal/README.md">Criminal artifacts docs</a>
+ </div>
 
-  <footer>
-    Generated 2026-04-24 by PAI. MPL-2.0. Proof of concept — not for client deployment
-    without senior counsel review of the 109 [VERIFY] markers across both POCs.
-  </footer>
+ <footer>
+ <strong>Proof of Concept — DO NOT RELY.</strong> This is a public POC of legal-tech infrastructure. Nothing on this site is legal advice, creates a solicitor-client relationship, or substitutes for a lawyer. Citations and statutory references are illustrative and have not been validated for client deployment. Generated 2026-04-24 by PAI. MPL-2.0.
+ </footer>
 </div>
 </body>
 </html>

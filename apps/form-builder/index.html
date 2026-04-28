@@ -5,83 +5,84 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Schema → Form (counsel-facing) — POC</title>
 <style>
-  :root {
-    --bg: #faf8f5; --ink: #1a1a1a; --muted: #5a5a5a; --rule: #d8d4cc;
-    --accent: #2b4a6b; --agree: #2e7d32; --warn: #b25400; --alert: #b00020; --paper: #ffffff;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--bg); color: var(--ink);
-    font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", serif;
-    font-size: 16px; line-height: 1.5; }
-  .wrap { max-width: 880px; margin: 0 auto; padding: 32px 24px 96px; }
-  header { border-bottom: 1px solid var(--rule); padding-bottom: 18px; margin-bottom: 24px; }
-  header h1 { font-size: 24px; margin: 0 0 4px; }
-  header .sub { color: var(--muted); font-size: 14px; }
-  .pickrow { display: flex; gap: 10px; align-items: center; margin-bottom: 20px;
-    font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px; flex-wrap: wrap; }
-  .pickrow select, .pickrow button { padding: 8px 14px; border: 1px solid var(--rule);
-    background: var(--paper); border-radius: 6px; font: inherit; cursor: pointer; }
-  .pickrow button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  fieldset { border: 1px solid var(--rule); border-radius: 6px; padding: 14px 18px;
-    margin-bottom: 14px; background: var(--paper); }
-  fieldset > legend { font-weight: 600; padding: 0 8px; font-size: 14px; color: var(--accent);
-    font-family: ui-sans-serif, system-ui, sans-serif; }
-  fieldset .desc { font-size: 12px; color: var(--muted); margin-bottom: 10px;
-    font-family: ui-sans-serif, system-ui, sans-serif; }
-  .field { display: grid; grid-template-columns: minmax(180px, 1fr) 2fr; gap: 8px 16px;
-    align-items: baseline; padding: 4px 0; }
-  .field label { font-size: 13px; color: var(--muted); font-family: ui-sans-serif, system-ui, sans-serif; }
-  .field label .req { color: var(--alert); margin-left: 3px; }
-  .field input, .field select, .field textarea {
-    padding: 6px 10px; font: inherit; font-size: 14px;
-    border: 1px solid var(--rule); border-radius: 4px; background: var(--bg); width: 100%;
-  }
-  .field textarea { min-height: 50px; resize: vertical; }
-  .field .hint { font-size: 11px; color: var(--muted); grid-column: 2; margin-top: -4px;
-    font-family: ui-sans-serif, system-ui, sans-serif; }
-  .array-block { padding: 8px 12px; border: 1px dashed var(--rule); border-radius: 4px;
-    margin: 6px 0; background: rgba(0,0,0,0.015); }
-  .array-block .add { font-size: 12px; padding: 4px 10px; background: var(--paper);
-    border: 1px solid var(--rule); border-radius: 4px; cursor: pointer; }
-  .out { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
-    padding: 14px 18px; margin-top: 18px; font-family: ui-monospace, "SF Mono", Menlo, monospace;
-    font-size: 12px; line-height: 1.45; max-height: 360px; overflow: auto; white-space: pre-wrap; }
-  .status { margin: 10px 0; font-size: 13px; font-family: ui-sans-serif, system-ui, sans-serif; }
-  .status.ok { color: var(--agree); }
-  .status.err { color: var(--alert); }
-  .status pre { background: var(--bg); padding: 8px 10px; border-radius: 4px; font-size: 11px;
-    color: var(--alert); margin: 6px 0 0; overflow: auto; max-height: 200px; }
+ :root {
+ --bg: #faf8f5; --ink: #1a1a1a; --muted: #5a5a5a; --rule: #d8d4cc;
+ --accent: #2b4a6b; --agree: #2e7d32; --warn: #b25400; --alert: #b00020; --paper: #ffffff;
+ }
+ * { box-sizing: border-box; }
+ html, body { margin: 0; background: var(--bg); color: var(--ink);
+ font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+ font-size: 16px; line-height: 1.5; }
+ .wrap { max-width: 880px; margin: 0 auto; padding: 32px 24px 96px; }
+ header { border-bottom: 1px solid var(--rule); padding-bottom: 18px; margin-bottom: 24px; }
+ header h1 { font-size: 24px; margin: 0 0 4px; }
+ header .sub { color: var(--muted); font-size: 14px; }
+ .pickrow { display: flex; gap: 10px; align-items: center; margin-bottom: 20px;
+ font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px; flex-wrap: wrap; }
+ .pickrow select, .pickrow button { padding: 8px 14px; border: 1px solid var(--rule);
+ background: var(--paper); border-radius: 6px; font: inherit; cursor: pointer; }
+ .pickrow button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+ fieldset { border: 1px solid var(--rule); border-radius: 6px; padding: 14px 18px;
+ margin-bottom: 14px; background: var(--paper); }
+ fieldset > legend { font-weight: 600; padding: 0 8px; font-size: 14px; color: var(--accent);
+ font-family: ui-sans-serif, system-ui, sans-serif; }
+ fieldset .desc { font-size: 12px; color: var(--muted); margin-bottom: 10px;
+ font-family: ui-sans-serif, system-ui, sans-serif; }
+ .field { display: grid; grid-template-columns: minmax(180px, 1fr) 2fr; gap: 8px 16px;
+ align-items: baseline; padding: 4px 0; }
+ .field label { font-size: 13px; color: var(--muted); font-family: ui-sans-serif, system-ui, sans-serif; }
+ .field label .req { color: var(--alert); margin-left: 3px; }
+ .field input, .field select, .field textarea {
+ padding: 6px 10px; font: inherit; font-size: 14px;
+ border: 1px solid var(--rule); border-radius: 4px; background: var(--bg); width: 100%;
+ }
+ .field textarea { min-height: 50px; resize: vertical; }
+ .field .hint { font-size: 11px; color: var(--muted); grid-column: 2; margin-top: -4px;
+ font-family: ui-sans-serif, system-ui, sans-serif; }
+ .array-block { padding: 8px 12px; border: 1px dashed var(--rule); border-radius: 4px;
+ margin: 6px 0; background: rgba(0,0,0,0.015); }
+ .array-block .add { font-size: 12px; padding: 4px 10px; background: var(--paper);
+ border: 1px solid var(--rule); border-radius: 4px; cursor: pointer; }
+ .out { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
+ padding: 14px 18px; margin-top: 18px; font-family: ui-monospace, "SF Mono", Menlo, monospace;
+ font-size: 12px; line-height: 1.45; max-height: 360px; overflow: auto; white-space: pre-wrap; }
+ .status { margin: 10px 0; font-size: 13px; font-family: ui-sans-serif, system-ui, sans-serif; }
+ .status.ok { color: var(--agree); }
+ .status.err { color: var(--alert); }
+ .status pre { background: var(--bg); padding: 8px 10px; border-radius: 4px; font-size: 11px;
+ color: var(--alert); margin: 6px 0 0; overflow: auto; max-height: 200px; }
 </style>
 </head>
 <body>
+<div style="background:#fef3c7;border-bottom:1px solid #d97706;padding:8px 16px;font:13px/1.4 ui-sans-serif,system-ui,sans-serif;color:#78350f;text-align:center;"><strong>Proof of Concept — DO NOT RELY.</strong> Demonstration only. Not legal advice. No solicitor-client relationship. <a href="/" style="color:#78350f;">Back to apps</a></div>
 <div class="wrap">
-  <header>
-    <h1>Schema → Form (counsel-facing)</h1>
-    <div class="sub">Render any of the InstructIT POC's JSON Schemas as a counsel-facing
-      form. Fill, validate live with ajv, export the JSON. Walks `properties` recursively;
-      supports primitives, enums, objects, arrays of objects, and `$ref` resolution
-      within the schema's `$defs`/`definitions`.</div>
-  </header>
+ <header>
+ <h1>Schema → Form (counsel-facing)</h1>
+ <div class="sub">Render any of the InstructIT POC's JSON Schemas as a counsel-facing
+ form. Fill, validate live with ajv, export the JSON. Walks `properties` recursively;
+ supports primitives, enums, objects, arrays of objects, and `$ref` resolution
+ within the schema's `$defs`/`definitions`.</div>
+ </header>
 
-  <div class="pickrow">
-    <label for="schema-pick">Schema:</label>
-    <select id="schema-pick" onchange="loadSchema(this.value)">
-      <option value="">— pick a schema —</option>
-      <option value="agreement">BC FLA Separation Agreement (family-law)</option>
-      <option value="criminal">Criminal Guilty Plea Instructions</option>
-    </select>
-    <button class="primary" onclick="exportJson()">Export JSON</button>
-    <button onclick="copyJson()">Copy</button>
-    <button onclick="loadSample()">Load sample</button>
-    <button onclick="resetForm()">Reset</button>
-  </div>
+ <div class="pickrow">
+ <label for="schema-pick">Schema:</label>
+ <select id="schema-pick" onchange="loadSchema(this.value)">
+ <option value="">— pick a schema —</option>
+ <option value="agreement">BC FLA Separation Agreement (family-law)</option>
+ <option value="criminal">Criminal Guilty Plea Instructions</option>
+ </select>
+ <button class="primary" onclick="exportJson()">Export JSON</button>
+ <button onclick="copyJson()">Copy</button>
+ <button onclick="loadSample()">Load sample</button>
+ <button onclick="resetForm()">Reset</button>
+ </div>
 
-  <div id="form-host"></div>
-  <div id="status" class="status"></div>
-  <details>
-    <summary style="cursor:pointer;font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px;color:var(--muted);">View current JSON</summary>
-    <div id="json-out" class="out">{}</div>
-  </details>
+ <div id="form-host"></div>
+ <div id="status" class="status"></div>
+ <details>
+ <summary style="cursor:pointer;font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px;color:var(--muted);">View current JSON</summary>
+ <div id="json-out" class="out">{}</div>
+ </details>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/ajv@8.17.1/dist/ajv2020.bundle.min.js"></script>
@@ -95,12 +96,12 @@ let DEFS = {};
 let CURRENT_KEY = null;
 
 const SCHEMA_URLS = {
-  agreement: "../../family-law-schema/schema/agreement.schema.json",
-  criminal: "../../family-law-schema/schema/criminal/instructions.schema.json",
+ agreement: "../../family-law-schema/schema/agreement.schema.json",
+ criminal: "../../family-law-schema/schema/criminal/instructions.schema.json",
 };
 const SAMPLE_URLS = {
-  agreement: "../../family-law-schema/schema/sample-filled.json",
-  criminal: "../../family-law-schema/schema/criminal/sample-filled.json",
+ agreement: "../../family-law-schema/schema/sample-filled.json",
+ criminal: "../../family-law-schema/schema/criminal/sample-filled.json",
 };
 
 function $(s) { return document.querySelector(s); }
@@ -108,188 +109,188 @@ function setStatus(msg, cls) { const el = $("#status"); el.className = "status "
 function refreshOut() { $("#json-out").textContent = JSON.stringify(DATA, null, 2); }
 
 async function loadSchema(key) {
-  if (!key) return;
-  CURRENT_KEY = key;
-  setStatus("loading schema…", "");
-  try {
-    const r = await fetch(SCHEMA_URLS[key]);
-    SCHEMA = await r.json();
-    DEFS = { ...(SCHEMA.definitions || {}), ...(SCHEMA.$defs || {}) };
-    DATA = {};
-    const Ajv = window.ajv2020.Ajv2020;
-    const ajv = new Ajv({ strict: false, allErrors: true });
-    window.ajvFormats(ajv);
-    VALIDATE = ajv.compile(SCHEMA);
-    renderForm();
-    refreshOut();
-    setStatus(`Schema loaded — ${Object.keys(SCHEMA.properties || {}).length} top-level properties.`, "ok");
-  } catch (e) {
-    setStatus("Failed to load schema: " + e.message, "err");
-  }
+ if (!key) return;
+ CURRENT_KEY = key;
+ setStatus("loading schema…", "");
+ try {
+ const r = await fetch(SCHEMA_URLS[key]);
+ SCHEMA = await r.json();
+ DEFS = { ...(SCHEMA.definitions || {}), ...(SCHEMA.$defs || {}) };
+ DATA = {};
+ const Ajv = window.ajv2020.Ajv2020;
+ const ajv = new Ajv({ strict: false, allErrors: true });
+ window.ajvFormats(ajv);
+ VALIDATE = ajv.compile(SCHEMA);
+ renderForm();
+ refreshOut();
+ setStatus(`Schema loaded — ${Object.keys(SCHEMA.properties || {}).length} top-level properties.`, "ok");
+ } catch (e) {
+ setStatus("Failed to load schema: " + e.message, "err");
+ }
 }
 
 async function loadSample() {
-  if (!CURRENT_KEY) { setStatus("Pick a schema first.", "err"); return; }
-  try {
-    const r = await fetch(SAMPLE_URLS[CURRENT_KEY]);
-    DATA = await r.json();
-    refreshOut();
-    validate();
-    setStatus("Sample loaded into JSON view (form fields not back-populated in POC; use the JSON view directly).", "ok");
-  } catch (e) {
-    setStatus("Failed to load sample: " + e.message, "err");
-  }
+ if (!CURRENT_KEY) { setStatus("Pick a schema first.", "err"); return; }
+ try {
+ const r = await fetch(SAMPLE_URLS[CURRENT_KEY]);
+ DATA = await r.json();
+ refreshOut();
+ validate();
+ setStatus("Sample loaded into JSON view (form fields not back-populated in POC; use the JSON view directly).", "ok");
+ } catch (e) {
+ setStatus("Failed to load sample: " + e.message, "err");
+ }
 }
 
 function resolveRef(ref) {
-  const m = ref.match(/^#\/(definitions|\$defs)\/(.+)$/);
-  if (!m) return null;
-  return DEFS[m[2]];
+ const m = ref.match(/^#\/(definitions|\$defs)\/(.+)$/);
+ if (!m) return null;
+ return DEFS[m[2]];
 }
 
 function fieldId(path) { return "f-" + path.replace(/[^a-zA-Z0-9]/g, "-"); }
 
 function renderField(path, schema, parent, required) {
-  if (!schema) return "";
-  if (schema.$ref) {
-    const resolved = resolveRef(schema.$ref);
-    if (resolved) return renderField(path, resolved, parent, required);
-  }
-  if (schema.allOf) {
-    return schema.allOf.map(s => renderField(path, s, parent, required)).join("");
-  }
-  const id = fieldId(path);
-  const label = path.split(".").pop();
-  const desc = schema.description || "";
-  const reqMark = required ? '<span class="req">*</span>' : '';
+ if (!schema) return "";
+ if (schema.$ref) {
+ const resolved = resolveRef(schema.$ref);
+ if (resolved) return renderField(path, resolved, parent, required);
+ }
+ if (schema.allOf) {
+ return schema.allOf.map(s => renderField(path, s, parent, required)).join("");
+ }
+ const id = fieldId(path);
+ const label = path.split(".").pop();
+ const desc = schema.description || "";
+ const reqMark = required ? '<span class="req">*</span>' : '';
 
-  if (schema.type === "object" || schema.properties) {
-    const props = schema.properties || {};
-    const reqSet = new Set(schema.required || []);
-    const inner = Object.entries(props).map(([k, v]) =>
-      renderField(path ? `${path}.${k}` : k, v, props, reqSet.has(k))
-    ).join("");
-    return `<fieldset>
-      <legend>${label || "root"}${reqMark}</legend>
-      ${desc ? `<div class="desc">${escapeHtml(desc)}</div>` : ""}
-      ${inner}
-    </fieldset>`;
-  }
+ if (schema.type === "object" || schema.properties) {
+ const props = schema.properties || {};
+ const reqSet = new Set(schema.required || []);
+ const inner = Object.entries(props).map(([k, v]) =>
+ renderField(path ? `${path}.${k}` : k, v, props, reqSet.has(k))
+ ).join("");
+ return `<fieldset>
+ <legend>${label || "root"}${reqMark}</legend>
+ ${desc ? `<div class="desc">${escapeHtml(desc)}</div>` : ""}
+ ${inner}
+ </fieldset>`;
+ }
 
-  if (schema.type === "array") {
-    return `<div class="field">
-      <label for="${id}">${label}${reqMark}</label>
-      <div class="array-block" id="${id}">
-        <button class="add" type="button" onclick="addArrayItem('${path}')">+ add item to array (then edit JSON directly)</button>
-        ${desc ? `<div class="hint">${escapeHtml(desc)}</div>` : ""}
-      </div>
-    </div>`;
-  }
+ if (schema.type === "array") {
+ return `<div class="field">
+ <label for="${id}">${label}${reqMark}</label>
+ <div class="array-block" id="${id}">
+ <button class="add" type="button" onclick="addArrayItem('${path}')">+ add item to array (then edit JSON directly)</button>
+ ${desc ? `<div class="hint">${escapeHtml(desc)}</div>` : ""}
+ </div>
+ </div>`;
+ }
 
-  if (schema.enum) {
-    const opts = ['<option value="">—</option>',
-      ...schema.enum.map(v => `<option value="${escapeHtml(String(v))}">${escapeHtml(String(v))}</option>`)
-    ].join("");
-    return `<div class="field">
-      <label for="${id}">${label}${reqMark}</label>
-      <select id="${id}" onchange="setVal('${path}', this.value)">${opts}</select>
-      ${desc ? `<div class="hint">${escapeHtml(desc)}</div>` : ""}
-    </div>`;
-  }
+ if (schema.enum) {
+ const opts = ['<option value="">—</option>',
+ ...schema.enum.map(v => `<option value="${escapeHtml(String(v))}">${escapeHtml(String(v))}</option>`)
+ ].join("");
+ return `<div class="field">
+ <label for="${id}">${label}${reqMark}</label>
+ <select id="${id}" onchange="setVal('${path}', this.value)">${opts}</select>
+ ${desc ? `<div class="hint">${escapeHtml(desc)}</div>` : ""}
+ </div>`;
+ }
 
-  let inputType = "text";
-  if (schema.type === "boolean") {
-    return `<div class="field">
-      <label for="${id}">${label}${reqMark}</label>
-      <select id="${id}" onchange="setVal('${path}', this.value === 'true' ? true : (this.value === 'false' ? false : ''))">
-        <option value="">—</option><option value="true">true</option><option value="false">false</option>
-      </select>
-      ${desc ? `<div class="hint">${escapeHtml(desc)}</div>` : ""}
-    </div>`;
-  }
-  if (schema.type === "number" || schema.type === "integer") inputType = "number";
-  if (schema.format === "date") inputType = "date";
-  if (schema.format === "date-time") inputType = "datetime-local";
-  if (schema.format === "email") inputType = "email";
+ let inputType = "text";
+ if (schema.type === "boolean") {
+ return `<div class="field">
+ <label for="${id}">${label}${reqMark}</label>
+ <select id="${id}" onchange="setVal('${path}', this.value === 'true' ? true : (this.value === 'false' ? false : ''))">
+ <option value="">—</option><option value="true">true</option><option value="false">false</option>
+ </select>
+ ${desc ? `<div class="hint">${escapeHtml(desc)}</div>` : ""}
+ </div>`;
+ }
+ if (schema.type === "number" || schema.type === "integer") inputType = "number";
+ if (schema.format === "date") inputType = "date";
+ if (schema.format === "date-time") inputType = "datetime-local";
+ if (schema.format === "email") inputType = "email";
 
-  return `<div class="field">
-    <label for="${id}">${label}${reqMark}</label>
-    <input id="${id}" type="${inputType}" oninput="setVal('${path}', this.value, '${schema.type || ''}')" />
-    ${desc ? `<div class="hint">${escapeHtml(desc)}</div>` : ""}
-  </div>`;
+ return `<div class="field">
+ <label for="${id}">${label}${reqMark}</label>
+ <input id="${id}" type="${inputType}" oninput="setVal('${path}', this.value, '${schema.type || ''}')" />
+ ${desc ? `<div class="hint">${escapeHtml(desc)}</div>` : ""}
+ </div>`;
 }
 
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
 function setVal(path, val, type) {
-  if (val === "" || val === null || val === undefined) { delByPath(DATA, path); refreshOut(); validate(); return; }
-  if (type === "number" || type === "integer") val = Number(val);
-  setByPath(DATA, path, val);
-  refreshOut();
-  validate();
+ if (val === "" || val === null || val === undefined) { delByPath(DATA, path); refreshOut(); validate(); return; }
+ if (type === "number" || type === "integer") val = Number(val);
+ setByPath(DATA, path, val);
+ refreshOut();
+ validate();
 }
 
 function setByPath(obj, path, val) {
-  const parts = path.split(".");
-  let cur = obj;
-  for (let i = 0; i < parts.length - 1; i++) {
-    const p = parts[i];
-    if (cur[p] == null || typeof cur[p] !== "object") cur[p] = {};
-    cur = cur[p];
-  }
-  cur[parts[parts.length - 1]] = val;
+ const parts = path.split(".");
+ let cur = obj;
+ for (let i = 0; i < parts.length - 1; i++) {
+ const p = parts[i];
+ if (cur[p] == null || typeof cur[p] !== "object") cur[p] = {};
+ cur = cur[p];
+ }
+ cur[parts[parts.length - 1]] = val;
 }
 
 function delByPath(obj, path) {
-  const parts = path.split(".");
-  let cur = obj;
-  for (let i = 0; i < parts.length - 1; i++) {
-    if (cur[parts[i]] == null) return;
-    cur = cur[parts[i]];
-  }
-  delete cur[parts[parts.length - 1]];
+ const parts = path.split(".");
+ let cur = obj;
+ for (let i = 0; i < parts.length - 1; i++) {
+ if (cur[parts[i]] == null) return;
+ cur = cur[parts[i]];
+ }
+ delete cur[parts[parts.length - 1]];
 }
 
 function addArrayItem(path) {
-  const arr = getByPath(DATA, path) || [];
-  arr.push({});
-  setByPath(DATA, path, arr);
-  refreshOut();
-  validate();
-  setStatus("Empty array item added; edit it via the JSON view below.", "");
+ const arr = getByPath(DATA, path) || [];
+ arr.push({});
+ setByPath(DATA, path, arr);
+ refreshOut();
+ validate();
+ setStatus("Empty array item added; edit it via the JSON view below.", "");
 }
 
 function getByPath(obj, path) {
-  return path.split(".").reduce((o, p) => (o == null ? o : o[p]), obj);
+ return path.split(".").reduce((o, p) => (o == null ? o : o[p]), obj);
 }
 
 function validate() {
-  if (!VALIDATE) return;
-  const ok = VALIDATE(DATA);
-  if (ok) {
-    setStatus(`✅ instance validates against ${Object.keys(SCHEMA.properties || {}).length}-property schema`, "ok");
-  } else {
-    const first = (VALIDATE.errors || []).slice(0, 5);
-    setStatus(`❌ ${VALIDATE.errors.length} validation error${VALIDATE.errors.length === 1 ? "" : "s"}<pre>${
-      first.map(e => `${e.instancePath || "<root>"}: ${e.message}`).join("\n")
-    }${VALIDATE.errors.length > 5 ? `\n…and ${VALIDATE.errors.length - 5} more` : ""}</pre>`, "err");
-  }
+ if (!VALIDATE) return;
+ const ok = VALIDATE(DATA);
+ if (ok) {
+ setStatus(`✅ instance validates against ${Object.keys(SCHEMA.properties || {}).length}-property schema`, "ok");
+ } else {
+ const first = (VALIDATE.errors || []).slice(0, 5);
+ setStatus(`❌ ${VALIDATE.errors.length} validation error${VALIDATE.errors.length === 1 ? "" : "s"}<pre>${
+ first.map(e => `${e.instancePath || "<root>"}: ${e.message}`).join("\n")
+ }${VALIDATE.errors.length > 5 ? `\n…and ${VALIDATE.errors.length - 5} more` : ""}</pre>`, "err");
+ }
 }
 
 function renderForm() {
-  if (!SCHEMA) return;
-  $("#form-host").innerHTML = renderField("", SCHEMA, null, false);
+ if (!SCHEMA) return;
+ $("#form-host").innerHTML = renderField("", SCHEMA, null, false);
 }
 
 function exportJson() {
-  const blob = new Blob([JSON.stringify(DATA, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a"); a.href = url; a.download = "instance.json"; a.click();
-  URL.revokeObjectURL(url);
+ const blob = new Blob([JSON.stringify(DATA, null, 2)], { type: "application/json" });
+ const url = URL.createObjectURL(blob);
+ const a = document.createElement("a"); a.href = url; a.download = "instance.json"; a.click();
+ URL.revokeObjectURL(url);
 }
 function copyJson() {
-  navigator.clipboard.writeText(JSON.stringify(DATA, null, 2));
-  setStatus("Copied to clipboard.", "ok");
+ navigator.clipboard.writeText(JSON.stringify(DATA, null, 2));
+ setStatus("Copied to clipboard.", "ok");
 }
 function resetForm() { DATA = {}; renderForm(); refreshOut(); validate(); }
 
