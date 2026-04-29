@@ -131,9 +131,20 @@
  </div>
  <div>
  <label for="jurisdiction">Province / region</label>
- <select id="jurisdiction" onchange="updateLocalPrograms()">
+ <select id="jurisdiction" onchange="onJurisdictionChange()">
  <option value="ON">Ontario</option>
  <option value="BC">British Columbia</option>
+ <option value="AB">Alberta</option>
+ <option value="SK">Saskatchewan</option>
+ <option value="MB">Manitoba</option>
+ <option value="QC">Québec</option>
+ <option value="NB">New Brunswick</option>
+ <option value="NS">Nova Scotia</option>
+ <option value="PE">Prince Edward Island</option>
+ <option value="NL">Newfoundland and Labrador</option>
+ <option value="YT">Yukon</option>
+ <option value="NT">Northwest Territories</option>
+ <option value="NU">Nunavut</option>
  </select>
  </div>
  </div>
@@ -145,9 +156,7 @@
  <div>
  <label for="hearing-judge">Hearing officer</label>
  <select id="hearing-judge">
- <option value="JP">Justice of the Peace</option>
- <option value="provincial">Provincial Court Judge</option>
- <option value="superior">Superior Court (s. 522 / s. 520 review)</option>
+ <!-- populated by populateHearingOfficer() based on jurisdiction -->
  </select>
  </div>
  </div>
@@ -820,6 +829,99 @@ function renderLadder() {
  ).join("");
 }
 
+// Per-jurisdiction hearing-officer options. Title only — forms of address
+// are deliberately omitted because they are governed by local Practice
+// Directions that change. Counsel should confirm against the courthouse's
+// current PD before appearance.
+//
+// Structural quirks worth knowing:
+//   - Atlantic (NB/NS/NL): JPs exist on paper; Provincial Court Judges actually run bail.
+//   - Nunavut: unified single-tier court (Nunavut Court of Justice) — no separate territorial court; 2 rows.
+//   - YT/NT/NU lay JPs: real bail jurisdiction in remote/after-hours; limited by s. 469 and authorization tier.
+//   - AB: Provincial Court renamed "Alberta Court of Justice" 2023-06-30.
+const HEARING_OFFICERS = {
+ ON: [
+ { value: "JP", label: "Justice of the Peace" },
+ { value: "provincial", label: "Provincial Court Judge (OCJ)" },
+ { value: "superior", label: "Superior Court Justice (SCJ, s. 522 / s. 520 review)" },
+ ],
+ BC: [
+ { value: "JJ", label: "Judicial Justice (JJ)" },
+ { value: "provincial", label: "Provincial Court Judge" },
+ { value: "superior", label: "Supreme Court Justice (s. 522 / s. 520 review)" },
+ ],
+ AB: [
+ { value: "jp", label: "Court Justice of the Peace" },
+ { value: "provincial", label: "Alberta Court of Justice Judge" },
+ { value: "superior", label: "Court of King's Bench of Alberta Justice (s. 522 / s. 520 review)" },
+ ],
+ SK: [
+ { value: "jp", label: "Presiding Justice of the Peace" },
+ { value: "provincial", label: "Provincial Court Judge" },
+ { value: "superior", label: "Court of King's Bench for Saskatchewan Justice (s. 522 / s. 520 review)" },
+ ],
+ MB: [
+ { value: "jjp", label: "Judicial Justice of the Peace" },
+ { value: "provincial", label: "Provincial Court Judge" },
+ { value: "superior", label: "Court of King's Bench of Manitoba Justice (s. 522 / s. 520 review)" },
+ ],
+ QC: [
+ { value: "JPM", label: "Juge de paix magistrat (Cour du Québec)" },
+ { value: "courquebec", label: "Juge de la Cour du Québec, Ch. crim. et pén." },
+ { value: "superior", label: "Juge de la Cour supérieure du Québec (s. 522 / s. 520 review)" },
+ ],
+ NB: [
+ { value: "JP", label: "Justice of the Peace (rare in NB; PC runs bail)" },
+ { value: "provincial", label: "Provincial Court Judge" },
+ { value: "superior", label: "Court of King's Bench of NB Justice (s. 522 / s. 520 review)" },
+ ],
+ NS: [
+ { value: "JP", label: "Presiding JP (after-hours, JP Centre Dartmouth)" },
+ { value: "provincial", label: "Provincial Court Judge / Bail Court" },
+ { value: "superior", label: "Supreme Court of Nova Scotia Justice (s. 522 / s. 520 review)" },
+ ],
+ PE: [
+ { value: "JP", label: "Judicial Justice of the Peace" },
+ { value: "provincial", label: "Provincial Court Judge" },
+ { value: "superior", label: "Supreme Court of PEI Justice (s. 522 / s. 520 review)" },
+ ],
+ NL: [
+ { value: "JP", label: "Justice of the Peace (rare; PC handles bail)" },
+ { value: "provincial", label: "Provincial Court Judge" },
+ { value: "superior", label: "Supreme Court of NL (General Division) Justice (s. 522 / s. 520 review)" },
+ ],
+ YT: [
+ { value: "JP", label: "Justice of the Peace (lay)" },
+ { value: "territorial", label: "Territorial Court Judge" },
+ { value: "superior", label: "Supreme Court of Yukon Justice (s. 522 / s. 520 review)" },
+ ],
+ NT: [
+ { value: "JP", label: "Justice of the Peace (lay)" },
+ { value: "territorial", label: "Territorial Court Judge" },
+ { value: "superior", label: "Supreme Court of NWT Justice (s. 522 / s. 520 review)" },
+ ],
+ NU: [
+ { value: "JP", label: "Justice of the Peace (lay)" },
+ { value: "ncj", label: "Nunavut Court of Justice Justice (UNIFIED — first bail and s. 522 / s. 520 review)" },
+ ],
+};
+
+function populateHearingOfficer() {
+ const sel = $("#hearing-judge");
+ if (!sel) return;
+ const j = $("#jurisdiction").value;
+ const opts = HEARING_OFFICERS[j] || HEARING_OFFICERS.ON;
+ const prev = sel.value;
+ sel.innerHTML = opts.map(o => `<option value="${o.value}">${o.label}</option>`).join("");
+ // preserve selection across jurisdiction changes when value still exists
+ if (opts.some(o => o.value === prev)) sel.value = prev;
+}
+
+function onJurisdictionChange() {
+ populateHearingOfficer();
+ updateLocalPrograms();
+}
+
 function updateLocalPrograms() {
  const j = $("#jurisdiction").value;
  const courthouse = ($("#courthouse").value || "").toLowerCase();
@@ -857,10 +959,12 @@ function init() {
  renderOnusSteps();
  renderGrounds();
  renderLadder();
+ populateHearingOfficer();
  updateLocalPrograms();
 }
 window.updateOnus = updateOnus;
 window.updateLocalPrograms = updateLocalPrograms;
+window.onJurisdictionChange = onJurisdictionChange;
 init();
 </script>
 </body>
